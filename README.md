@@ -8,7 +8,7 @@ To interface it with your project:
 * Call the function `LCSF_TranscoderReceive` with your module receiving data in lcsf format (eg: data coming from a network port, an UART or a CAN bus...)
 * Give a callback to the function that will send the transcoder data.
 
-Finally, to fit your application's needs, create a custom command set either by modifying the example command set or by using the LCSF Generator (WIP).
+Finally, to fit your application's needs, create a custom protocol either by modifying the example protocol or by using the [LCSF Generator](https://github.com/jean-roland/LCSF_Generator) (recommanded).
 
 ## About LCSF
 
@@ -31,6 +31,13 @@ Then the actual protocols are fed into the stack at initialization time.
 The following diagram helps understanding how it works:
 
 ![LCSF C Stack](./Doc/img/Stack.png)
+
+## Protocol files
+
+Each protocol used by the LCSF C stack is composed of 5 files:
+* LCSF_protocol_Desc.h: This file contains the tables describing the protocol commands and attributes.
+* LCSF_Bridge_protocol.c/.h: This files contain the LCSF abstraction layer.
+* protocol_Main.c/.h: This files contain the application code associated with the protocol.
 
 ## Note on recursivity
 
