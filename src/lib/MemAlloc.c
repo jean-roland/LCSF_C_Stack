@@ -2,7 +2,7 @@
  * \file MemAlloc.c
  * \brief Memory allocation module
  * \author Jean-Roland Gosse
-
+ 
     This file is part of LCSF C Stack.
 
     LCSF C Stack is free software: you can redistribute it and/or modify
@@ -61,15 +61,15 @@ static void *MemAllocGetAddr(uint32_t size, uint8_t alignment) {
     }
     // 32-bit size alignment
     if ((size & 0x3) > 0) {
-        size = (size + 4) & 0xFFFFFFFC;
+        size = (size + 4) & (~0x3);
     }
     // Find the earliest free aligned memory address
-    uint32_t memAddr = (uint32_t)(MemAllocInfo.pMemoryHeap + MemAllocInfo.MemoryOffset);
+    uintptr_t memAddr = (uintptr_t)MemAllocInfo.pMemoryHeap + MemAllocInfo.MemoryOffset;
     if ((memAddr & (alignment - 1)) > 0) {
-        memAddr = ((memAddr + alignment) & (~((uint32_t)(alignment - 1))));
+        memAddr = ((memAddr + alignment) & (~(alignment - 1)));
     }
     // Effective size calculation
-    uint32_t alignedSize = memAddr - (uint32_t)MemAllocInfo.pMemoryHeap - MemAllocInfo.MemoryOffset + size;
+    uintptr_t alignedSize = memAddr - (uintptr_t)MemAllocInfo.pMemoryHeap - MemAllocInfo.MemoryOffset + size;
     MemAllocInfo.MemoryOffset += alignedSize;
     // Check if we have enough memory
     if (MemAllocInfo.MemoryOffset > MemAllocInfo.HeapSize) {
@@ -83,7 +83,7 @@ static void *MemAllocGetAddr(uint32_t size, uint8_t alignment) {
 
 void MemAllocInit(const uint8_t *pHeap, uint32_t heapSize) {
     // Pointer validity and 32-bit alignment test
-    if ((pHeap != NULL) && (((uint32_t)pHeap & 0x3) > 0)) {
+    if ((pHeap != NULL) && (((uintptr_t)pHeap & 0x3) > 0)) {
         // Address is invalid, blocking error
         while (1) {};
     }
@@ -99,7 +99,7 @@ void *MemAllocMalloc(uint32_t size) {
 void *MemAllocCalloc(uint32_t size) {
     void *pData = MemAllocMalloc(size);
     // Check pData validity
-    if( pData != NULL ) {
+    if (pData != NULL) {
         memset(pData, 0, size);
     }
     return pData;
@@ -112,7 +112,7 @@ void *MemAllocMallocAligned(uint32_t size, uint8_t alignment) {
 void *MemAllocCallocAligned(uint32_t size, uint8_t alignment) {
     void *pData = MemAllocMallocAligned(size, alignment);
     // Check pData validity
-    if( pData != NULL ) {
+    if (pData != NULL) {
         memset(pData, 0, size);
     }
     return pData;
