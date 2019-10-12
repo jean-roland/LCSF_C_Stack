@@ -43,7 +43,7 @@ typedef struct _example_info {
 
 // --- Private Constants ---
 // --- Private Function Prototypes ---
-static bool Example_MainCheckAddrValidity(uint32_t addr);
+static bool Example_MainCheckAddrValidity(uintptr_t addr);
 static bool Example_MainSendError(uint8_t errorCode);
 static bool Example_MainSendAck(void);
 static bool Example_MainSendCommand(uint8_t cmdName, bool hasPayload);
@@ -61,13 +61,13 @@ static example_info_t ExampleInfo;
 // *** Private Functions ***
 
 /**
- * \fn static bool Example_MainCheckAddrValidity(uint32_t addr)
+ * \fn static bool Example_MainCheckAddrValidity(uintptr_t addr)
  * \brief Check validity of an address
  *
  * \param addr address to check
  * \return bool: true if address is valid
  */
-static bool Example_MainCheckAddrValidity(uint32_t addr) {
+static bool Example_MainCheckAddrValidity(uintptr_t addr) {
 
     if (((void *)addr != NULL) && (addr >= 0x20400000) && (addr <= 0x20410000)) {
         return true;
@@ -157,7 +157,7 @@ static bool Example_MainExecuteJUMP(example_cmd_payload_t *pCmdPayload) {
     }
     uint32_t m_jump_addr = pCmdPayload->jump_payload.jump_addr;
 
-    if (!Example_MainCheckAddrValidity(m_jump_addr)) {
+    if (!Example_MainCheckAddrValidity((uintptr_t)m_jump_addr)) {
         return Example_MainSendError(EXAMPLE_ERROR_INVALID_JMP_ADDR);
     }
     if (!Example_MainSendAck()) {
