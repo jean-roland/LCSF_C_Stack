@@ -16,9 +16,9 @@
   :default_tasks:
     - test:all
 
-#:release_build:
-#  :output: MyApp.out
-#  :use_assembly: FALSE
+:release_build:
+ :output: LCSF_C_Stack.out
+ :use_assembly: FALSE
 
 :environment:
 
@@ -64,6 +64,23 @@
 
 :gcov:
     :html_report_type: basic
+
+:flags:
+  :release:
+    :compile:
+      :*:
+        - -std=c99
+        - -Wall
+        - -Wpedantic
+        - -O2
+     #:link:
+       #:*:
+  # :test:
+  #   :compile:
+  #     :*:
+  #       - -std=c99
+  #       - -Wall
+  #       - -O2
 
 #:tools:
 # Ceedling defaults to using gcc for compiling, linking, etc.
