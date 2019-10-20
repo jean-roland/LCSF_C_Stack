@@ -447,7 +447,7 @@ bool LCSF_TranscoderInit(const lcsf_trnscdr_init_desc_t *pInitDesc) {
 
     if (LCSF_TranscoderCheckInitDesc(pInitDesc)) {
         // Buffer allocation
-        LcsfTranscoderInfo.pEncoderBuffer = MemAllocCalloc(pInitDesc->BufferSize);
+        LcsfTranscoderInfo.pEncoderBuffer = MemAllocMalloc(pInitDesc->BufferSize);
         // Filo creation
         LcsfTranscoderInfo.pDecoderFilo = FiloCreate(pInitDesc->FiloSize, sizeof(lcsf_raw_att_t));
         // Structure initialization
