@@ -2,7 +2,7 @@
  * \file custom_main.c
  * \brief Application example for the LCSF C Stack.
  * \author Jean-Roland Gosse
- 
+
     This file is part of LCSF C Stack.
 
     LCSF C Stack is free software: you can redistribute it and/or modify
@@ -99,7 +99,7 @@ static void app_init(void) {
     // Lcsf stack
  	LCSF_TranscoderInit(&LcsfTranscoderDesc);
  	LCSF_ValidatorInit(&LcsfValidatorDesc);
- 	LCSF_ValidatorAddProtocol(LCSF_PROTOCOL_EXAMPLE, &LcsfProtocolExampleDesc);   
+ 	LCSF_ValidatorAddProtocol(LCSF_PROTOCOL_EXAMPLE, &LcsfProtocolExampleDesc);
     // Lcsf example
     LCSF_Bridge_ExampleInit(20);
     Example_MainInit(&ExampleMainInitDesc);
