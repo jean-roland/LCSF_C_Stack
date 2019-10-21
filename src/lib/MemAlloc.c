@@ -2,7 +2,7 @@
  * \file MemAlloc.c
  * \brief Memory allocation module
  * \author Jean-Roland Gosse
- 
+
     This file is part of LCSF C Stack.
 
     LCSF C Stack is free software: you can redistribute it and/or modify
@@ -61,16 +61,16 @@ static void *MemAllocGetAddr(uint32_t size, uint8_t alignment) {
     }
     // 32-bit size alignment
     if ((size & 0x3) > 0) {
-        size = (size + 4) & (~0x3);
+        size = (size + 4) & (uint32_t)(~0x3);
     }
     // Find the earliest free aligned memory address
     uintptr_t memAddr = (uintptr_t)MemAllocInfo.pMemoryHeap + MemAllocInfo.MemoryOffset;
-    if ((memAddr & (alignment - 1)) > 0) {
-        memAddr = ((memAddr + alignment) & (~(alignment - 1)));
+    if ((memAddr & (uintptr_t)(alignment - 1)) > 0) {
+        memAddr = ((memAddr + alignment) & (uintptr_t)(~(alignment - 1)));
     }
     // Effective size calculation
     uintptr_t alignedSize = memAddr - (uintptr_t)MemAllocInfo.pMemoryHeap - MemAllocInfo.MemoryOffset + size;
-    MemAllocInfo.MemoryOffset += alignedSize;
+    MemAllocInfo.MemoryOffset += (uint32_t)alignedSize;
     // Check if we have enough memory
     if (MemAllocInfo.MemoryOffset > MemAllocInfo.HeapSize) {
         // Out of memory, blocking error
