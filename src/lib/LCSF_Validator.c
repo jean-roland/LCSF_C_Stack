@@ -91,8 +91,8 @@ typedef struct _lcsf_validator_info {
 // Utility functions
 static bool LCSF_AllocateReceiverAttArray(uint16_t attNb, lcsf_valid_att_t **pAttArray);
 static bool LCSF_AllocateSenderAttArray(uint16_t attNb, lcsf_raw_att_t **pAttArray);
-static LCSFInterpretCallback *LCSF_GetCallback(uint8_t protId);
-static const lcsf_protocol_desc_t *LCSF_GetDescriptor(uint8_t protId);
+static LCSFInterpretCallback *LCSF_GetCallback(uint16_t protId);
+static const lcsf_protocol_desc_t *LCSF_GetDescriptor(uint16_t protId);
 // Table look up functions
 static bool LCSF_ValidateCmdId(uint16_t cmdId, uint16_t cmdNb, uint16_t *pCmdIdx, const lcsf_command_desc_t *pCmdDescArray);
 static bool LCSF_HasNonOptionalAttribute(uint16_t attNb, const lcsf_attribute_desc_t *pAttDescArray);
@@ -148,7 +148,7 @@ static bool LCSF_AllocateSenderAttArray(uint16_t attNb, lcsf_raw_att_t **pAttArr
  * \param protId protocol identifier
  * \return LCSFInterpretCallback *: Pointer to the interpretor callback (NULL if unknown protocol)
  */
-static LCSFInterpretCallback *LCSF_GetCallback(uint8_t protId) {
+static LCSFInterpretCallback *LCSF_GetCallback(uint16_t protId) {
     for (uint8_t idx = 0; idx < LcsfValidatorInfo.pInitDesc->ProtNb; idx++) {
         const lcsf_validator_protocol_desc_t *pProtocol = LcsfValidatorInfo.pProtArray[idx];
 
@@ -166,7 +166,7 @@ static LCSFInterpretCallback *LCSF_GetCallback(uint8_t protId) {
  * \param protId protocol identifier
  * \return lcsf_protocol_desc_t *: Pointer to the descriptor (NULL if unknown protocol)
  */
-static const lcsf_protocol_desc_t *LCSF_GetDescriptor(uint8_t protId) {
+static const lcsf_protocol_desc_t *LCSF_GetDescriptor(uint16_t protId) {
     for (uint8_t idx = 0; idx < LcsfValidatorInfo.pInitDesc->ProtNb; idx++) {
         const lcsf_validator_protocol_desc_t *pProtocol = LcsfValidatorInfo.pProtArray[idx];
 
@@ -450,7 +450,7 @@ static bool LCSF_FillAttributeInfo(lcsf_raw_att_t *pRawAtt, uint8_t descDataType
 
         case LCSF_BYTE_ARRAY:
               if (pValidAtt->PayloadSize > 0) {
-                  pRawAtt->DataSize = pValidAtt->PayloadSize;
+                  pRawAtt->DataSize = (uint16_t)pValidAtt->PayloadSize;
                   pRawAtt->HasSubAtt = false;
               return true;
               } else {
@@ -459,7 +459,7 @@ static bool LCSF_FillAttributeInfo(lcsf_raw_att_t *pRawAtt, uint8_t descDataType
         break;
 
         case LCSF_STRING:
-              stringSize = strlen((char *)pValidAtt->Payload.pData);
+              stringSize = (uint16_t)strlen((char *)pValidAtt->Payload.pData);
               if (stringSize > 0) {
                   pRawAtt->DataSize = stringSize;
                   pRawAtt->HasSubAtt = false;
@@ -632,7 +632,7 @@ bool LCSF_ValidatorInit(const lcsf_validator_init_desc_t *pInitDesc) {
     // Note initialization descriptor
     LcsfValidatorInfo.pInitDesc = pInitDesc;
     // Allocate structures
-    LcsfValidatorInfo.pProtArray = MemAllocCalloc(pInitDesc->ProtNb * sizeof(lcsf_validator_protocol_desc_t *));
+    LcsfValidatorInfo.pProtArray = MemAllocCalloc((uint32_t)(pInitDesc->ProtNb * sizeof(lcsf_validator_protocol_desc_t *)));
     LcsfValidatorInfo.pSenderFilo = FiloCreate(LcsfValidatorInfo.pInitDesc->FiloSize, sizeof(lcsf_valid_att_t));
     LcsfValidatorInfo.pReceiverFilo = FiloCreate(LcsfValidatorInfo.pInitDesc->FiloSize, sizeof(lcsf_raw_att_t));
     // Initialize variables

@@ -100,15 +100,15 @@ static bool LCSF_FetchMsgHeader(uint16_t *pBuffIdx, uint16_t buffSize, const uin
         // Byte 1: Protocol ID LSB
         pMsg->ProtId = pBuffer[(*pBuffIdx)++];
         // Byte 2: Protocol ID MSB
-        pMsg->ProtId += (pBuffer[(*pBuffIdx)++] << 8);
+        pMsg->ProtId += pBuffer[(*pBuffIdx)++] << 8;
         // Byte 3: Command ID LSB
         pMsg->CmdId = pBuffer[(*pBuffIdx)++];
         // Byte 4: Command ID MSB
-        pMsg->CmdId += (pBuffer[(*pBuffIdx)++] << 8);
+        pMsg->CmdId += pBuffer[(*pBuffIdx)++] << 8;
         // Byte 5: Attribute Number LSB
         pMsg->AttNb = pBuffer[(*pBuffIdx)++];
         // Byte 6: Attribute Number MSB
-        pMsg->AttNb += (pBuffer[(*pBuffIdx)++] << 8);
+        pMsg->AttNb += pBuffer[(*pBuffIdx)++] << 8;
         return true;
     } else {
         return false;
@@ -133,7 +133,7 @@ static bool LCSF_FetchAttHeader(uint16_t *pBuffIdx, uint16_t buffSize, const uin
         // Byte 2 (MSbit): Attribute complexity (does it have sub attributes or not)
         pAtt->HasSubAtt = ((pBuffer[*pBuffIdx] & (1 << 7)) != 0);
         // Byte 2: Attribute id MSB
-        pAtt->AttId += ((pBuffer[(*pBuffIdx)++] << 8));
+        pAtt->AttId += pBuffer[(*pBuffIdx)++] << 8;
     } else {
         return false;
     }
@@ -143,7 +143,7 @@ static bool LCSF_FetchAttHeader(uint16_t *pBuffIdx, uint16_t buffSize, const uin
             // Byte 3: Data size LSB
             pAtt->DataSize = pBuffer[(*pBuffIdx)++];
             // Byte 4: Data size MSB
-            pAtt->DataSize += (pBuffer[(*pBuffIdx)++] << 8);
+            pAtt->DataSize += pBuffer[(*pBuffIdx)++] << 8;
         } else {
             return false;
         }
@@ -153,7 +153,7 @@ static bool LCSF_FetchAttHeader(uint16_t *pBuffIdx, uint16_t buffSize, const uin
             // Byte 3: Sub-attribute number LSB
             pAtt->DataSize = pBuffer[(*pBuffIdx)++];
             // Byte 4: Sub-attribute number MSB
-            pAtt->DataSize += (pBuffer[(*pBuffIdx)++] << 8);
+            pAtt->DataSize += pBuffer[(*pBuffIdx)++] << 8;
         } else {
             return false;
         }
@@ -288,17 +288,17 @@ static bool LCSF_FillMsgHeader(uint16_t *pBuffIdx, uint8_t *pBuffer, const lcsf_
     // Guard against buffer overflow
     if (*pBuffIdx + 5 < LcsfTranscoderInfo.pInitDesc->BufferSize) {
         // Byte 1 : Protocol id LSB
-        pBuffer[(*pBuffIdx)++] = pMsg->ProtId;
+        pBuffer[(*pBuffIdx)++] = (uint8_t)pMsg->ProtId;
         // Byte 2 : Protocol id MSB
-        pBuffer[(*pBuffIdx)++] = (pMsg->ProtId >> 8);
+        pBuffer[(*pBuffIdx)++] = (uint8_t)(pMsg->ProtId >> 8);
         // Byte 3 : Command id LSB
-        pBuffer[(*pBuffIdx)++] = pMsg->CmdId;
+        pBuffer[(*pBuffIdx)++] = (uint8_t)pMsg->CmdId;
         // Byte 4 : Command id MSB
-        pBuffer[(*pBuffIdx)++] = (pMsg->CmdId >> 8);
+        pBuffer[(*pBuffIdx)++] = (uint8_t)(pMsg->CmdId >> 8);
         // Byte 5 : Attribute number LSB
-        pBuffer[(*pBuffIdx)++] = pMsg->AttNb;
+        pBuffer[(*pBuffIdx)++] = (uint8_t)pMsg->AttNb;
         // Byte 6 : Attribute number MSB
-        pBuffer[(*pBuffIdx)++] = (pMsg->AttNb >> 8);
+        pBuffer[(*pBuffIdx)++] = (uint8_t)(pMsg->AttNb >> 8);
         return true;
     } else {
         return false;
@@ -319,19 +319,19 @@ static bool LCSF_FillAttHeader(uint16_t *pBuffIdx, uint8_t *pBuffer, const lcsf_
     // Guard against buffer overflow
     if (*pBuffIdx + 3 < LcsfTranscoderInfo.pInitDesc->BufferSize) {
         // Byte 1: Attribute id LSB
-        pBuffer[(*pBuffIdx)++] = pAtt->AttId;
+        pBuffer[(*pBuffIdx)++] = (uint8_t)pAtt->AttId;
         // Check if attribute has sub attributes
         if (pAtt->HasSubAtt) {
             // Byte 2: Attribute id MSB + MSb at 1
-            pBuffer[(*pBuffIdx)++] = (pAtt->AttId >> 8) | 0x80;
+            pBuffer[(*pBuffIdx)++] = (uint8_t)((pAtt->AttId >> 8) | 0x80);
         } else {
             // Byte 2: Attribute id MSB + MSb at 0
-            pBuffer[(*pBuffIdx)++] = (pAtt->AttId >> 8) & 0x7F;
+            pBuffer[(*pBuffIdx)++] = (uint8_t)((pAtt->AttId >> 8) & 0x7F);
         }
         // Byte 3: Attribute data size or sub-attribute number LSB
-        pBuffer[(*pBuffIdx)++] = pAtt->DataSize;
+        pBuffer[(*pBuffIdx)++] = (uint8_t)pAtt->DataSize;
         // Byte 4: Attribute data size or sub-attribute number MSB
-        pBuffer[(*pBuffIdx)++] = (pAtt->DataSize >> 8);
+        pBuffer[(*pBuffIdx)++] = (uint8_t)(pAtt->DataSize >> 8);
         return true;
     } else {
         return false;
