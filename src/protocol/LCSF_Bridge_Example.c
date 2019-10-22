@@ -40,7 +40,7 @@ typedef struct _lcsf_bridge_example_info {
 
 // --- Private Constants ---
 // Array to convert command name value to their lcsf command id
-const uint8_t LCSF_Bridge_Example_CMDNAME2CMDID[LCSF_EXAMPLE_CMD_NB] = {
+const uint16_t LCSF_Bridge_Example_CMDNAME2CMDID[LCSF_EXAMPLE_CMD_NB] = {
     LCSF_EXAMPLE_CMD_ID_PING,
     LCSF_EXAMPLE_CMD_ID_RESET,
     LCSF_EXAMPLE_CMD_ID_ERROR,
@@ -51,13 +51,13 @@ const uint8_t LCSF_Bridge_Example_CMDNAME2CMDID[LCSF_EXAMPLE_CMD_NB] = {
 };
 
 // --- Private Function Prototypes ---
-static uint8_t LCSF_Bridge_Example_CMDID2CMDNAME(uint16_t cmdId);
+static uint16_t LCSF_Bridge_Example_CMDID2CMDNAME(uint16_t cmdId);
 static void LCSF_Bridge_ExampleJUMPGetData(lcsf_valid_att_t *pAttArray, example_cmd_payload_t *pCmdPayload);
 static void LCSF_Bridge_ExampleCOLOR_SPACEGetData(lcsf_valid_att_t *pAttArray, example_cmd_payload_t *pCmdPayload);
-static void LCSF_Bridge_ExampleGetCmdData(uint8_t cmdName, lcsf_valid_att_t *pAttArray, example_cmd_payload_t *pCmdPayload);
+static void LCSF_Bridge_ExampleGetCmdData(uint16_t cmdName, lcsf_valid_att_t *pAttArray, example_cmd_payload_t *pCmdPayload);
 static bool LCSF_Bridge_ExampleERRORFillAtt(lcsf_valid_att_t **pAttArray, example_cmd_payload_t *pCmdPayload);
 static bool LCSF_Bridge_ExampleCOLOR_SPACEFillAtt(lcsf_valid_att_t **pAttArray, example_cmd_payload_t *pCmdPayload);
-static bool LCSF_Bridge_ExampleFillCmdAtt(uint8_t cmdName, lcsf_valid_att_t **pAttArray, example_cmd_payload_t *pCmdPayload);
+static bool LCSF_Bridge_ExampleFillCmdAtt(uint16_t cmdName, lcsf_valid_att_t **pAttArray, example_cmd_payload_t *pCmdPayload);
 
 // --- Private Variables ---
 static lcsf_bridge_example_info_t LcsfBridgeExampleInfo;
@@ -67,13 +67,13 @@ static lcsf_bridge_example_info_t LcsfBridgeExampleInfo;
 // *** Private Functions ***
 
 /**
- * \fn static uint8_t LCSF_Bridge_Example_CMDID2CMDNAME(uint16_t cmdId)
+ * \fn static uint16_t LCSF_Bridge_Example_CMDID2CMDNAME(uint16_t cmdId)
  * \brief Translate an lcsf command id to its name value
  *
  * \param cmdId lcsf command identifier to translate
- * \return uint8_t: name value of the command
+ * \return uint16_t: name value of the command
  */
-static uint8_t LCSF_Bridge_Example_CMDID2CMDNAME(uint16_t cmdId) {
+static uint16_t LCSF_Bridge_Example_CMDID2CMDNAME(uint16_t cmdId) {
     switch (cmdId) {
         default:
         case LCSF_EXAMPLE_CMD_ID_PING:
@@ -135,7 +135,7 @@ static void LCSF_Bridge_ExampleCOLOR_SPACEGetData(lcsf_valid_att_t *pAttArray, e
 }
 
 /**
- * \fn static void LCSF_Bridge_ExampleGetCmdData(uint8_t cmdName, lcsf_valid_att_t *pAttArray, example_cmd_payload_t *pCmdPayload)
+ * \fn static void LCSF_Bridge_ExampleGetCmdData(uint16_t cmdName, lcsf_valid_att_t *pAttArray, example_cmd_payload_t *pCmdPayload)
  * \brief Retrieve command data from its attribute array and store it in a payload
  *
  * \param cmdName name of the command
@@ -143,7 +143,7 @@ static void LCSF_Bridge_ExampleCOLOR_SPACEGetData(lcsf_valid_att_t *pAttArray, e
  * \param pPayload pointer to the payload to contain the command data
  * \return void
  */
-static void LCSF_Bridge_ExampleGetCmdData(uint8_t cmdName, lcsf_valid_att_t *pAttArray, example_cmd_payload_t *pCmdPayload) {
+static void LCSF_Bridge_ExampleGetCmdData(uint16_t cmdName, lcsf_valid_att_t *pAttArray, example_cmd_payload_t *pCmdPayload) {
     if (pAttArray == NULL) {
 	    return;
     }
@@ -225,7 +225,7 @@ static bool LCSF_Bridge_ExampleCOLOR_SPACEFillAtt(lcsf_valid_att_t **pAttArray, 
 }
 
 /**
- * \fnstatic bool LCSF_Bridge_ExampleFillCmdAtt(uint8_t cmdName, lcsf_valid_att_t **pAttArray, example_cmd_payload_t *pCmdPayload)
+ * \fnstatic bool LCSF_Bridge_ExampleFillCmdAtt(uint16_t cmdName, lcsf_valid_att_t **pAttArray, example_cmd_payload_t *pCmdPayload)
  * \brief Fill the attribute array of a command from its payload
  *
  * \param cmdName name of the command
@@ -233,7 +233,7 @@ static bool LCSF_Bridge_ExampleCOLOR_SPACEFillAtt(lcsf_valid_att_t **pAttArray, 
  * \param pCmdPayload pointer to the command payload
  * \return bool: true if operation was a success
  */
-static bool LCSF_Bridge_ExampleFillCmdAtt(uint8_t cmdName, lcsf_valid_att_t **pAttArray, example_cmd_payload_t *pCmdPayload) {
+static bool LCSF_Bridge_ExampleFillCmdAtt(uint16_t cmdName, lcsf_valid_att_t **pAttArray, example_cmd_payload_t *pCmdPayload) {
     switch (cmdName) {
         case EXAMPLE_CMD_ERROR:
             return LCSF_Bridge_ExampleERRORFillAtt(pAttArray, pCmdPayload);
@@ -254,12 +254,12 @@ static bool LCSF_Bridge_ExampleFillCmdAtt(uint8_t cmdName, lcsf_valid_att_t **pA
 
 bool LCSF_Bridge_ExampleInit(uint16_t filoSize) {
     LcsfBridgeExampleInfo.pFilo = FiloCreate(filoSize, sizeof(lcsf_valid_att_t));
-    LcsfBridgeExampleInfo.pCmdPayload = (example_cmd_payload_t *)MemAllocCalloc(sizeof(example_cmd_payload_t));
+    LcsfBridgeExampleInfo.pCmdPayload = MemAllocCalloc(sizeof(example_cmd_payload_t));
     return true;
 }
 
 bool LCSF_Bridge_ExampleReceive(lcsf_valid_cmd_t *pValidCmd) {
-    uint8_t cmdName = LCSF_Bridge_Example_CMDID2CMDNAME(pValidCmd->CmdId);
+    uint16_t cmdName = LCSF_Bridge_Example_CMDID2CMDNAME(pValidCmd->CmdId);
     example_cmd_payload_t *pCmdPayload = LcsfBridgeExampleInfo.pCmdPayload;
     memset(pCmdPayload, 0, sizeof(example_cmd_payload_t));
 

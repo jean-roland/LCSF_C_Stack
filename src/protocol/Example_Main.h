@@ -106,9 +106,6 @@ typedef union _example_cmd_payload {
     example_color_space_att_payload_t color_space_payload;
 } example_cmd_payload_t;
 
-// Command send callback function prototype
-typedef bool Example_SendCallback(uint8_t cmdName, example_cmd_payload_t *pCmdPayload);
-
 // Module initialization descriptor
 typedef struct _example_init_desc {
     uint8_t FooValue;
@@ -126,14 +123,14 @@ typedef struct _example_init_desc {
 bool Example_MainInit(const example_init_desc_t *pInitDesc);
 
 /**
- * \fn bool Example_MainCommandExecute(uint8_t cmdName, example_cmd_payload_t *pCmdPayload)
+ * \fn bool Example_MainCommandExecute(uint16_t cmdName, example_cmd_payload_t *pCmdPayload)
  * \brief Execute a command
  *
  * \param cmdName name of the command
  * \param pCmdPayload pointer to command payload
  * \return bool: true if operation was a success
  */
-bool Example_MainCommandExecute(uint8_t cmdName, example_cmd_payload_t *pCmdPayload);
+bool Example_MainCommandExecute(uint16_t cmdName, example_cmd_payload_t *pCmdPayload);
 
 // *** End Definitions ***
 #endif // Example_Main_h
