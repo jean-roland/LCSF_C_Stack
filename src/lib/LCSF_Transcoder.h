@@ -63,6 +63,8 @@ typedef struct _lcsf_trnscdr_init_desc {
 } lcsf_trnscdr_init_desc_t;
 
 // --- Public Constants ---
+// #define LCSF_SMALL // Uncomment to use the smaller representation LCSF variant
+
 // --- Public Variables ---
 // --- Public Function Prototypes ---
 

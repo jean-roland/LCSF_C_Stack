@@ -34,6 +34,97 @@ static void *memPtr[64];
 static int memIdx;
 
 // *** Model data ***
+#ifdef LCSF_SMALL
+
+static const uint8_t ovrflwMsg[] = {0xaa, 0x01, 0x0b};
+
+static const uint8_t badformatMsg[] = {0xaa, 0x01, 0x0a};
+
+static const uint8_t rxMsg[] = {
+0xab, 0x12, 0x03, 0x55, 0x05, 0x00, 0x01, 0x02, 0x03, 0x04,
+0xff, 0x02, 0x30, 0x01, 0x0a, 0xb1, 0x01, 0x32, 0x02, 0xab,
+0xcd, 0x40, 0x10, 0x4f, 0x72, 0x67, 0x61, 0x6e, 0x6f, 0x6c,
+0x65, 0x70, 0x74, 0x69, 0x63, 0x00, 0x00, 0x00, 0x00
+};
+
+// Model raw msg
+static uint8_t txAtt1Data[] = {0x00, 0x01, 0x02, 0x03, 0x04};
+
+static uint8_t txAtt2Data[] = {0xa};
+
+static uint8_t txAtt3Data[] = {0xab, 0xcd};
+
+static uint8_t txAtt4Data[] = { // Organoleptic
+0x4f, 0x72, 0x67, 0x61, 0x6e, 0x6f, 0x6c, 0x65,
+0x70, 0x74, 0x69, 0x63, 0x00, 0x00, 0x00, 0x00
+};
+
+static lcsf_raw_att_t txSubSubAtt[] = {
+    {
+        0x32,
+        false,
+        sizeof(txAtt3Data),
+        {
+            .pData = txAtt3Data,
+        }
+    }
+};
+
+static lcsf_raw_att_t txSubAttArr[] = {
+    {
+        0x30,
+        false,
+        sizeof(txAtt2Data),
+        {
+            .pData = txAtt2Data,
+        }
+    },
+    {
+        0x31,
+        true,
+        sizeof(txSubSubAtt)/sizeof(lcsf_raw_att_t),
+        {
+            .pSubAttArray = txSubSubAtt,
+        }
+    },
+};
+
+static lcsf_raw_att_t txAttArr[] = {
+    {
+        0x55,
+        false,
+        sizeof(txAtt1Data),
+        {
+            .pData = txAtt1Data,
+        }
+    },
+    {
+        0x7f,
+        true,
+        sizeof(txSubAttArr)/sizeof(lcsf_raw_att_t),
+        {
+            .pSubAttArray = txSubAttArr,
+        }
+    },
+    {
+        0x40,
+        false,
+        sizeof(txAtt4Data),
+        {
+            .pData = txAtt4Data,
+        }
+    },
+};
+
+static const lcsf_raw_msg_t txMsg = {
+    0xab,
+    0x12,
+    sizeof(txAttArr)/sizeof(lcsf_raw_att_t),
+    txAttArr
+};
+
+#else
+
 static const uint8_t ovrflwMsg[] = {0xaa, 0x00, 0x01, 0x00, 0x0b, 0x00};
 
 static const uint8_t badformatMsg[] = {0xaa, 0x00, 0x01, 0x00, 0x0a, 0x00};
@@ -120,6 +211,7 @@ static const lcsf_raw_msg_t txMsg = {
     sizeof(txAttArr)/sizeof(lcsf_raw_att_t),
     txAttArr
 };
+#endif
 
 // *** Private Functions ***
 static bool compare_rawatt(const lcsf_raw_att_t *pAtt1, const lcsf_raw_att_t *pAtt2) {
@@ -216,6 +308,11 @@ void tearDown(void) {
 }
 
 void test_LCSF_Transcoder_Encode(void) {
+#ifdef LCSF_SMALL
+    printf("Smaller LCSF representation is in use.\n");
+#else
+    printf("Regular LCSF representation is in use.\n");
+#endif
     // Test error cases
     TEST_ASSERT_FALSE(LCSF_TranscoderSend(NULL));
     // Test valid message
