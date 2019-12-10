@@ -275,17 +275,17 @@ static bool LCSF_DecodeBuffer(const uint8_t *pBuffer, uint16_t buffSize, lcsf_ra
 static bool LCSF_FillMsgHeader(uint16_t *pBuffIdx, uint8_t *pBuffer, const lcsf_raw_msg_t *pMsg) {
     // Guard against buffer overflow
     if (*pBuffIdx + 5 < LcsfTranscoderInfo.pInitDesc->BufferSize) {
-        // Byte 1 : Protocol id LSB
+        // Byte 1: Protocol id LSB
         pBuffer[(*pBuffIdx)++] = (uint8_t)pMsg->ProtId;
-        // Byte 2 : Protocol id MSB
+        // Byte 2: Protocol id MSB
         pBuffer[(*pBuffIdx)++] = (uint8_t)(pMsg->ProtId >> 8);
-        // Byte 3 : Command id LSB
+        // Byte 3: Command id LSB
         pBuffer[(*pBuffIdx)++] = (uint8_t)pMsg->CmdId;
-        // Byte 4 : Command id MSB
+        // Byte 4: Command id MSB
         pBuffer[(*pBuffIdx)++] = (uint8_t)(pMsg->CmdId >> 8);
-        // Byte 5 : Attribute number LSB
+        // Byte 5: Attribute number LSB
         pBuffer[(*pBuffIdx)++] = (uint8_t)pMsg->AttNb;
-        // Byte 6 : Attribute number MSB
+        // Byte 6: Attribute number MSB
         pBuffer[(*pBuffIdx)++] = (uint8_t)(pMsg->AttNb >> 8);
         return true;
     } else {
@@ -303,7 +303,6 @@ static bool LCSF_FillMsgHeader(uint16_t *pBuffIdx, uint8_t *pBuffer, const lcsf_
  * \return bool: true if operation was a success
  */
 static bool LCSF_FillAttHeader(uint16_t *pBuffIdx, uint8_t *pBuffer, const lcsf_raw_att_t *pAtt) {
-
     // Guard against buffer overflow
     if (*pBuffIdx + 3 < LcsfTranscoderInfo.pInitDesc->BufferSize) {
         // Byte 1: Attribute id LSB
