@@ -129,17 +129,17 @@ static bool compare_rawatt(const lcsf_raw_att_t *pAtt1, const lcsf_raw_att_t *pA
     if (pAtt1->HasSubAtt != pAtt2->HasSubAtt) {
         return false;
     }
-    if (pAtt1->DataSize != pAtt2->DataSize) {
+    if (pAtt1->PayloadSize != pAtt2->PayloadSize) {
         return false;
     }
     if (pAtt1->HasSubAtt) {
-        for (uint16_t idx = 0; idx < pAtt1->DataSize; idx++) {
+        for (uint16_t idx = 0; idx < pAtt1->PayloadSize; idx++) {
             if (!compare_rawatt(&pAtt1->Payload.pSubAttArray[idx], &pAtt2->Payload.pSubAttArray[idx])) {
                 return false;
             }
         }
     } else {
-        if (memcmp(pAtt1->Payload.pData, pAtt2->Payload.pData, pAtt1->DataSize) != 0) {
+        if (memcmp(pAtt1->Payload.pData, pAtt2->Payload.pData, pAtt1->PayloadSize) != 0) {
             return false;
         }
     }

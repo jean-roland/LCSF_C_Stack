@@ -198,17 +198,17 @@ static bool LCSF_DecodeAtt_Rec(uint16_t *pBuffIdx, const uint8_t *pBuffer, uint1
             // Test if attribute has data or sub-attributes
             if (pAttArray[attIdx].HasSubAtt) {
                 // Allocate the sub-attribute array
-                if (!LCSF_AllocateAttArray(pAttArray[attIdx].DataSize, &(pAttArray[attIdx].Payload.pSubAttArray))) {
+                if (!LCSF_AllocateAttArray(pAttArray[attIdx].PayloadSize, &(pAttArray[attIdx].Payload.pSubAttArray))) {
                     LcsfTranscoderInfo.LastErrCode = LCSF_DECODE_OVERFLOW_ERROR;
                     return false;
                 }
                 // Decode current attribute sub-attribute array
-                if (!LCSF_DecodeAtt_Rec(pBuffIdx, pBuffer, buffSize, pAttArray[attIdx].DataSize, pAttArray[attIdx].Payload.pSubAttArray)) {
+                if (!LCSF_DecodeAtt_Rec(pBuffIdx, pBuffer, buffSize, pAttArray[attIdx].PayloadSize, pAttArray[attIdx].Payload.pSubAttArray)) {
                     return false;
                 }
             } else {
                 // Decode attribute data
-                if (!LCSF_FetchAttData(pBuffIdx, buffSize, pBuffer, pAttArray[attIdx].DataSize, &(pAttArray[attIdx].Payload.pData))) {
+                if (!LCSF_FetchAttData(pBuffIdx, buffSize, pBuffer, pAttArray[attIdx].PayloadSize, &(pAttArray[attIdx].Payload.pData))) {
                     LcsfTranscoderInfo.LastErrCode = LCSF_DECODE_FORMAT_ERROR;
                     return false;
                 }
@@ -317,9 +317,9 @@ static bool LCSF_FillAttHeader(uint16_t *pBuffIdx, uint8_t *pBuffer, const lcsf_
             pBuffer[(*pBuffIdx)++] = (uint8_t)((pAtt->AttId >> 8) & 0x7F);
         }
         // Byte 3: Attribute data size or sub-attribute number LSB
-        pBuffer[(*pBuffIdx)++] = (uint8_t)pAtt->DataSize;
+        pBuffer[(*pBuffIdx)++] = (uint8_t)pAtt->PayloadSize;
         // Byte 4: Attribute data size or sub-attribute number MSB
-        pBuffer[(*pBuffIdx)++] = (uint8_t)(pAtt->DataSize >> 8);
+        pBuffer[(*pBuffIdx)++] = (uint8_t)(pAtt->PayloadSize >> 8);
         return true;
     } else {
         return false;
@@ -337,11 +337,11 @@ static bool LCSF_FillAttHeader(uint16_t *pBuffIdx, uint8_t *pBuffer, const lcsf_
  */
 static bool LCSF_FillAttData(uint16_t *pBuffIdx, uint8_t *pBuffer, const lcsf_raw_att_t *pAtt) {
     // Guard against buffer overflow
-    if (pAtt->DataSize < LcsfTranscoderInfo.pInitDesc->BufferSize) {
+    if (pAtt->PayloadSize < LcsfTranscoderInfo.pInitDesc->BufferSize) {
         // Copy data into the buffer
-        memcpy(&(pBuffer[*pBuffIdx]), pAtt->Payload.pData, pAtt->DataSize);
+        memcpy(&(pBuffer[*pBuffIdx]), pAtt->Payload.pData, pAtt->PayloadSize);
         // Increment buffer index
-        *pBuffIdx += pAtt->DataSize;
+        *pBuffIdx += pAtt->PayloadSize;
         return true;
     } else {
         return false;
@@ -372,7 +372,7 @@ static bool LCSF_EncodeAtt_Rec(uint16_t *pBuffIdx, uint8_t *pBuffer, uint16_t at
 	             return false;
             }
             // Encode current attribute sub-attribute array
-            if (!LCSF_EncodeAtt_Rec(pBuffIdx, pBuffer, pAttArray[attIdx].DataSize, pAttArray[attIdx].Payload.pSubAttArray)) {
+            if (!LCSF_EncodeAtt_Rec(pBuffIdx, pBuffer, pAttArray[attIdx].PayloadSize, pAttArray[attIdx].Payload.pSubAttArray)) {
 	             return false;
 	         }
         } else {

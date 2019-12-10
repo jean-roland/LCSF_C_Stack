@@ -353,7 +353,7 @@ static bool LCSF_ValidateAttribute_Rec(uint16_t attNb, const lcsf_raw_att_t *pAt
             if (pCurrDescAtt->DataType == LCSF_SUB_ATTRIBUTES) {
                 if (pCurrRxAtt->HasSubAtt) {
                     // We process the sub-attributes
-                    if (!LCSF_ValidateAttribute_Rec(pCurrRxAtt->DataSize, pCurrRxAtt->Payload.pSubAttArray, pCurrDescAtt->SubAttNb, pCurrDescAtt->pSubAttDescArray, &(pCurrValidAtt->Payload.pSubAttArray))) {
+                    if (!LCSF_ValidateAttribute_Rec(pCurrRxAtt->PayloadSize, pCurrRxAtt->Payload.pSubAttArray, pCurrDescAtt->SubAttNb, pCurrDescAtt->pSubAttDescArray, &(pCurrValidAtt->Payload.pSubAttArray))) {
                         return false;
                     }
                 } else if (LCSF_HasNonOptionalAttribute(pCurrDescAtt->SubAttNb, pCurrDescAtt->pSubAttDescArray)) {
@@ -363,13 +363,13 @@ static bool LCSF_ValidateAttribute_Rec(uint16_t attNb, const lcsf_raw_att_t *pAt
                 }
             } else {
                 // Check if data type is valid
-                if (!LCSF_ValidateDataType(pCurrRxAtt->DataSize, pCurrDescAtt->DataType)) {
+                if (!LCSF_ValidateDataType(pCurrRxAtt->PayloadSize, pCurrDescAtt->DataType)) {
                     LcsfValidatorInfo.LastErrorCode = LCSF_EP_ERROR_CODE_WRONG_ATT_DATA_TYPE;
                     return false;
                 }
                 // Note the data and data size
                 pCurrValidAtt->Payload.pData = pCurrRxAtt->Payload.pData;
-                pCurrValidAtt->PayloadSize = pCurrRxAtt->DataSize;
+                pCurrValidAtt->PayloadSize = pCurrRxAtt->PayloadSize;
             }
         } else if (!pCurrDescAtt->IsOptional) {
             // Missing non-optional attribute, error
@@ -431,26 +431,26 @@ static bool LCSF_FillAttributeInfo(lcsf_raw_att_t *pRawAtt, uint8_t descDataType
 
     switch (descDataType) {
         case LCSF_UINT8:
-              pRawAtt->DataSize = sizeof(uint8_t);
+              pRawAtt->PayloadSize = sizeof(uint8_t);
               pRawAtt->HasSubAtt = false;
               return true;
         break;
 
         case LCSF_UINT16:
-              pRawAtt->DataSize = sizeof(uint16_t);
+              pRawAtt->PayloadSize = sizeof(uint16_t);
               pRawAtt->HasSubAtt = false;
               return true;
         break;
 
         case LCSF_UINT32:
-              pRawAtt->DataSize = sizeof(uint32_t);
+              pRawAtt->PayloadSize = sizeof(uint32_t);
               pRawAtt->HasSubAtt = false;
               return true;
         break;
 
         case LCSF_BYTE_ARRAY:
               if (pValidAtt->PayloadSize > 0) {
-                  pRawAtt->DataSize = (uint16_t)pValidAtt->PayloadSize;
+                  pRawAtt->PayloadSize = (uint16_t)pValidAtt->PayloadSize;
                   pRawAtt->HasSubAtt = false;
               return true;
               } else {
@@ -461,7 +461,7 @@ static bool LCSF_FillAttributeInfo(lcsf_raw_att_t *pRawAtt, uint8_t descDataType
         case LCSF_STRING:
               stringSize = (uint16_t)strlen((char *)pValidAtt->Payload.pData);
               if (stringSize > 0) {
-                  pRawAtt->DataSize = stringSize;
+                  pRawAtt->PayloadSize = stringSize;
                   pRawAtt->HasSubAtt = false;
                   return true;
               } else {
@@ -470,7 +470,7 @@ static bool LCSF_FillAttributeInfo(lcsf_raw_att_t *pRawAtt, uint8_t descDataType
         break;
 
         case LCSF_SUB_ATTRIBUTES:
-              pRawAtt->DataSize = subAttNb;
+              pRawAtt->PayloadSize = subAttNb;
               pRawAtt->HasSubAtt = true;
               return true;
         break;
@@ -528,7 +528,7 @@ static bool LCSF_FillAttribute_Rec(uint16_t descAttNb, const lcsf_attribute_desc
                     return false;
                 }
                 // Allocate sub-attribute array
-                if (!LCSF_AllocateSenderAttArray(pCurrRawAtt->DataSize, &(pCurrRawAtt->Payload.pSubAttArray))) {
+                if (!LCSF_AllocateSenderAttArray(pCurrRawAtt->PayloadSize, &(pCurrRawAtt->Payload.pSubAttArray))) {
                     return false;
                 }
                 // Fill sub-attribute array
@@ -587,12 +587,12 @@ static bool LCSF_ValidatorSendError(uint8_t errorLoc, uint8_t errorType) {
     errorMsg.pAttArray = msgAttArray;
     // Fill error location attribute
     msgAttArray[0].AttId = LCSF_EP_CMD_ERROR_ATT_ERR_LOC_ID;
-    msgAttArray[0].DataSize = LCSF_EP_CMD_ERROR_ATT_ERR_LOC_SIZE;
+    msgAttArray[0].PayloadSize = LCSF_EP_CMD_ERROR_ATT_ERR_LOC_SIZE;
     msgAttArray[0].HasSubAtt = false;
     msgAttArray[0].Payload.pData = &errorLocVal;
     // Fill error code attribute
     msgAttArray[1].AttId = LCSF_EP_CMD_ERROR_ATT_ERR_TYPE_ID;
-    msgAttArray[1].DataSize = LCSF_EP_CMD_ERROR_ATT_ERR_TYPE_SIZE;
+    msgAttArray[1].PayloadSize = LCSF_EP_CMD_ERROR_ATT_ERR_TYPE_SIZE;
     msgAttArray[1].HasSubAtt = false;
     msgAttArray[1].Payload.pData = &errorCodeVal;
     // Send the message to transcoder
@@ -612,7 +612,7 @@ static bool LCSF_ProcessReceivedError(const lcsf_raw_msg_t *pErrorMsg) {
         return false;
     }
     // Validate attributes data size
-    if ((pErrorMsg->pAttArray[0].DataSize != sizeof(uint8_t)) || (pErrorMsg->pAttArray[1].DataSize != sizeof(uint8_t))) {
+    if ((pErrorMsg->pAttArray[0].PayloadSize != sizeof(uint8_t)) || (pErrorMsg->pAttArray[1].PayloadSize != sizeof(uint8_t))) {
         return false;
     }
     // Save error message information

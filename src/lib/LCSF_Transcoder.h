@@ -39,9 +39,9 @@ typedef union _lcsf_raw_att_payload {
 } lcsf_raw_att_payload_t; // total : 4 bytes, 0 padding
 
 struct _lcsf_raw_att {
-    uint16_t AttId: 15; // Lcsf attribute id
-    uint16_t HasSubAtt: 1; // Indicates if the attribute has sub attributes or data
-    uint16_t DataSize; // Data size (bytes) or lcsf sub attribute number
+    uint16_t AttId:15; // Lcsf attribute id
+    uint16_t HasSubAtt:1; // Indicates if the attribute has sub attributes or data
+    uint16_t PayloadSize; // Data size (bytes) or lcsf sub attribute number
     lcsf_raw_att_payload_t Payload; // See lcsf_att_field_t
 }; // total : 8 bytes, 0 padding
 
