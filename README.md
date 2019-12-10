@@ -32,6 +32,10 @@ The following diagram helps understanding how it works:
 
 ![LCSF C Stack](./Doc/img/Stack.png)
 
+## Representations
+
+The default LCSF representation used by the transcoder is the standard one. You can switch to the smaller representation by uncommenting the `#define LCSF_SMALL` symbol declaration found in `LCSF_Transcoder.h`
+
 ## Protocol files
 
 Each protocol used by the LCSF C stack is composed of 5 files:
