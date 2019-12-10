@@ -364,21 +364,17 @@ static bool LCSF_EncodeAtt_Rec(uint16_t *pBuffIdx, uint8_t *pBuffer, uint16_t at
         if (*pBuffIdx >= LcsfTranscoderInfo.pInitDesc->BufferSize) {
             return false;
         }
+        // Fill attribute header
+        if (!LCSF_FillAttHeader(pBuffIdx, pBuffer, &(pAttArray[attIdx]))) {
+             return false;
+        }
         // Test if attribute has sub-attributes
         if (pAttArray[attIdx].HasSubAtt) {
-            // Fill attribute header
-            if (!LCSF_FillAttHeader(pBuffIdx, pBuffer, &(pAttArray[attIdx]))) {
-	             return false;
-            }
             // Encode current attribute sub-attribute array
             if (!LCSF_EncodeAtt_Rec(pBuffIdx, pBuffer, pAttArray[attIdx].PayloadSize, pAttArray[attIdx].Payload.pSubAttArray)) {
 	             return false;
 	         }
         } else {
-            // Fill attribute header
-            if (!LCSF_FillAttHeader(pBuffIdx, pBuffer, &(pAttArray[attIdx]))) {
-                return false;
-            }
             // Copy data into the buffer
             if (!LCSF_FillAttData(pBuffIdx, pBuffer, &(pAttArray[attIdx]))) {
                 return false;
