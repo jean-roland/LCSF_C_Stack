@@ -130,7 +130,7 @@ static bool LCSF_FetchAttHeader(uint16_t *pBuffIdx, uint16_t buffSize, const uin
     if (*pBuffIdx + 1 < buffSize) {
         // Byte 1: Attribute id LSB
         pAtt->AttId = pBuffer[(*pBuffIdx)++];
-        // Byte 2 (MSbit): Attribute complexity (does it have sub attributes or not)
+        // Byte 2 (MSbit): Complexity flag (the attribute have sub-attributes if set)
         pAtt->HasSubAtt = ((pBuffer[*pBuffIdx] & (1 << 7)) != 0);
         // Byte 2: Attribute id MSB
         pAtt->AttId += pBuffer[(*pBuffIdx)++] << 8;
