@@ -137,26 +137,14 @@ static bool LCSF_FetchAttHeader(uint16_t *pBuffIdx, uint16_t buffSize, const uin
     } else {
         return false;
     }
-    if (!pAtt->HasSubAtt) {
-        // Guard against buffer overflow
-        if(*pBuffIdx + 1 < buffSize) {
-            // Byte 3: Data size LSB
-            pAtt->DataSize = pBuffer[(*pBuffIdx)++];
-            // Byte 4: Data size MSB
-            pAtt->DataSize += pBuffer[(*pBuffIdx)++] << 8;
-        } else {
-            return false;
-        }
+    // Guard against buffer overflow
+    if(*pBuffIdx + 1 < buffSize) {
+        // Byte 3: Data size or Sub-attribute number LSB
+        pAtt->PayloadSize = pBuffer[(*pBuffIdx)++];
+        // Byte 4: Data size or Sub-attribute number MSB
+        pAtt->PayloadSize += pBuffer[(*pBuffIdx)++] << 8;
     } else {
-        // Guard against buffer overflow
-        if(*pBuffIdx + 1 < buffSize) {
-            // Byte 3: Sub-attribute number LSB
-            pAtt->DataSize = pBuffer[(*pBuffIdx)++];
-            // Byte 4: Sub-attribute number MSB
-            pAtt->DataSize += pBuffer[(*pBuffIdx)++] << 8;
-        } else {
-            return false;
-        }
+        return false;
     }
     return true;
 }
