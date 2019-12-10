@@ -366,7 +366,7 @@ static bool LCSF_EncodeAtt_Rec(uint16_t *pBuffIdx, uint8_t *pBuffer, uint16_t at
         }
         // Test if attribute has sub-attributes
         if (pAttArray[attIdx].HasSubAtt) {
-            // Fill attribute header (we add the 2 bytes from the sub-attribute number field to the size)
+            // Fill attribute header
             if (!LCSF_FillAttHeader(pBuffIdx, pBuffer, &(pAttArray[attIdx]))) {
 	             return false;
             }
