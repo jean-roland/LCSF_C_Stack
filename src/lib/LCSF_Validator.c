@@ -461,7 +461,7 @@ static bool LCSF_FillAttributeInfo(lcsf_raw_att_t *pRawAtt, uint8_t descDataType
         case LCSF_STRING:
               stringSize = (uint16_t)strlen((char *)pValidAtt->Payload.pData);
               if (stringSize > 0) {
-                  pRawAtt->PayloadSize = stringSize;
+                  pRawAtt->PayloadSize = stringSize + 1;
                   pRawAtt->HasSubAtt = false;
                   return true;
               } else {
