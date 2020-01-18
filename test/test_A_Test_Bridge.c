@@ -24,55 +24,55 @@ static int memIdx;
 // *** Model data ***
 
 // Model payload
-uint8_t cc1_sa4_array[ARRAY_SIZE] = {6,5,4,3,2};
-uint8_t cc1_sa9_array[ARRAY_SIZE] = {2,3,4,5,6};
-char cc1_sa5_str[] = "Cpc";
-char cc1_sa10_str[] = "Qbvm";
+static uint8_t cc1_sa4_array[ARRAY_SIZE] = {6,5,4,3,2};
+static uint8_t cc1_sa9_array[ARRAY_SIZE] = {2,3,4,5,6};
+static char cc1_sa5_str[] = "Cpc";
+static char cc1_sa10_str[] = "Qbvm";
 
-test_cmd_payload_t cc1_cmd_payload = {
+static test_cmd_payload_t cc1_cmd_payload = {
     .cc1_payload = {
         .optAttFlagsBitfield = (TEST_CC1_ATT_SA6_FLAG | TEST_CC1_ATT_SA8_FLAG | TEST_CC1_ATT_SA9_FLAG | TEST_CC1_ATT_SA10_FLAG),
         .sa1 = 1,
-        .sa2 = 2,
-        .sa3 = 3,
+        .sa2 = 2001,
+        .sa3 = 100001,
         .sa4Size = ARRAY_SIZE,
         .p_sa4 = cc1_sa4_array,
         .p_sa5 = cc1_sa5_str,
         .sa6 = 4,
-        .sa7 = 5,
-        .sa8 = 6,
+        .sa7 = 4001,
+        .sa8 = 150000,
         .sa9Size = ARRAY_SIZE,
         .p_sa9 = cc1_sa9_array,
         .p_sa10 = cc1_sa10_str,
     },
 };
 
-uint8_t cc2_sa4_array[ARRAY_SIZE] = {5,4,3,2,1};
-uint8_t cc2_sa9_array[ARRAY_SIZE] = {1,2,3,4,5};
-char cc2_sa5_str[] = "Bob";
-char cc2_sa10_str[] = "Paul";
+static uint8_t cc2_sa4_array[ARRAY_SIZE] = {5,4,3,2,1};
+static uint8_t cc2_sa9_array[ARRAY_SIZE] = {1,2,3,4,5};
+static char cc2_sa5_str[] = "Bob";
+static char cc2_sa10_str[] = "Paul";
 
-test_cmd_payload_t cc2_cmd_payload = {
+static test_cmd_payload_t cc2_cmd_payload = {
     .cc2_payload = {
         .optAttFlagsBitfield = (TEST_CC2_ATT_SA6_FLAG | TEST_CC2_ATT_SA8_FLAG | TEST_CC2_ATT_SA9_FLAG | TEST_CC2_ATT_SA10_FLAG),
         .sa1 = 0,
-        .sa2 = 1,
-        .sa3 = 2,
+        .sa2 = 2000,
+        .sa3 = 100000,
         .sa4Size = ARRAY_SIZE,
         .p_sa4 = cc2_sa4_array,
         .p_sa5 = cc2_sa5_str,
         .sa6 = 3,
-        .sa7 = 4,
-        .sa8 = 5,
+        .sa7 = 4000,
+        .sa8 = 149999,
         .sa9Size = ARRAY_SIZE,
         .p_sa9 = cc2_sa9_array,
         .p_sa10 = cc2_sa10_str,
     },
 };
 
-uint8_t ca4_sa4_array[ARRAY_SIZE] = {11,21,31,41,51};
+static uint8_t ca4_sa4_array[ARRAY_SIZE] = {11,21,31,41,51};
 
-test_cmd_payload_t cc4_cmd_payload = {
+static test_cmd_payload_t cc4_cmd_payload = {
     .cc4_payload = {
         .optAttFlagsBitfield = TEST_CC4_ATT_CA2_FLAG,
         .sa1 = 0,
@@ -97,9 +97,9 @@ test_cmd_payload_t cc4_cmd_payload = {
     },
 };
 
-uint8_t ca8_sa4_array[ARRAY_SIZE] = {10,20,30,40,50};
+static uint8_t ca8_sa4_array[ARRAY_SIZE] = {10,20,30,40,50};
 
-test_cmd_payload_t cc5_cmd_payload = {
+static test_cmd_payload_t cc5_cmd_payload = {
     .cc5_payload = {
         .optAttFlagsBitfield = TEST_CC5_ATT_CA6_FLAG,
         .sa2 = 255,
@@ -130,16 +130,16 @@ static lcsf_valid_cmd_t sc2_msg = {
     NULL,
 };
 
-uint8_t cc1_sa1 = 1;
-uint16_t cc1_sa2 = 2;
-uint32_t cc1_sa3 = 3;
-uint8_t cc1_sa4[ARRAY_SIZE] = {6,5,4,3,2};
-char cc1_sa5[] = "Cpc";
-uint8_t cc1_sa6 = 4;
-uint16_t cc1_sa7 = 5;
-uint32_t cc1_sa8 = 6;
-uint8_t cc1_sa9[ARRAY_SIZE] = {2,3,4,5,6};
-char cc1_sa10[] = "Qbvm";
+static uint8_t cc1_sa1 = 1;
+static uint16_t cc1_sa2 = 2001;
+static uint32_t cc1_sa3 = 100001;
+static uint8_t cc1_sa4[ARRAY_SIZE] = {6,5,4,3,2};
+static char cc1_sa5[] = "Cpc";
+static uint8_t cc1_sa6 = 4;
+static uint16_t cc1_sa7 = 4001;
+static uint32_t cc1_sa8 = 150000;
+static uint8_t cc1_sa9[ARRAY_SIZE] = {2,3,4,5,6};
+static char cc1_sa10[] = "Qbvm";
 
 static lcsf_valid_att_t cc1_att_array[] = {
     {sizeof(cc1_sa1), {.pData = &cc1_sa1}},
@@ -159,16 +159,16 @@ static const lcsf_valid_cmd_t cc1_msg = {
     cc1_att_array,
 };
 
-uint8_t cc2_sa1 = 0;
-uint16_t cc2_sa2 = 1;
-uint32_t cc2_sa3 = 2;
-uint8_t cc2_sa4[ARRAY_SIZE] = {5,4,3,2,1};
-char cc2_sa5[] = "Bob";
-uint8_t cc2_sa6 = 3;
-uint16_t cc2_sa7 = 4;
-uint32_t cc2_sa8 = 5;
-uint8_t cc2_sa9[ARRAY_SIZE] = {1,2,3,4,5};
-char cc2_sa10[] = "Paul";
+static uint8_t cc2_sa1 = 0;
+static uint16_t cc2_sa2 = 2000;
+static uint32_t cc2_sa3 = 100000;
+static uint8_t cc2_sa4[ARRAY_SIZE] = {5,4,3,2,1};
+static char cc2_sa5[] = "Bob";
+static uint8_t cc2_sa6 = 3;
+static uint16_t cc2_sa7 = 4000;
+static uint32_t cc2_sa8 = 149999;
+static uint8_t cc2_sa9[ARRAY_SIZE] = {1,2,3,4,5};
+static char cc2_sa10[] = "Paul";
 
 static lcsf_valid_att_t cc2_att_array[] = {
     {sizeof(cc2_sa1), {.pData = &cc2_sa1}},
@@ -188,13 +188,13 @@ static lcsf_valid_cmd_t cc2_msg = {
     cc2_att_array,
 };
 
-uint8_t cc4_sa1 = 0;
-uint8_t cc4_ca1_sa1 = 2;
-uint16_t cc4_ca1_sa2 = 2001;
-uint32_t cc4_ca1_sa3 = 100001;
-uint8_t cc4_ca2_sa1 = 3;
-uint8_t ca2_ca3_sa1 = 4;
-uint8_t ca3_ca4_sa4[ARRAY_SIZE] = {11,21,31,41,51};
+static uint8_t cc4_sa1 = 0;
+static uint8_t cc4_ca1_sa1 = 2;
+static uint16_t cc4_ca1_sa2 = 2001;
+static uint32_t cc4_ca1_sa3 = 100001;
+static uint8_t cc4_ca2_sa1 = 3;
+static uint8_t ca2_ca3_sa1 = 4;
+static uint8_t ca3_ca4_sa4[ARRAY_SIZE] = {11,21,31,41,51};
 
 static lcsf_valid_att_t ca3_ca4_subatt_array[] = {
     {sizeof(ca3_ca4_sa4), {.pData = &ca3_ca4_sa4}},
@@ -227,13 +227,13 @@ static lcsf_valid_cmd_t cc4_msg = {
     cc4_att_array,
 };
 
-uint16_t cc5_sa2 = 255;
-uint8_t cc5_ca5_sa1 = 1;
-uint16_t cc5_ca5_sa2 = 2000;
-uint32_t cc5_ca5_sa3 = 100000;
-uint8_t cc5_ca6_sa1 = 2;
-uint8_t ca6_ca7_sa1 = 3;
-uint8_t ca7_ca8_sa4[ARRAY_SIZE] = {10,20,30,40,50};
+static uint16_t cc5_sa2 = 255;
+static uint8_t cc5_ca5_sa1 = 1;
+static uint16_t cc5_ca5_sa2 = 2000;
+static uint32_t cc5_ca5_sa3 = 100000;
+static uint8_t cc5_ca6_sa1 = 2;
+static uint8_t ca6_ca7_sa1 = 3;
+static uint8_t ca7_ca8_sa4[ARRAY_SIZE] = {10,20,30,40,50};
 
 static lcsf_valid_att_t ca7_ca8_subatt_array[] = {
     {sizeof(ca7_ca8_sa4), {.pData = &ca7_ca8_sa4}},

@@ -19,12 +19,12 @@ static void *memPtr[64];
 static int memIdx;
 
 // *** Model data ***
-uint8_t cc1_sa4_array[ARRAY_SIZE] = {6,5,4,3,2};
-uint8_t cc1_sa9_array[ARRAY_SIZE] = {2,3,4,5,6};
-char cc1_sa5_str[] = "Cpc";
-char cc1_sa10_str[] = "Qbvm";
+static uint8_t cc1_sa4_array[ARRAY_SIZE] = {6,5,4,3,2};
+static uint8_t cc1_sa9_array[ARRAY_SIZE] = {2,3,4,5,6};
+static char cc1_sa5_str[] = "Cpc";
+static char cc1_sa10_str[] = "Qbvm";
 
-test_cmd_payload_t cc1_cmd_payload = {
+static test_cmd_payload_t cc1_cmd_payload = {
     .cc1_payload = {
         .optAttFlagsBitfield = (TEST_CC1_ATT_SA6_FLAG | TEST_CC1_ATT_SA8_FLAG | TEST_CC1_ATT_SA9_FLAG | TEST_CC1_ATT_SA10_FLAG),
         .sa1 = 1,
@@ -42,12 +42,12 @@ test_cmd_payload_t cc1_cmd_payload = {
     },
 };
 
-uint8_t cc2_sa4_array[ARRAY_SIZE] = {5,4,3,2,1};
-uint8_t cc2_sa9_array[ARRAY_SIZE] = {1,2,3,4,5};
-char cc2_sa5_str[] = "Bob";
-char cc2_sa10_str[] = "Paul";
+static uint8_t cc2_sa4_array[ARRAY_SIZE] = {5,4,3,2,1};
+static uint8_t cc2_sa9_array[ARRAY_SIZE] = {1,2,3,4,5};
+static char cc2_sa5_str[] = "Bob";
+static char cc2_sa10_str[] = "Paul";
 
-test_cmd_payload_t cc2_cmd_payload = {
+static test_cmd_payload_t cc2_cmd_payload = {
     .cc2_payload = {
         .optAttFlagsBitfield = (TEST_CC2_ATT_SA6_FLAG | TEST_CC2_ATT_SA8_FLAG | TEST_CC2_ATT_SA9_FLAG | TEST_CC2_ATT_SA10_FLAG),
         .sa1 = 0,
@@ -65,9 +65,9 @@ test_cmd_payload_t cc2_cmd_payload = {
     },
 };
 
-uint8_t ca4_sa4_array[ARRAY_SIZE] = {11,21,31,41,51};
+static uint8_t ca4_sa4_array[ARRAY_SIZE] = {11,21,31,41,51};
 
-test_cmd_payload_t cc4_cmd_payload = {
+static test_cmd_payload_t cc4_cmd_payload = {
     .cc4_payload = {
         .optAttFlagsBitfield = TEST_CC4_ATT_CA2_FLAG,
         .sa1 = 0,
@@ -92,9 +92,9 @@ test_cmd_payload_t cc4_cmd_payload = {
     },
 };
 
-uint8_t ca8_sa4_array[ARRAY_SIZE] = {10,20,30,40,50};
+static uint8_t ca8_sa4_array[ARRAY_SIZE] = {10,20,30,40,50};
 
-test_cmd_payload_t cc5_cmd_payload = {
+static test_cmd_payload_t cc5_cmd_payload = {
     .cc5_payload = {
         .optAttFlagsBitfield = TEST_CC5_ATT_CA6_FLAG,
         .sa2 = 255,
@@ -119,7 +119,7 @@ test_cmd_payload_t cc5_cmd_payload = {
     },
 };
 
-uint8_t pattern[ARRAY_SIZE] = {0x12,0x34,0x56,0x78,0x89};
+static uint8_t pattern[ARRAY_SIZE] = {0x12,0x34,0x56,0x78,0x89};
 
 // *** Private Functions ***
 static bool compare_payload_cc1(const test_cc1_att_payload_t *p1, const test_cc1_att_payload_t *p2) {
