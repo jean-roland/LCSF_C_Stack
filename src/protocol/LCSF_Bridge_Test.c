@@ -363,23 +363,33 @@ static bool LCSF_Bridge_TestCC1FillAtt(lcsf_valid_att_t **pAttArrayAddr, test_cm
     // Fill data of attribute SA6
     if ((pCmdPayload->cc1_payload.optAttFlagsBitfield & TEST_CC1_ATT_SA6_FLAG) != 0) {
         pAttArray[TEST_CC1_ATT_SA6].Payload.pData = &(pCmdPayload->cc1_payload.sa6);
+    } else {
+        pAttArray[TEST_CC1_ATT_SA6].Payload.pData = NULL;
     }
     // Fill data of attribute SA7
     if ((pCmdPayload->cc1_payload.optAttFlagsBitfield & TEST_CC1_ATT_SA7_FLAG) != 0) {
         pAttArray[TEST_CC1_ATT_SA7].Payload.pData = &(pCmdPayload->cc1_payload.sa7);
+    } else {
+        pAttArray[TEST_CC1_ATT_SA7].Payload.pData = NULL;
     }
     // Fill data of attribute SA8
     if ((pCmdPayload->cc1_payload.optAttFlagsBitfield & TEST_CC1_ATT_SA8_FLAG) != 0) {
         pAttArray[TEST_CC1_ATT_SA8].Payload.pData = &(pCmdPayload->cc1_payload.sa8);
+    } else {
+        pAttArray[TEST_CC1_ATT_SA8].Payload.pData = NULL;
     }
     // Fill data of attribute SA9
     if ((pCmdPayload->cc1_payload.optAttFlagsBitfield & TEST_CC1_ATT_SA9_FLAG) != 0) {
         pAttArray[TEST_CC1_ATT_SA9].PayloadSize = pCmdPayload->cc1_payload.sa9Size;
         pAttArray[TEST_CC1_ATT_SA9].Payload.pData = pCmdPayload->cc1_payload.p_sa9;
+    } else {
+        pAttArray[TEST_CC1_ATT_SA9].Payload.pData = NULL;
     }
     // Fill data of attribute SA10
     if ((pCmdPayload->cc1_payload.optAttFlagsBitfield & TEST_CC1_ATT_SA10_FLAG) != 0) {
         pAttArray[TEST_CC1_ATT_SA10].Payload.pData = pCmdPayload->cc1_payload.p_sa10;
+    } else {
+        pAttArray[TEST_CC1_ATT_SA10].Payload.pData = NULL;
     }
     return true;
 }
@@ -408,23 +418,33 @@ static bool LCSF_Bridge_TestCC3FillAtt(lcsf_valid_att_t **pAttArrayAddr, test_cm
     // Fill data of attribute SA6
     if ((pCmdPayload->cc3_payload.optAttFlagsBitfield & TEST_CC3_ATT_SA6_FLAG) != 0) {
         pAttArray[TEST_CC3_ATT_SA6].Payload.pData = &(pCmdPayload->cc3_payload.sa6);
+    } else {
+        pAttArray[TEST_CC3_ATT_SA6].Payload.pData = NULL;
     }
     // Fill data of attribute SA7
     if ((pCmdPayload->cc3_payload.optAttFlagsBitfield & TEST_CC3_ATT_SA7_FLAG) != 0) {
         pAttArray[TEST_CC3_ATT_SA7].Payload.pData = &(pCmdPayload->cc3_payload.sa7);
+    } else {
+        pAttArray[TEST_CC3_ATT_SA7].Payload.pData = NULL;
     }
     // Fill data of attribute SA8
     if ((pCmdPayload->cc3_payload.optAttFlagsBitfield & TEST_CC3_ATT_SA8_FLAG) != 0) {
         pAttArray[TEST_CC3_ATT_SA8].Payload.pData = &(pCmdPayload->cc3_payload.sa8);
+    } else {
+        pAttArray[TEST_CC3_ATT_SA8].Payload.pData = NULL;
     }
     // Fill data of attribute SA9
     if ((pCmdPayload->cc3_payload.optAttFlagsBitfield & TEST_CC3_ATT_SA9_FLAG) != 0) {
         pAttArray[TEST_CC3_ATT_SA9].PayloadSize = pCmdPayload->cc3_payload.sa9Size;
         pAttArray[TEST_CC3_ATT_SA9].Payload.pData = pCmdPayload->cc3_payload.p_sa9;
+    } else {
+        pAttArray[TEST_CC3_ATT_SA9].Payload.pData = NULL;
     }
     // Fill data of attribute SA10
     if ((pCmdPayload->cc3_payload.optAttFlagsBitfield & TEST_CC3_ATT_SA10_FLAG) != 0) {
         pAttArray[TEST_CC3_ATT_SA10].Payload.pData = pCmdPayload->cc3_payload.p_sa10;
+    } else {
+        pAttArray[TEST_CC3_ATT_SA10].Payload.pData = NULL;
     }
     return true;
 }
@@ -495,6 +515,8 @@ static bool LCSF_Bridge_TestCC4FillAtt(lcsf_valid_att_t **pAttArrayAddr, test_cm
                 // Fill data of sub-attribute SA4
                 pAttArray[TEST_CC4_ATT_CA2].Payload.pSubAttArray[TEST_CA2_ATT_CA3].Payload.pSubAttArray[TEST_CA3_ATT_CA4].Payload.pSubAttArray[TEST_CA4_ATT_SA4].PayloadSize = pCmdPayload->cc4_payload.ca2_payload.ca3_payload.ca4_payload.sa4Size;
                 pAttArray[TEST_CC4_ATT_CA2].Payload.pSubAttArray[TEST_CA2_ATT_CA3].Payload.pSubAttArray[TEST_CA3_ATT_CA4].Payload.pSubAttArray[TEST_CA4_ATT_SA4].Payload.pData = pCmdPayload->cc4_payload.ca2_payload.ca3_payload.ca4_payload.p_sa4;
+    } else {
+        pAttArray[TEST_CC4_ATT_CA2].Payload.pData = NULL;
     }
     return true;
 }
@@ -566,6 +588,8 @@ static bool LCSF_Bridge_TestCC6FillAtt(lcsf_valid_att_t **pAttArrayAddr, test_cm
                 // Fill data of sub-attribute SA4
                 pAttArray[TEST_CC6_ATT_CA10].Payload.pSubAttArray[TEST_CA10_ATT_CA11].Payload.pSubAttArray[TEST_CA11_ATT_CA12].Payload.pSubAttArray[TEST_CA12_ATT_SA4].PayloadSize = pCmdPayload->cc6_payload.ca10_payload.ca11_payload.ca12_payload.sa4Size;
                 pAttArray[TEST_CC6_ATT_CA10].Payload.pSubAttArray[TEST_CA10_ATT_CA11].Payload.pSubAttArray[TEST_CA11_ATT_CA12].Payload.pSubAttArray[TEST_CA12_ATT_SA4].Payload.pData = pCmdPayload->cc6_payload.ca10_payload.ca11_payload.ca12_payload.p_sa4;
+    } else {
+        pAttArray[TEST_CC6_ATT_CA10].Payload.pData = NULL;
     }
     return true;
 }
