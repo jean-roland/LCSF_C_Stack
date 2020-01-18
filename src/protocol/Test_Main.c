@@ -396,13 +396,14 @@ static bool TestExecuteCC6(test_cmd_payload_t *pCmdPayload) {
     TestInfo.pSendCmdPayload->cc6_payload.ca10_payload.optAttFlagsBitfield = 0;
     TestInfo.pSendCmdPayload->cc6_payload.ca10_payload.ca11_payload.optAttFlagsBitfield = 0;
     // Process data
+    TestInfo.pSendCmdPayload->cc6_payload.sa4Size = TEST_ARRAY_SIZE;
     TestInfo.pSendCmdPayload->cc6_payload.p_sa4 = m_cc6_sa4;
     Test_FillArray(m_cc6_sa4, false);
     TestInfo.pSendCmdPayload->cc6_payload.ca9_payload.sa1 = m_ca9_sa1 - 1;
     TestInfo.pSendCmdPayload->cc6_payload.ca9_payload.sa2 = m_ca9_sa2 - 1;
     // Optional attributes
     if (m_ca9_sa3_isHere) {
-        TestInfo.pSendCmdPayload->cc6_payload.ca9_payload.sa3 = m_ca9_sa3;
+        TestInfo.pSendCmdPayload->cc6_payload.ca9_payload.sa3 = m_ca9_sa3 - 1;
         TestInfo.pSendCmdPayload->cc6_payload.ca9_payload.optAttFlagsBitfield |= TEST_CA9_ATT_SA3_FLAG;
     }
     if (m_cc6_ca10_isHere) {
