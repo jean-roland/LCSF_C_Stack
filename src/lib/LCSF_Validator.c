@@ -674,7 +674,7 @@ bool LCSF_ValidatorReceive(const lcsf_raw_msg_t *pMessage) {
     // Variables initialization
     uint16_t descCmdIdx = 0;
     lcsf_valid_cmd_t validMsg;
-    FiloFreeAll(LcsfValidatorInfo.pSenderFilo);
+    FiloFreeAll(LcsfValidatorInfo.pReceiverFilo);
     memset(&validMsg, 0, sizeof(lcsf_valid_cmd_t));
     // Check if command id is valid
     if (!LCSF_ValidateCmdId(pMessage->CmdId, pProtDesc->CmdNb, &descCmdIdx, pProtDesc->pCmdDescArray)) {
@@ -704,7 +704,7 @@ bool LCSF_ValidatorSend(uint8_t protId, const lcsf_valid_cmd_t *pCommand) {
     uint16_t cmdIdx = 0;
     lcsf_raw_msg_t sendMsg;
     memset(&sendMsg, 0, sizeof(lcsf_raw_msg_t));
-    FiloFreeAll(LcsfValidatorInfo.pReceiverFilo);
+    FiloFreeAll(LcsfValidatorInfo.pSenderFilo);
     // Note the protocol id
     sendMsg.ProtId = protId;
     // Validate command id
