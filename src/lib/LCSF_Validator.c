@@ -669,8 +669,7 @@ bool LCSF_ValidatorReceive(const lcsf_raw_msg_t *pMessage) {
     const lcsf_protocol_desc_t *pProtDesc = LCSF_GetDescriptor(pMessage->ProtId);
     // Check if protocol id is valid
     if ((pProtDesc == NULL) || (pFnInterpreter == NULL)) {
-        LCSF_ValidatorSendError(LCSF_EP_ERROR_LOC_VALIDATION_ERROR, LCSF_EP_ERROR_CODE_UNKNOWN_PROT_ID);
-        return false;
+        return LCSF_ValidatorSendError(LCSF_EP_ERROR_LOC_VALIDATION_ERROR, LCSF_EP_ERROR_CODE_UNKNOWN_PROT_ID);
     }
     // Variables initialization
     uint16_t descCmdIdx = 0;
@@ -679,15 +678,13 @@ bool LCSF_ValidatorReceive(const lcsf_raw_msg_t *pMessage) {
     memset(&validMsg, 0, sizeof(lcsf_valid_cmd_t));
     // Check if command id is valid
     if (!LCSF_ValidateCmdId(pMessage->CmdId, pProtDesc->CmdNb, &descCmdIdx, pProtDesc->pCmdDescArray)) {
-        LCSF_ValidatorSendError(LCSF_EP_ERROR_LOC_VALIDATION_ERROR, LCSF_EP_ERROR_CODE_UNKNOWN_CMD_ID);
-        return false;
+        return LCSF_ValidatorSendError(LCSF_EP_ERROR_LOC_VALIDATION_ERROR, LCSF_EP_ERROR_CODE_UNKNOWN_CMD_ID);
     }
     // Validate the command id
     validMsg.CmdId = pMessage->CmdId;
     // Check if command attributes are valid
     if (!LCSF_ValidateAttribute(pMessage, &(pProtDesc->pCmdDescArray[descCmdIdx]), &(validMsg.pAttArray))) {
-        LCSF_ValidatorSendError(LCSF_EP_ERROR_LOC_VALIDATION_ERROR, LcsfValidatorInfo.LastErrorCode);
-        return false;
+        return LCSF_ValidatorSendError(LCSF_EP_ERROR_LOC_VALIDATION_ERROR, LcsfValidatorInfo.LastErrorCode);
     }
     // Send validated message to interpreter function
     return pFnInterpreter(&validMsg);
