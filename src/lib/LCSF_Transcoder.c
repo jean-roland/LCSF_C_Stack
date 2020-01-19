@@ -497,23 +497,20 @@ bool LCSF_TranscoderInit(const lcsf_trnscdr_init_desc_t *pInitDesc) {
 }
 
 bool LCSF_TranscoderReceive(const uint8_t *pBuffer, uint16_t buffSize) {
-
-    if (pBuffer != NULL) {
-        lcsf_raw_msg_t *pMsg = &LcsfTranscoderInfo.DecoderMsg;
-        // Decode buffer into lcsf object
-        if(LCSF_DecodeBuffer(pBuffer, buffSize, pMsg)) {
-            // Send lcsf object to receiver
-            return LCSF_ValidatorReceive(pMsg);
-        }
-    } else {
-        LcsfTranscoderInfo.LastErrCode = LCSF_DECODE_UNKNOWN_ERROR;
+    if (pBuffer == NULL) {
+        return false;
+    }
+    lcsf_raw_msg_t *pMsg = &LcsfTranscoderInfo.DecoderMsg;
+    // Decode buffer into lcsf object
+    if(LCSF_DecodeBuffer(pBuffer, buffSize, pMsg)) {
+        // Send lcsf object to receiver
+        return LCSF_ValidatorReceive(pMsg);
     }
     // Send error if decode unsuccessful
     return LCSF_ValidatorSendTranscoderError(LcsfTranscoderInfo.LastErrCode);
 }
 
 bool LCSF_TranscoderSend(const lcsf_raw_msg_t *pMessage) {
-
     if (pMessage != NULL) {
         uint16_t buffSize = 0;
         uint8_t *pBuffer = LcsfTranscoderInfo.pEncoderBuffer;
