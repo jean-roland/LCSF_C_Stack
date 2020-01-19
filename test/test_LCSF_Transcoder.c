@@ -269,10 +269,8 @@ static void *malloc_Callback(uint32_t size, int num_calls) {
 static bool process_error_Callback(uint8_t error_code, int num_calls) {
     switch (num_calls) {
         case 0:
-            return (error_code == 0xFF);
-        case 1:
             return (error_code == 0x01);
-        case 2:
+        case 1:
             return (error_code == 0x00);
         default:
             return false;
@@ -321,7 +319,7 @@ void test_LCSF_Transcoder_Encode(void) {
 
 void test_LCSF_Transcoder_Decode(void) {
     // Test error cases
-    TEST_ASSERT_TRUE(LCSF_TranscoderReceive(NULL, 0));
+    TEST_ASSERT_FALSE(LCSF_TranscoderReceive(NULL, 0));
     TEST_ASSERT_TRUE(LCSF_TranscoderReceive(ovrflwMsg, sizeof(ovrflwMsg)));
     TEST_ASSERT_TRUE(LCSF_TranscoderReceive(badformatMsg, sizeof(badformatMsg)));
     // Test valid packet
