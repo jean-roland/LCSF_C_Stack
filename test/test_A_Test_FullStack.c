@@ -49,8 +49,38 @@ static int send_num_calls;
 // *** Model data ***
 #ifdef LCSF_SMALL
 // Error messages
-static const uint8_t ovrflwMsg[] = {0xaa, 0x01, 0x0b};
-static const uint8_t badformatMsg[] = {0xaa, 0x01, 0x0a};
+static const uint8_t err_unknown_prot_msg[] = {0xFF, 0x00, 0x02, 0x00, 0x01, 0x01, 0x01, 0x01, 0x00};
+static const uint8_t err_unknown_cmd_msg[] = {0xFF, 0x00, 0x02, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01};
+static const uint8_t err_unknown_att_msg[] = {0xFF, 0x00, 0x02, 0x00, 0x01, 0x01, 0x01, 0x01, 0x02};
+static const uint8_t err_too_many_att_msg[] = {0xFF, 0x00, 0x02, 0x00, 0x01, 0x01, 0x01, 0x01, 0x03};
+static const uint8_t err_missing_att_msg[] = {0xFF, 0x00, 0x02, 0x00, 0x01, 0x01, 0x01, 0x01, 0x04};
+static const uint8_t err_wrong_data_type_msg[] = {0xFF, 0x00, 0x02, 0x00, 0x01, 0x01, 0x01, 0x01, 0x05};
+// Wrong messages
+static const uint8_t bad_prot_id_msg[] = {0x21, 0x00, 0x00};
+static const uint8_t bad_cmd_id_msg[] = {0x55, 0x4c, 0x00};
+static const uint8_t bad_att_id_msg[] = {0x55, 0x03, 0x06, // CC1
+ 0x00, 0x01, 0x00, // SA1
+ 0x01, 0x02, 0x00, 0x00 // SA2
+ 0x02, 0x04, 0x00, 0x00, 0x00, 0x00, // SA3
+ 0x03, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, // SA4
+ 0x04, 0x01, 0x00, // SA5
+ 0x48, 0x01, 0x00 // Wrong att
+};
+static const uint8_t extra_att_msg[] = {0x55, 0x00, 0x01, 0x00, 0x01, 0x00};
+static const uint8_t missing_att_msg[] = {0x55, 0x03, 0x05, // CC1
+ 0x00, 0x01, 0x00, // SA1
+ 0x01, 0x02, 0x00, 0x00 // SA2
+ 0x02, 0x04, 0x00, 0x00, 0x00, 0x00, // SA3
+ 0x03, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, // SA4
+ 0x05, 0x01, 0x00 // SA6
+};
+static const uint8_t bad_data_type_msg[] = {0x55, 0x03, 0x05, // CC1
+ 0x00, 0x04, 0x00, 0x00, 0x00, 0x00 // SA1
+ 0x01, 0x02, 0x00, 0x00 // SA2
+ 0x02, 0x04, 0x00, 0x00, 0x00, 0x00, // SA3
+ 0x03, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, // SA4
+ 0x04, 0x01, 0x00 // SA5
+};
 // Test messages
 static const uint8_t sc1_msg[] = {0x55, 0x00, 0x00};
 static const uint8_t sc2_msg[] = {0x55, 0x01, 0x00};
@@ -142,8 +172,50 @@ static uint8_t cc6_msg_tx[] = {
 
 #else
 // Error messages
-static const uint8_t ovrflwMsg[] = {0xaa, 0x00, 0x01, 0x00, 0x0b, 0x00};
-static const uint8_t badformatMsg[] = {0xaa, 0x00, 0x01, 0x00, 0x0a, 0x00};
+static const uint8_t err_unknown_prot_msg[] = {
+0xFF, 0xFF, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x01, 0x00, 0x01, 0x00, 0x00
+};
+static const uint8_t err_unknown_cmd_msg[] = {
+0xFF, 0xFF, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x01, 0x00, 0x01, 0x00, 0x01
+};
+static const uint8_t err_unknown_att_msg[] = {
+0xFF, 0xFF, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x01, 0x00, 0x01, 0x00, 0x02
+};
+static const uint8_t err_too_many_att_msg[] = {
+0xFF, 0xFF, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x01, 0x00, 0x01, 0x00, 0x03
+};
+static const uint8_t err_missing_att_msg[] = {
+0xFF, 0xFF, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x01, 0x00, 0x01, 0x00, 0x04
+};
+static const uint8_t err_wrong_data_type_msg[] = {
+0xFF, 0xFF, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x01, 0x00, 0x01, 0x00, 0x05
+};
+// Wrong messages
+static const uint8_t bad_prot_id_msg[] = {0x21, 0x00, 0x00, 0x00, 0x00, 0x00};
+static const uint8_t bad_cmd_id_msg[] = {0x55, 0x00, 0x4c, 0x00, 0x00, 0x00};
+static const uint8_t bad_att_id_msg[] = {0x55, 0x00, 0x03, 0x00, 0x06, 0x00, // CC1
+ 0x00, 0x00, 0x01, 0x00, 0x00, // SA1
+ 0x01, 0x00, 0x02, 0x00, 0x00, 0x00, // SA2
+ 0x02, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, // SA3
+ 0x03, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // SA4
+ 0x04, 0x00, 0x01, 0x00, 0x00, // SA5
+ 0x48, 0x00, 0x01, 0x00, 0x00 // Wrong att
+};
+static const uint8_t extra_att_msg[] = {0x55, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00};
+static const uint8_t missing_att_msg[] = {0x55, 0x00, 0x03, 0x00, 0x05, 0x00, // CC1
+ 0x00, 0x00, 0x01, 0x00, 0x00, // SA1
+ 0x01, 0x00, 0x02, 0x00, 0x00, 0x00, // SA2
+ 0x02, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, // SA3
+ 0x03, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // SA4
+ 0x05, 0x00, 0x01, 0x00, 0x00 // SA6
+};
+static const uint8_t bad_data_type_msg[] = {0x55, 0x00, 0x03, 0x00, 0x05, 0x00, // CC1
+ 0x00, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, // SA1
+ 0x01, 0x00, 0x02, 0x00, 0x00, 0x00, // SA2
+ 0x02, 0x00, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, // SA3
+ 0x03, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // SA4
+ 0x04, 0x00, 0x01, 0x00, 0x00 // SA5
+};
 // Test messages
 static const uint8_t sc1_msg[] = {0x55, 0x00, 0x00, 0x00, 0x00, 0x00};
 static const uint8_t sc2_msg[] = {0x55, 0x00, 0x01, 0x00, 0x00, 0x00};
@@ -261,48 +333,120 @@ static bool send_Callback(const uint8_t *pBuffer, uint16_t buffSize) {
         case 0:
             res = (memcmp(pBuffer, sc1_msg, buffSize) == 0);
             if (!res) {
-                printf("Bad SC1 received.");
+                printf("Bad SC1 received.\n");
                 print_buffer(pBuffer, sc1_msg, buffSize);
+            } else {
+                printf("Correct SC1 received.\n");
             }
         break;
 
         case 1:
             res = (memcmp(pBuffer, sc3_msg, buffSize) == 0);
             if (!res) {
-                printf("Bad SC3 received.");
+                printf("Bad SC3 received.\n");
                 print_buffer(pBuffer, sc3_msg, buffSize);
+            } else {
+                printf("Correct SC3 received.\n");
             }
         break;
 
         case 2:
             res = (memcmp(pBuffer, cc1_msg, buffSize) == 0);
             if (!res) {
-                printf("Bad CC1 received.");
+                printf("Bad CC1 received.\n");
                 print_buffer(pBuffer, cc1_msg, buffSize);
+            } else {
+                printf("Correct CC1 received.\n");
             }
         break;
 
         case 3:
             res = (memcmp(pBuffer, cc3_msg_tx, buffSize) == 0);
             if (!res) {
-                printf("Bad CC3 received.");
+                printf("Bad CC3 received.\n");
                 print_buffer(pBuffer, cc3_msg_tx, buffSize);
+            } else {
+                printf("Correct CC3 received.\n");
             }
         break;
 
         case 4:
             res = (memcmp(pBuffer, cc4_msg, buffSize) == 0);
             if (!res) {
-                printf("Bad CC4 received.");
+                printf("Bad CC4 received.\n");
                 print_buffer(pBuffer, cc4_msg, buffSize);
+            } else {
+                printf("Correct CC4 received.\n");
             }
         break;
 
         case 5:
             res = (memcmp(pBuffer, cc6_msg_tx, buffSize) == 0);
             if (!res) {
-                printf("Bad CC6 received.");
+                printf("Bad CC6 received.\n");
                 print_buffer(pBuffer, cc6_msg_tx, buffSize);
+            } else {
+                printf("Correct CC6 received.\n");
+            }
+        break;
+
+        case 6:
+            res = (memcmp(pBuffer, err_unknown_prot_msg, buffSize) == 0);
+            if (!res) {
+                printf("Bad unknown protocol error received.\n");
+                print_buffer(pBuffer, err_unknown_prot_msg, buffSize);
+            } else {
+                printf("Correct unknown protocol error received.\n");
+            }
+        break;
+
+        case 7:
+            res = (memcmp(pBuffer, err_unknown_cmd_msg, buffSize) == 0);
+            if (!res) {
+                printf("Bad unknown command error received.\n");
+                print_buffer(pBuffer, err_unknown_cmd_msg, buffSize);
+            } else {
+                printf("Correct unknown command error received.\n");
+            }
+        break;
+
+        case 8:
+            res = (memcmp(pBuffer, err_unknown_att_msg, buffSize) == 0);
+            if (!res) {
+                printf("Bad unknown attribute error received.\n");
+                print_buffer(pBuffer, err_unknown_att_msg, buffSize);
+            } else {
+                printf("Correct unknown attribute error received.\n");
+            }
+        break;
+
+        case 9:
+            res = (memcmp(pBuffer, err_too_many_att_msg, buffSize) == 0);
+            if (!res) {
+                printf("Bad too many attribute error received.\n");
+                print_buffer(pBuffer, err_too_many_att_msg, buffSize);
+            } else {
+                printf("Correct too many attribute error received.\n");
+            }
+        break;
+
+        case 10:
+            res = (memcmp(pBuffer, err_missing_att_msg, buffSize) == 0);
+            if (!res) {
+                printf("Bad missing attribute error received.\n");
+                print_buffer(pBuffer, err_missing_att_msg, buffSize);
+            } else {
+                printf("Correct missing attribute error received.\n");
+            }
+        break;
+
+        case 11:
+            res = (memcmp(pBuffer, err_wrong_data_type_msg, buffSize) == 0);
+            if (!res) {
+                printf("Bad wrong data type error received.\n");
+                print_buffer(pBuffer, err_wrong_data_type_msg, buffSize);
+            } else {
+                printf("Correct wrong data type error received.\n");
             }
         break;
 
@@ -354,4 +498,11 @@ void test_Test_Main_Execute(void) {
     TEST_ASSERT_TRUE(LCSF_TranscoderReceive(cc3_msg_rx, sizeof(cc3_msg_rx)));
     TEST_ASSERT_TRUE(LCSF_TranscoderReceive(cc5_msg, sizeof(cc5_msg)));
     TEST_ASSERT_TRUE(LCSF_TranscoderReceive(cc6_msg_rx, sizeof(cc6_msg_rx)));
+    // Test bad message cases
+    TEST_ASSERT_TRUE(LCSF_TranscoderReceive(bad_prot_id_msg, sizeof(bad_prot_id_msg)));
+    TEST_ASSERT_TRUE(LCSF_TranscoderReceive(bad_cmd_id_msg, sizeof(bad_cmd_id_msg)));
+    TEST_ASSERT_TRUE(LCSF_TranscoderReceive(bad_att_id_msg, sizeof(bad_att_id_msg)));
+    TEST_ASSERT_TRUE(LCSF_TranscoderReceive(extra_att_msg, sizeof(extra_att_msg)));
+    TEST_ASSERT_TRUE(LCSF_TranscoderReceive(missing_att_msg, sizeof(missing_att_msg)));
+    TEST_ASSERT_TRUE(LCSF_TranscoderReceive(bad_data_type_msg, sizeof(bad_data_type_msg)));
 }
