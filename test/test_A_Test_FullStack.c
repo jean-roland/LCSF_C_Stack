@@ -20,7 +20,6 @@
 // *** Private functions prototypes ***
 static void *calloc_Callback(uint32_t size, int num_calls);
 static void *malloc_Callback(uint32_t size, int num_calls);
-static bool process_error_Callback(uint8_t error_code, int num_calls);
 static bool send_Callback(const uint8_t *pBuffer, uint16_t buffSize);
 
 // *** Descriptors ***

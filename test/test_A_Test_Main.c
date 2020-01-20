@@ -12,7 +12,6 @@
 
 // *** Private functions prototypes ***
 static void *calloc_Callback(uint32_t size, int num_calls);
-static void *malloc_Callback(uint32_t size, int num_calls);
 
 // *** Private global vars ***
 static void *memPtr[64];
@@ -274,11 +273,6 @@ static bool compare_payload_cc4(const test_cc4_att_payload_t *p1, const test_cc4
 // *** Callback Functions ***
 static void *calloc_Callback(uint32_t size, int num_calls) {
     memPtr[memIdx] = calloc(size,1);
-    return memPtr[memIdx++];
-}
-
-static void *malloc_Callback(uint32_t size, int num_calls) {
-    memPtr[memIdx] = malloc(size);
     return memPtr[memIdx++];
 }
 
