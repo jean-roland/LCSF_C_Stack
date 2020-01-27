@@ -16,4 +16,4 @@ jobs:
       run: |
         gem install bundler
         bundle install --jobs 4 --retry 3
-        ceedling test:all
+        bundle exec rake test:all
