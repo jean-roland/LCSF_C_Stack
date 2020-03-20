@@ -596,7 +596,7 @@ static bool LCSF_Bridge_TestCC6FillAtt(lcsf_valid_att_t **pAttArrayAddr, test_cm
 
 /**
  * \fn static bool LCSF_Bridge_TestFillCmdAtt(uint16_t cmdName, lcsf_valid_att_t **pAttArrayAddr, test_cmd_payload_t *pCmdPayload)
- * \brief Fill the attribute array of a command from its payload 
+ * \brief Fill the attribute array of a command from its payload
  *
  * \param cmdName name of the command
  * \param pAttArrayAddr pointer to contain the attribute array
