@@ -122,6 +122,10 @@ static uint8_t pattern[ARRAY_SIZE] = {0x12,0x34,0x56,0x78,0x89};
 
 // *** Private Functions ***
 static bool compare_payload_cc1(const test_cc1_att_payload_t *p1, const test_cc1_att_payload_t *p2) {
+    if ((p1 == NULL) || (p2 == NULL)) {
+        printf("Received a null pointer !\n");
+        return false;
+    }
     if (p1->optAttFlagsBitfield != p2->optAttFlagsBitfield) {
         printf("CC1: Different flag bitfield: %d, %d\n", p1->optAttFlagsBitfield, p2->optAttFlagsBitfield);
         return false;
@@ -204,6 +208,10 @@ static bool compare_payload_cc1(const test_cc1_att_payload_t *p1, const test_cc1
 }
 
 static bool compare_payload_cc4(const test_cc4_att_payload_t *p1, const test_cc4_att_payload_t *p2) {
+    if ((p1 == NULL) || (p2 == NULL)) {
+        printf("Received a null pointer !\n");
+        return false;
+    }
     if (p1->optAttFlagsBitfield != p2->optAttFlagsBitfield) {
         printf("CC4: Different flag bitfield: %d, %d\n", p1->optAttFlagsBitfield, p2->optAttFlagsBitfield);
         return false;
