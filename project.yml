@@ -30,7 +30,6 @@
     - +:test/**
     - -:test/support
   :source:
-    - src/**
     - src/lib
     - src/protocol
   :support:
