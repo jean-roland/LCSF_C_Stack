@@ -269,6 +269,10 @@ static lcsf_valid_cmd_t cc5_msg = {
 
 // *** Private Functions ***
 static bool compare_valid_cc1(const lcsf_valid_cmd_t *p1, const lcsf_valid_cmd_t *p2) {
+    if ((p1 == NULL) || (p2 == NULL)) {
+        printf("Received a null pointer !\n");
+        return false;
+    }
     if ((p1->CmdId != LCSF_TEST_CMD_ID_CC1) || (p2->CmdId != LCSF_TEST_CMD_ID_CC1)) {
         printf("CC1: Wrong command id: %d, %d\n", p1->CmdId, p2->CmdId);
         return false;
@@ -414,6 +418,10 @@ static bool compare_valid_cc1(const lcsf_valid_cmd_t *p1, const lcsf_valid_cmd_t
 }
 
 static bool compare_valid_cc4(const lcsf_valid_cmd_t *p1, const lcsf_valid_cmd_t *p2) {
+    if ((p1 == NULL) || (p2 == NULL)) {
+        printf("Received a null pointer !\n");
+        return false;
+    }
     if ((p1->CmdId != LCSF_TEST_CMD_ID_CC4) || (p2->CmdId != LCSF_TEST_CMD_ID_CC4)) {
         printf("CC4: Wrong command id: %d, %d\n", p1->CmdId, p2->CmdId);
         return false;
