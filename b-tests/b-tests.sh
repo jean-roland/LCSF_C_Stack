@@ -18,3 +18,5 @@ rm ../test/test_B*
 rm  ../src/protocol/*Test*
 mv ../src/protocol/bckup/*Test* ../src/protocol/
 rmdir ../src/protocol/bckup
+cd ..
+ceedling clean
