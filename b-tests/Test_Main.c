@@ -284,7 +284,7 @@ static bool TestExecuteCC3(test_cmd_payload_t *pCmdPayload) {
     // Send command
     return TestSendCommand(TEST_CMD_CC3, true);
 }
-#include <stdio.h>
+
 static bool TestExecuteCC4(test_cmd_payload_t *pCmdPayload) {
     if (pCmdPayload == NULL) {
        return false;
