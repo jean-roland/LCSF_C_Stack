@@ -428,10 +428,9 @@ static bool TestExecuteCC6(test_cmd_payload_t *pCmdPayload) {
 // *** Public Functions ***
 
 /**
- * \fn bool Test_MainInit(const void *pInitDesc)
+ * \fn bool Test_MainInit(void)
  * \brief Initialize the module
  *
- * \param pInitDesc pointer to module initialization descriptor
  * \return bool: true if operation was a success
  */
 bool Test_MainInit(void) {
