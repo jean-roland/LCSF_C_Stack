@@ -1,8 +1,7 @@
 /**
  * \file Test_Main.h
  * \brief Test protocol module
- * \author LCSF Generator v1.1.0.0
- *
+ * \author LCSF Generator v1.1
  */
 
 #ifndef test_main_h
