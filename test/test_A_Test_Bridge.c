@@ -154,7 +154,7 @@ static lcsf_valid_att_t cc1_att_array[] = {
     {sizeof(cc1_sa10), {.pData = &cc1_sa10}},
 };
 
-static const lcsf_valid_cmd_t cc1_msg = {
+static lcsf_valid_cmd_t cc1_msg = {
     LCSF_TEST_CMD_ID_CC1,
     cc1_att_array,
 };
@@ -579,25 +579,25 @@ static bool compare_payload_cc2(const test_cc2_att_payload_t *p1, const test_cc2
         printf("CC2: Different SA5\n");
         return false;
     }
-    if ((p1->optAttFlagsBitfield & TEST_CC1_ATT_SA6_FLAG) != 0) {
+    if ((p1->optAttFlagsBitfield & TEST_CC2_ATT_SA6_FLAG) != 0) {
         if (p1->sa6 != p2->sa6) {
             printf("CC2: Different SA6: %d, %d\n", p1->sa6, p2->sa6);
             return false;
         }
     }
-    if ((p1->optAttFlagsBitfield & TEST_CC1_ATT_SA7_FLAG) != 0) {
+    if ((p1->optAttFlagsBitfield & TEST_CC2_ATT_SA7_FLAG) != 0) {
         if (p1->sa7 != p2->sa7) {
             printf("CC2: Different SA7: %d, %d\n", p1->sa7, p2->sa7);
             return false;
         }
     }
-    if ((p1->optAttFlagsBitfield & TEST_CC1_ATT_SA8_FLAG) != 0) {
+    if ((p1->optAttFlagsBitfield & TEST_CC2_ATT_SA8_FLAG) != 0) {
         if (p1->sa8 != p2->sa8) {
             printf("CC2: Different SA8: %d, %d\n", p1->sa8, p2->sa8);
             return false;
         }
     }
-    if ((p1->optAttFlagsBitfield & TEST_CC1_ATT_SA9_FLAG) != 0) {
+    if ((p1->optAttFlagsBitfield & TEST_CC2_ATT_SA9_FLAG) != 0) {
         if ((p1->p_sa9 == NULL) || (p2->p_sa9 == NULL)) {
             printf("CC2: Missing SA9\n");
             return false;
@@ -607,7 +607,7 @@ static bool compare_payload_cc2(const test_cc2_att_payload_t *p1, const test_cc2
             return false;
         }
     }
-    if ((p1->optAttFlagsBitfield & TEST_CC1_ATT_SA10_FLAG) != 0) {
+    if ((p1->optAttFlagsBitfield & TEST_CC2_ATT_SA10_FLAG) != 0) {
         if ((p1->p_sa10 == NULL) || (p2->p_sa10 == NULL)) {
             printf("CC2: Missing SA10\n");
             return false;
@@ -640,7 +640,7 @@ static bool compare_payload_cc5(const test_cc5_att_payload_t *p1, const test_cc5
         printf("CC5_CA5: Different SA2: %d, %d\n", pca5_a->sa2, pca5_b->sa2);
         return false;
     }
-    if ((pca5_a->optAttFlagsBitfield & TEST_CA1_ATT_SA3_FLAG) != 0) {
+    if ((pca5_a->optAttFlagsBitfield & TEST_CA5_ATT_SA3_FLAG) != 0) {
         if (pca5_a->sa3 != pca5_b->sa3) {
             printf("CC5_CA5: Different SA3: %d, %d\n", pca5_a->sa3, pca5_b->sa3);
             return false;
