@@ -55,16 +55,7 @@ typedef struct _lcsf_raw_msg {
 // Callback prototype
 typedef bool LCSFSendCallback(const uint8_t *pBuffer, uint16_t buffSize);
 
-// Module initialization descriptor structure
-typedef struct _lcsf_trnscdr_init_desc {
-    LCSFSendCallback *pFnSendMsg; // Used to send encoded lcsf messages
-    uint16_t FiloSize; // Size of the filo used by the module (number of element)
-    uint16_t BufferSize; // Size of the module encoder buffer (byte)
-} lcsf_trnscdr_init_desc_t;
-
 // --- Public Constants ---
-// #define LCSF_SMALL // Uncomment to use the smaller representation LCSF variant
-
 // --- Public Variables ---
 // --- Public Function Prototypes ---
 
@@ -72,10 +63,10 @@ typedef struct _lcsf_trnscdr_init_desc {
  * \fn bool LCSF_TranscoderInit(const lcsf_trnscdr_init_desc_t *pInitDesc)
  * \brief Initialize the module
  *
- * \param pInitDesc pointer to module initialization descriptor
+ * \param pFnSendMsg function pointer to send encoded lcsf messages
  * \return bool: true if operation was a success
  */
-bool LCSF_TranscoderInit(const lcsf_trnscdr_init_desc_t *pInitDesc);
+bool LCSF_TranscoderInit(LCSFSendCallback *pFnSendMsg);
 
 /**
  * \fn bool LCSF_TranscoderReceive(const uint8_t *pBuffer, uint16_t buffSize)

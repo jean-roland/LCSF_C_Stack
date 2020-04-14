@@ -101,12 +101,6 @@ typedef struct _lcsf_validator_protocol_desc {
     LCSFInterpretCallback *pFnInterpretMsg; // Pointer to the message interpretation function
 } lcsf_validator_protocol_desc_t;
 
-// Module initialization descriptor structure
-typedef struct _lcsf_validator_init_desc {
-    uint16_t FiloSize; // Size of the filo used by the module (number of element)
-    uint8_t ProtNb; // Number of protocol the module will handle
-} lcsf_validator_init_desc_t;
-
 // --- Public Constants ---
 // --- Public Variables ---
 // --- Public Function Prototypes ---
@@ -115,10 +109,10 @@ typedef struct _lcsf_validator_init_desc {
  * \fn bool LCSF_ValidatorInit(const lcsf_validator_init_desc_t *pInitDesc)
  * \brief Initialize the module
  *
- * \param pInitDesc pointer to module initialization descriptor
+ * \param protNb Number of protocols the module will handle
  * \return bool: true if operation was a success
  */
-bool LCSF_ValidatorInit(const lcsf_validator_init_desc_t *pInitDesc);
+bool LCSF_ValidatorInit(uint8_t protNb);
 
 /**
  * \fn bool LCSF_ValidatorAddProtocol(uint8_t protId, const lcsf_validator_protocol_desc_t *pProtDesc)

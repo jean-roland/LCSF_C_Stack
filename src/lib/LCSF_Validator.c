@@ -23,7 +23,7 @@
 // Standard lib
 #include <string.h>
 // Custom lib
-#include <MemAlloc.h>
+#include <LCSF_config.h>
 #include <Filo.h>
 #include <LCSF_Transcoder.h>
 #include <LCSF_Validator.h>
@@ -78,12 +78,12 @@ typedef struct _lcsf_ep_cmd_error_desc {
 
 // Module information structure
 typedef struct _lcsf_validator_info {
+    uint8_t ProtNb; // Number of protocol handled by the module
     uint8_t LastErrorCode; // Contains the last error the module encountered
     lcsf_ep_cmd_error_desc_t LastReceivedError; // Contains the last received lcsf error
     filo_desc_t *pReceiverFilo; // Pointer to the receiver filo
     filo_desc_t *pSenderFilo; // Pointer to the sender filo
     const lcsf_validator_protocol_desc_t **pProtArray; // Pointer to contain the module protocol array
-    const lcsf_validator_init_desc_t *pInitDesc; // Pointer to module initialization descriptor
 } lcsf_validator_info_t;
 
 // --- Private Constants ---
@@ -149,7 +149,7 @@ static bool LCSF_AllocateSenderAttArray(uint16_t attNb, lcsf_raw_att_t **pAttArr
  * \return LCSFInterpretCallback *: Pointer to the interpretor callback (NULL if unknown protocol)
  */
 static LCSFInterpretCallback *LCSF_GetCallback(uint16_t protId) {
-    for (uint8_t idx = 0; idx < LcsfValidatorInfo.pInitDesc->ProtNb; idx++) {
+    for (uint8_t idx = 0; idx < LcsfValidatorInfo.ProtNb; idx++) {
         const lcsf_validator_protocol_desc_t *pProtocol = LcsfValidatorInfo.pProtArray[idx];
 
         if ((pProtocol != NULL) && (pProtocol->ProtId == protId)) {
@@ -167,7 +167,7 @@ static LCSFInterpretCallback *LCSF_GetCallback(uint16_t protId) {
  * \return lcsf_protocol_desc_t *: Pointer to the descriptor (NULL if unknown protocol)
  */
 static const lcsf_protocol_desc_t *LCSF_GetDescriptor(uint16_t protId) {
-    for (uint8_t idx = 0; idx < LcsfValidatorInfo.pInitDesc->ProtNb; idx++) {
+    for (uint8_t idx = 0; idx < LcsfValidatorInfo.ProtNb; idx++) {
         const lcsf_validator_protocol_desc_t *pProtocol = LcsfValidatorInfo.pProtArray[idx];
 
         if ((pProtocol != NULL) && (pProtocol->ProtId == protId)) {
@@ -624,17 +624,13 @@ static bool LCSF_ProcessReceivedError(const lcsf_raw_msg_t *pErrorMsg) {
 
 // *** Public Functions ***
 
-bool LCSF_ValidatorInit(const lcsf_validator_init_desc_t *pInitDesc) {
-
-    if (pInitDesc == NULL) {
-        return false;
-    }
-    // Note initialization descriptor
-    LcsfValidatorInfo.pInitDesc = pInitDesc;
+bool LCSF_ValidatorInit(uint8_t protNb) {
+    // Note protocol number
+    LcsfValidatorInfo.ProtNb = protNb;
     // Allocate structures
-    LcsfValidatorInfo.pProtArray = MemAllocCalloc((uint32_t)(pInitDesc->ProtNb * sizeof(lcsf_validator_protocol_desc_t *)));
-    LcsfValidatorInfo.pSenderFilo = FiloCreate(LcsfValidatorInfo.pInitDesc->FiloSize, sizeof(lcsf_valid_att_t));
-    LcsfValidatorInfo.pReceiverFilo = FiloCreate(LcsfValidatorInfo.pInitDesc->FiloSize, sizeof(lcsf_raw_att_t));
+    LcsfValidatorInfo.pProtArray = MEM_ALLOC((uint32_t)(protNb * sizeof(lcsf_validator_protocol_desc_t *)));
+    LcsfValidatorInfo.pSenderFilo = FiloCreate(LCSF_VALIDATOR_TX_FILO_SIZE, sizeof(lcsf_valid_att_t));
+    LcsfValidatorInfo.pReceiverFilo = FiloCreate(LCSF_VALIDATOR_RX_FILO_SIZE, sizeof(lcsf_raw_att_t));
     // Initialize variables
     LcsfValidatorInfo.LastReceivedError.HasReceivedError = false;
     LcsfValidatorInfo.LastReceivedError.ErrorLocation = 0;
@@ -643,7 +639,7 @@ bool LCSF_ValidatorInit(const lcsf_validator_init_desc_t *pInitDesc) {
 }
 
 bool LCSF_ValidatorAddProtocol(uint8_t protIdx, const lcsf_validator_protocol_desc_t *pProtDesc) {
-    if ((pProtDesc != NULL) && (protIdx < LcsfValidatorInfo.pInitDesc->ProtNb)) {
+    if ((pProtDesc != NULL) && (protIdx < LcsfValidatorInfo.ProtNb)) {
         LcsfValidatorInfo.pProtArray[protIdx] = pProtDesc;
         return true;
     } else {

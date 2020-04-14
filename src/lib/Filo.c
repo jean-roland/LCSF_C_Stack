@@ -25,7 +25,7 @@
 #include <stdlib.h>
 #include <string.h>
 // Custom lib
-#include <MemAlloc.h>
+#include <LCSF_config.h>
 #include <Filo.h>
 
 // *** Definitions ***
@@ -41,9 +41,9 @@
 
 filo_desc_t *FiloCreate(uint32_t itemNb, uint32_t itemSize) {
 	// Filo allocation
-	filo_desc_t *pFiloDesc = MemAllocCalloc(sizeof(filo_desc_t));
+	filo_desc_t *pFiloDesc = MEM_ALLOC(sizeof(filo_desc_t));
 	// Filo data array allocation
-	pFiloDesc->pDataArray = MemAllocMalloc(itemNb * itemSize);
+	pFiloDesc->pDataArray = MEM_ALLOC(itemNb * itemSize);
 	// Filo Initialization
 	pFiloDesc->ItemSize = itemSize;
 	pFiloDesc->ItemNb = itemNb;

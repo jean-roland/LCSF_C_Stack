@@ -23,7 +23,7 @@
 // Standard lib
 #include <string.h>
 // Custom lib
-#include <MemAlloc.h>
+#include <LCSF_config.h>
 #include <Filo.h>
 #include <LCSF_Transcoder.h>
 #include <LCSF_Validator.h>
@@ -42,7 +42,7 @@ typedef struct _lcsf_trnscdr_info {
     uint8_t LastErrCode; // Last error code encountered during decoding
     uint8_t *pEncoderBuffer; // Pointer to the transmission buffer
     filo_desc_t *pDecoderFilo; // Pointer to the decoder filo
-    const lcsf_trnscdr_init_desc_t *pInitDesc; // Pointer to module initialization descriptor
+    LCSFSendCallback *pFnSendMsg; // Function pointer to send buffer to
     lcsf_raw_msg_t DecoderMsg; // Structure of the decoder message header
 } lcsf_trnscdr_info_t;
 
@@ -61,8 +61,6 @@ static bool LCSF_FillAttHeader(uint16_t *pBuffIdx, uint8_t *pBuffer, const lcsf_
 static bool LCSF_FillAttData(uint16_t *pBuffIdx, uint8_t *pBuffer, const lcsf_raw_att_t *pAtt);
 static bool LCSF_EncodeAtt_Rec(uint16_t *pBuffIdx, uint8_t *pBuffer, uint16_t attNb, const lcsf_raw_att_t *pAttArray);
 static bool LCSF_EncodeBuffer(uint16_t *pBuffIdx, uint8_t *pBuffer, const lcsf_raw_msg_t *pMsg);
-// Other functions
-static bool LCSF_TranscoderCheckInitDesc(const lcsf_trnscdr_init_desc_t *pInitDesc);
 
 // --- Private Variables ---
 static lcsf_trnscdr_info_t LcsfTranscoderInfo;
@@ -301,7 +299,7 @@ static bool LCSF_DecodeBuffer(const uint8_t *pBuffer, uint16_t buffSize, lcsf_ra
 static bool LCSF_FillMsgHeader(uint16_t *pBuffIdx, uint8_t *pBuffer, const lcsf_raw_msg_t *pMsg) {
     // Guard against buffer overflow
 #ifdef LCSF_SMALL
-    if (*pBuffIdx + 2 < LcsfTranscoderInfo.pInitDesc->BufferSize) {
+    if (*pBuffIdx + 2 < LCSF_TRANSCODER_TX_BUFFER_SIZE) {
         // Byte 1: Protocol id
         pBuffer[(*pBuffIdx)++] = (uint8_t)pMsg->ProtId;
         // Byte 2: Command id
@@ -311,7 +309,7 @@ static bool LCSF_FillMsgHeader(uint16_t *pBuffIdx, uint8_t *pBuffer, const lcsf_
         return true;
     }
 #else
-    if (*pBuffIdx + 5 < LcsfTranscoderInfo.pInitDesc->BufferSize) {
+    if (*pBuffIdx + 5 < LCSF_TRANSCODER_TX_BUFFER_SIZE) {
         // Byte 1: Protocol id LSB
         pBuffer[(*pBuffIdx)++] = (uint8_t)pMsg->ProtId;
         // Byte 2: Protocol id MSB
@@ -342,7 +340,7 @@ static bool LCSF_FillMsgHeader(uint16_t *pBuffIdx, uint8_t *pBuffer, const lcsf_
 static bool LCSF_FillAttHeader(uint16_t *pBuffIdx, uint8_t *pBuffer, const lcsf_raw_att_t *pAtt) {
     // Guard against buffer overflow
 #ifdef LCSF_SMALL
-    if (*pBuffIdx + 1 < LcsfTranscoderInfo.pInitDesc->BufferSize) {
+    if (*pBuffIdx + 1 < LCSF_TRANSCODER_TX_BUFFER_SIZE) {
         // Check if attribute has sub attributes
         if (pAtt->HasSubAtt) {
             // Byte 1: Attribute id + MSb at 1
@@ -356,7 +354,7 @@ static bool LCSF_FillAttHeader(uint16_t *pBuffIdx, uint8_t *pBuffer, const lcsf_
         return true;
     }
 #else
-    if (*pBuffIdx + 3 < LcsfTranscoderInfo.pInitDesc->BufferSize) {
+    if (*pBuffIdx + 3 < LCSF_TRANSCODER_TX_BUFFER_SIZE) {
         // Byte 1: Attribute id LSB
         pBuffer[(*pBuffIdx)++] = (uint8_t)pAtt->AttId;
         // Check if attribute has sub attributes
@@ -388,7 +386,7 @@ static bool LCSF_FillAttHeader(uint16_t *pBuffIdx, uint8_t *pBuffer, const lcsf_
  */
 static bool LCSF_FillAttData(uint16_t *pBuffIdx, uint8_t *pBuffer, const lcsf_raw_att_t *pAtt) {
     // Guard against buffer overflow
-    if (pAtt->PayloadSize < LcsfTranscoderInfo.pInitDesc->BufferSize) {
+    if (pAtt->PayloadSize < LCSF_TRANSCODER_TX_BUFFER_SIZE) {
         // Copy data into the buffer
         memcpy(&(pBuffer[*pBuffIdx]), pAtt->Payload.pData, pAtt->PayloadSize);
         // Increment buffer index
@@ -413,7 +411,7 @@ static bool LCSF_EncodeAtt_Rec(uint16_t *pBuffIdx, uint8_t *pBuffer, uint16_t at
     // We go through the attribute array
     for (uint16_t attIdx = 0; attIdx < attNb; attIdx++) {
         // Guard against buffer overflow
-        if (*pBuffIdx >= LcsfTranscoderInfo.pInitDesc->BufferSize) {
+        if (*pBuffIdx >= LCSF_TRANSCODER_TX_BUFFER_SIZE) {
             return false;
         }
         // Fill attribute header
@@ -447,7 +445,7 @@ static bool LCSF_EncodeAtt_Rec(uint16_t *pBuffIdx, uint8_t *pBuffer, uint16_t at
  */
 static bool LCSF_EncodeBuffer(uint16_t *pBuffIdx, uint8_t *pBuffer, const lcsf_raw_msg_t *pMsg) {
     // Buffer initialization
-    memset(pBuffer, 0, LcsfTranscoderInfo.pInitDesc->BufferSize * sizeof(uint8_t));
+    memset(pBuffer, 0, LCSF_TRANSCODER_TX_BUFFER_SIZE * sizeof(uint8_t));
     // Encode the message header
     if (!LCSF_FillMsgHeader(pBuffIdx, pBuffer, pMsg)) {
         return false;
@@ -459,41 +457,22 @@ static bool LCSF_EncodeBuffer(uint16_t *pBuffIdx, uint8_t *pBuffer, const lcsf_r
     return true;
 }
 
-/**
- * \fn static bool LCSF_CheckInitDesc(const lcsf_trnscdr_init_desc_t *pInitDesc)
- * \brief Check the validity of the initialization descriptor
- *
- * \param pInitDesc Pointer to the module initialization descriptor
- * \return bool: true if descriptor is valid
- */
-static bool LCSF_TranscoderCheckInitDesc(const lcsf_trnscdr_init_desc_t *pInitDesc) {
-    if (pInitDesc != NULL) {
-        return (pInitDesc->pFnSendMsg != NULL);
-    } else {
-        return false;
-    }
-}
-
-
-
 // *** Public Functions ***
 
-bool LCSF_TranscoderInit(const lcsf_trnscdr_init_desc_t *pInitDesc) {
-
-    if (LCSF_TranscoderCheckInitDesc(pInitDesc)) {
-        // Buffer allocation
-        LcsfTranscoderInfo.pEncoderBuffer = MemAllocMalloc(pInitDesc->BufferSize);
-        // Filo creation
-        LcsfTranscoderInfo.pDecoderFilo = FiloCreate(pInitDesc->FiloSize, sizeof(lcsf_raw_att_t));
-        // Structure initialization
-        memset(&LcsfTranscoderInfo.DecoderMsg, 0, sizeof(lcsf_raw_msg_t));
-        // Variables initialization
-        LcsfTranscoderInfo.LastErrCode = 0;
-        LcsfTranscoderInfo.pInitDesc = pInitDesc;
-        return true;
-    } else {
+bool LCSF_TranscoderInit(LCSFSendCallback *pFnSendMsg) {
+    if (pFnSendMsg == NULL) {
         return false;
     }
+    // Buffer allocation
+    LcsfTranscoderInfo.pEncoderBuffer = MEM_ALLOC(LCSF_TRANSCODER_TX_BUFFER_SIZE);
+    // Filo creation
+    LcsfTranscoderInfo.pDecoderFilo = FiloCreate(LCSF_TRANSCODER_RX_FILO_SIZE, sizeof(lcsf_raw_att_t));
+    // Structure initialization
+    memset(&LcsfTranscoderInfo.DecoderMsg, 0, sizeof(lcsf_raw_msg_t));
+    // Variables initialization
+    LcsfTranscoderInfo.LastErrCode = 0;
+    LcsfTranscoderInfo.pFnSendMsg = pFnSendMsg;
+    return true;
 }
 
 bool LCSF_TranscoderReceive(const uint8_t *pBuffer, uint16_t buffSize) {
@@ -502,7 +481,7 @@ bool LCSF_TranscoderReceive(const uint8_t *pBuffer, uint16_t buffSize) {
     }
     lcsf_raw_msg_t *pMsg = &LcsfTranscoderInfo.DecoderMsg;
     // Decode buffer into lcsf object
-    if(LCSF_DecodeBuffer(pBuffer, buffSize, pMsg)) {
+    if (LCSF_DecodeBuffer(pBuffer, buffSize, pMsg)) {
         // Send lcsf object to receiver
         return LCSF_ValidatorReceive(pMsg);
     }
@@ -511,14 +490,15 @@ bool LCSF_TranscoderReceive(const uint8_t *pBuffer, uint16_t buffSize) {
 }
 
 bool LCSF_TranscoderSend(const lcsf_raw_msg_t *pMessage) {
-    if (pMessage != NULL) {
-        uint16_t buffSize = 0;
-        uint8_t *pBuffer = LcsfTranscoderInfo.pEncoderBuffer;
-        // Encode lcsf object into buffer
-        if (LCSF_EncodeBuffer(&buffSize, pBuffer, pMessage)) {
-            // Send buffer to transmitter
-            return LcsfTranscoderInfo.pInitDesc->pFnSendMsg(pBuffer, buffSize);
-        }
+    if (pMessage == NULL) {
+        return false;
+    }
+    uint16_t buffSize = 0;
+    uint8_t *pBuffer = LcsfTranscoderInfo.pEncoderBuffer;
+    // Encode lcsf object into buffer
+    if (LCSF_EncodeBuffer(&buffSize, pBuffer, pMessage)) {
+        // Send buffer to transmitter
+        return LcsfTranscoderInfo.pFnSendMsg(pBuffer, buffSize);
     }
     return false;
 }

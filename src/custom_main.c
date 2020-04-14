@@ -58,17 +58,6 @@ enum lcsf_validator_protocol_enum {
     LCSF_PROTOCOL_COUNT,
 };
 
-static const lcsf_trnscdr_init_desc_t LcsfTranscoderDesc = {
-    dummySend,
-    20,
-    1024,
-};
-
-static const lcsf_validator_init_desc_t LcsfValidatorDesc = {
-    20,
-    LCSF_PROTOCOL_COUNT,
-};
-
 static const lcsf_validator_protocol_desc_t LcsfProtocolExampleDesc = {
     LCSF_EXAMPLE_PROTOCOL_ID,
     &LCSF_Example_ProtDesc,
@@ -97,8 +86,8 @@ static void app_init(void) {
     // Memory allocation
     MemAllocInit(_HEAP, sizeof(_HEAP));
     // Lcsf stack
- 	LCSF_TranscoderInit(&LcsfTranscoderDesc);
- 	LCSF_ValidatorInit(&LcsfValidatorDesc);
+ 	LCSF_TranscoderInit(dummySend);
+ 	LCSF_ValidatorInit(LCSF_PROTOCOL_COUNT);
  	LCSF_ValidatorAddProtocol(LCSF_PROTOCOL_EXAMPLE, &LcsfProtocolExampleDesc);
     // Lcsf example
     LCSF_Bridge_ExampleInit(20);
