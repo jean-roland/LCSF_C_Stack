@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include "unity.h"
+#include "LCSF_config.h"
 #include "Filo.h"
 #include "mock_MemAlloc.h"
 
@@ -17,7 +18,7 @@ void setUp(void) {
         init_srand = true;
     }
     // Emulate memory allocation
-    MemAllocCalloc_ExpectAndReturn(sizeof(filo_desc_t), calloc(sizeof(filo_desc_t), sizeof(uint8_t)));
+    MemAllocMalloc_ExpectAndReturn(sizeof(filo_desc_t), malloc(sizeof(filo_desc_t)));
     MemAllocMalloc_ExpectAndReturn(FILO_SIZE, malloc(FILO_SIZE));
     // Create filo
     pTestFilo = FiloCreate(FILO_SIZE, sizeof(uint8_t));

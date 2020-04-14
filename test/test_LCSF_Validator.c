@@ -28,11 +28,6 @@ static bool process_Callback(const lcsf_raw_msg_t *pMsg, int num_calls);
 static bool interpret_Callback(lcsf_valid_cmd_t *pValidCmd);
 
 // *** Descriptors ***
-static const lcsf_validator_init_desc_t init_vldtr = {
-    FILO_SIZE,
-    PROTOCOL_NB,
-};
-
 static const lcsf_validator_protocol_desc_t example_prot_desc = {
     LCSF_EXAMPLE_PROTOCOL_ID,
     &LCSF_Example_ProtDesc,
@@ -176,11 +171,6 @@ static bool compare_rawmsg(const lcsf_raw_msg_t *pMsg1, const lcsf_raw_msg_t *pM
     return true;
 }
 
-static void *calloc_Callback(uint32_t size, int num_calls) {
-    memPtr[memIdx] = calloc(size,1);
-    return memPtr[memIdx++];
-}
-
 static void *malloc_Callback(uint32_t size, int num_calls) {
     memPtr[memIdx] = malloc(size);
     return memPtr[memIdx++];
@@ -204,12 +194,10 @@ static bool interpret_Callback(lcsf_valid_cmd_t *pValidCmd) {
 // *** Public Functions ***
 void setUp(void) {
     // Set callbacks
-    MemAllocCalloc_StubWithCallback(calloc_Callback);
     MemAllocMalloc_StubWithCallback(malloc_Callback);
     LCSF_TranscoderSend_StubWithCallback(process_Callback);
     // Test init module
-    TEST_ASSERT_FALSE(LCSF_ValidatorInit(NULL));
-    TEST_ASSERT_TRUE(LCSF_ValidatorInit(&init_vldtr));
+    TEST_ASSERT_TRUE(LCSF_ValidatorInit(PROTOCOL_NB));
     TEST_ASSERT_FALSE(LCSF_ValidatorAddProtocol(0, NULL));
     TEST_ASSERT_TRUE(LCSF_ValidatorAddProtocol(0, &example_prot_desc));
 }

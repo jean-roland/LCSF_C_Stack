@@ -10,9 +10,6 @@
 #include "mock_LCSF_Validator.h"
 
 // *** Constants ***
-#define FILO_SIZE 10
-#define BUFF_SIZE 255
-
 // *** Private functions prototypes
 static bool compare_rawatt(const lcsf_raw_att_t *pAtt1, const lcsf_raw_att_t *pAtt2);
 static bool compare_rawmsg(const lcsf_raw_msg_t *pMsg1, const lcsf_raw_msg_t *pMsg2);
@@ -23,12 +20,6 @@ static bool process_msg_Callback(const lcsf_raw_msg_t *pMsg, int num_calls);
 static bool send_Callback(const uint8_t *pBuffer, uint16_t buffSize);
 
 // *** Descriptors ***
-static const lcsf_trnscdr_init_desc_t init_trnscdr = {
-    send_Callback,
-    FILO_SIZE,
-    BUFF_SIZE,
-};
-
 // *** Private global vars ***
 static void *memPtr[64];
 static int memIdx;
@@ -36,7 +27,7 @@ static int memIdx;
 // *** Model data ***
 #ifdef LCSF_SMALL
 
-static const uint8_t ovrflwMsg[] = {0xaa, 0x01, 0x0b};
+static const uint8_t ovrflwMsg[] = {0xaa, 0x01, 0x20};
 
 static const uint8_t badformatMsg[] = {0xaa, 0x01, 0x0a};
 
@@ -125,7 +116,7 @@ static const lcsf_raw_msg_t txMsg = {
 
 #else
 
-static const uint8_t ovrflwMsg[] = {0xaa, 0x00, 0x01, 0x00, 0x0b, 0x00};
+static const uint8_t ovrflwMsg[] = {0xaa, 0x00, 0x01, 0x00, 0x20, 0x00};
 
 static const uint8_t badformatMsg[] = {0xaa, 0x00, 0x01, 0x00, 0x0a, 0x00};
 
@@ -256,11 +247,6 @@ static bool compare_rawmsg(const lcsf_raw_msg_t *pMsg1, const lcsf_raw_msg_t *pM
     return true;
 }
 
-static void *calloc_Callback(uint32_t size, int num_calls) {
-    memPtr[memIdx] = calloc(size,1);
-    return memPtr[memIdx++];
-}
-
 static void *malloc_Callback(uint32_t size, int num_calls) {
     memPtr[memIdx] = malloc(size);
     return memPtr[memIdx++];
@@ -288,13 +274,12 @@ static bool send_Callback(const uint8_t *pBuffer, uint16_t buffSize) {
 // *** Public Functions ***
 void setUp(void) {
     // Declare callback
-    MemAllocCalloc_StubWithCallback(calloc_Callback);
     MemAllocMalloc_StubWithCallback(malloc_Callback);
     LCSF_ValidatorSendTranscoderError_StubWithCallback(process_error_Callback);
     LCSF_ValidatorReceive_StubWithCallback(process_msg_Callback);
     // Test init module
     TEST_ASSERT_FALSE(LCSF_TranscoderInit(NULL));
-    TEST_ASSERT_TRUE(LCSF_TranscoderInit(&init_trnscdr));
+    TEST_ASSERT_TRUE(LCSF_TranscoderInit(send_Callback));
 }
 
 void tearDown(void) {

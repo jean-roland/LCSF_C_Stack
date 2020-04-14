@@ -3,6 +3,7 @@
 #include <string.h>
 #include "unity.h"
 
+#include "LCSF_config.h"
 #include "Filo.h"
 #include "LCSF_Transcoder.h"
 #include "LCSF_Validator.h"
@@ -13,7 +14,6 @@
 
 // *** Constants ***
 #define FILO_SIZE 20
-#define BUFF_SIZE 255
 #define ARRAY_SIZE 5
 #define PROTOCOL_NB 1
 
@@ -23,17 +23,6 @@ static void *malloc_Callback(uint32_t size, int num_calls);
 static bool send_Callback(const uint8_t *pBuffer, uint16_t buffSize);
 
 // *** Descriptors ***
-static const lcsf_trnscdr_init_desc_t init_trnscdr = {
-    send_Callback,
-    FILO_SIZE,
-    BUFF_SIZE,
-};
-
-static const lcsf_validator_init_desc_t init_vldtr = {
-    FILO_SIZE,
-    PROTOCOL_NB,
-};
-
 static const lcsf_validator_protocol_desc_t test_prot_desc = {
     LCSF_TEST_PROTOCOL_ID,
     &LCSF_Test_ProtDesc,
@@ -463,11 +452,10 @@ void setUp(void) {
     MemAllocMalloc_StubWithCallback(malloc_Callback);
     // Test init modules error
     TEST_ASSERT_FALSE(LCSF_TranscoderInit(NULL));
-    TEST_ASSERT_FALSE(LCSF_ValidatorInit(NULL));
     TEST_ASSERT_FALSE(LCSF_ValidatorAddProtocol(0, NULL));
     // Test init modules valid
-    TEST_ASSERT_TRUE(LCSF_TranscoderInit(&init_trnscdr));
-    TEST_ASSERT_TRUE(LCSF_ValidatorInit(&init_vldtr));
+    TEST_ASSERT_TRUE(LCSF_TranscoderInit(send_Callback));
+    TEST_ASSERT_TRUE(LCSF_ValidatorInit(PROTOCOL_NB));
     TEST_ASSERT_TRUE(LCSF_ValidatorAddProtocol(0, &test_prot_desc));
     TEST_ASSERT_TRUE(LCSF_Bridge_TestInit(FILO_SIZE));
     TEST_ASSERT_TRUE(Test_MainInit());
