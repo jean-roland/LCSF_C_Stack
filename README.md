@@ -2,13 +2,18 @@
 
 LCSF C Stack is a C implementation of the LCSF (Light Command Set Format), designed for, but not limited to, small embedded systems.
 
-To use it in your project, include all the source files as well as the application code found in `custom_main`.
+## How to use
+First, include all the source files in your project. You can find example set-up code in `custom_main.c`.
 
-To interface it with your project:
+Modules must be initialized once in your application before you can use them. Further initialization will only waste memory and using before initializing will result in a bad address fault.
+
+Then, to interface with your project:
 * Call the function `LCSF_TranscoderReceive` with your module receiving data in lcsf format (eg: data coming from a network port, an UART or a CAN bus...)
 * Give a callback to the function that will send the transcoder data.
 
-Finally, to fit your application's needs, create a custom protocol either by modifying the example protocol or by using the [LCSF Generator](https://github.com/jean-roland/LCSF_Generator) (recommanded).
+Finally, to fit your application's needs, create a custom protocol either by modifying the example protocol files or by using the [LCSF Generator](https://github.com/jean-roland/LCSF_Generator) (recommanded).
+
+You can change the memory allocation function used by the stack to use your own or change other parameters (buffer sizes, filo sizes) in `LCSF_config.h`.
 
 ## About LCSF
 
@@ -23,8 +28,8 @@ The stack itself is composed of two main files:
 * `LCSF_Validator.c`: This module is in charge of verifying if messages correspond to a known command set protocol.
 
 They are accompanied by two support files:
-* `MemAlloc.c`: A module that handles the static memory allocation.
 * `Filo.c`: A module that creates memory pool that can be used as filo memory.
+* `MemAlloc.c`: An _optional_ module that handles the static memory allocation.
 
 Then the actual protocols are fed into the stack at initialization time.
 
@@ -34,7 +39,7 @@ The following diagram helps understanding how it works:
 
 ## Representations
 
-The default LCSF representation used by the transcoder is the standard one. You can switch to the smaller representation by uncommenting the `#define LCSF_SMALL` symbol declaration found in `LCSF_Transcoder.h`
+The default LCSF representation used by the transcoder is the standard one. You can switch to the smaller representation by uncommenting the `#define LCSF_SMALL` symbol declaration found in `LCSF_Config.h`
 
 ## Protocol files
 
