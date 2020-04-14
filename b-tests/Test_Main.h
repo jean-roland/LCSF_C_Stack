@@ -2,6 +2,7 @@
  * \file Test_Main.h
  * \brief Test protocol module
  * \author LCSF Generator v1.1
+ *
  */
 
 #ifndef test_main_h
@@ -332,10 +333,9 @@ typedef union _test_cmd_payload {
 // --- Public Function Prototypes ---
 
 /**
- * \fn bool Test_MainInit(const void *pInitDesc)
+ * \fn bool Test_MainInit(void)
  * \brief Initialize the module
  *
- * \param pInitDesc pointer to module initialization descriptor
  * \return bool: true if operation was a success
  */
 bool Test_MainInit(void);
