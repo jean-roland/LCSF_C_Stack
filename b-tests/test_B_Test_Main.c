@@ -11,7 +11,7 @@
 #define ARRAY_SIZE 5
 
 // *** Private functions prototypes ***
-static void *calloc_Callback(uint32_t size, int num_calls);
+static void *malloc_Callback(uint32_t size, int num_calls);
 
 // *** Private global vars ***
 static void *memPtr[64];
@@ -278,8 +278,8 @@ static bool compare_payload_cc5(const test_cc5_att_payload_t *p1, const test_cc5
 }
 
 // *** Callback Functions ***
-static void *calloc_Callback(uint32_t size, int num_calls) {
-    memPtr[memIdx] = calloc(size,1);
+static void *malloc_Callback(uint32_t size, int num_calls) {
+    memPtr[memIdx] = malloc(size);
     return memPtr[memIdx++];
 }
 
@@ -317,7 +317,7 @@ static bool process_Callback(uint16_t cmdName, test_cmd_payload_t *pCmdPayload, 
 // *** Public Functions ***
 void setUp(void) {
     // Declare callback
-    MemAllocCalloc_StubWithCallback(calloc_Callback);
+    MemAllocMalloc_StubWithCallback(malloc_Callback);
     LCSF_Bridge_TestSend_StubWithCallback(process_Callback);
     // Test init module
     TEST_ASSERT_TRUE(Test_MainInit());
