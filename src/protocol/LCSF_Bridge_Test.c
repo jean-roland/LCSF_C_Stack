@@ -9,7 +9,7 @@
 // Standard lib
 #include <string.h>
 // Custom lib
-#include <MemAlloc.h>
+#include <LCSF_config.h>
 #include <Filo.h>
 #include <LCSF_Transcoder.h>
 #include <LCSF_Validator.h>
@@ -632,7 +632,7 @@ static bool LCSF_Bridge_TestFillCmdAtt(uint16_t cmdName, lcsf_valid_att_t **pAtt
 
 bool LCSF_Bridge_TestInit(uint16_t filoSize) {
     LcsfBridgeTestInfo.pFilo = FiloCreate(filoSize, sizeof(lcsf_valid_att_t));
-    LcsfBridgeTestInfo.pCmdPayload = (test_cmd_payload_t *)MemAllocCalloc(sizeof(test_cmd_payload_t));
+    LcsfBridgeTestInfo.pCmdPayload = (test_cmd_payload_t *)MEM_ALLOC(sizeof(test_cmd_payload_t));
     return true;
 }
 

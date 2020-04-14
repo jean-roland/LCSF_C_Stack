@@ -23,7 +23,7 @@
 // Standard lib
 #include <string.h>
 // Custom lib
-#include <MemAlloc.h>
+#include <LCSF_config.h>
 #include <Filo.h>
 #include <LCSF_Transcoder.h>
 #include <LCSF_Validator.h>
@@ -254,7 +254,7 @@ static bool LCSF_Bridge_ExampleFillCmdAtt(uint16_t cmdName, lcsf_valid_att_t **p
 
 bool LCSF_Bridge_ExampleInit(uint16_t filoSize) {
     LcsfBridgeExampleInfo.pFilo = FiloCreate(filoSize, sizeof(lcsf_valid_att_t));
-    LcsfBridgeExampleInfo.pCmdPayload = MemAllocCalloc(sizeof(example_cmd_payload_t));
+    LcsfBridgeExampleInfo.pCmdPayload = MEM_ALLOC(sizeof(example_cmd_payload_t));
     return true;
 }
 

@@ -23,7 +23,7 @@
 // Standard lib
 #include <string.h>
 // Custom lib
-#include <MemAlloc.h>
+#include <LCSF_config.h>
 #include <LCSF_Bridge_Example.h>
 #include <Example_Main.h>
 
@@ -211,7 +211,7 @@ static bool Example_MainExecuteCOLOR_SPACE(example_cmd_payload_t *pCmdPayload) {
 
 bool Example_MainInit(const example_init_desc_t * pInitDesc) {
     ExampleInfo.pInitDesc = pInitDesc;
-    ExampleInfo.pSendCmdPayload = (example_cmd_payload_t *)MemAllocCalloc(sizeof(example_cmd_payload_t));
+    ExampleInfo.pSendCmdPayload = (example_cmd_payload_t *)MEM_ALLOC(sizeof(example_cmd_payload_t));
     return true;
 }
 
