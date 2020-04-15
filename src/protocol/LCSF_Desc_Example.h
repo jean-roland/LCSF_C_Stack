@@ -26,7 +26,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 // Custom lib
-#include <LCSF_Bridge_Example.h>
+#include "LCSF_Bridge_Example.h"
 
 // *** Definitions ***
 // --- Public Constants ---

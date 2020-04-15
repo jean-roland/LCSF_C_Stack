@@ -13,7 +13,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 // Custom lib
-#include <LCSF_Bridge_Test.h>
+#include "LCSF_Bridge_Test.h"
 
 // *** Definitions ***
 // --- Public Constants ---
