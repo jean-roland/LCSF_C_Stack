@@ -13,7 +13,7 @@
 #include <Filo.h>
 #include <LCSF_Transcoder.h>
 #include <LCSF_Validator.h>
-#include <LCSF_Bridge_Test.h>
+#include "LCSF_Bridge_Test.h"
 
 // *** Definitions ***
 // --- Private Types ---

@@ -24,8 +24,8 @@
 #include <string.h>
 // Custom lib
 #include <LCSF_config.h>
-#include <LCSF_Bridge_Example.h>
-#include <Example_Main.h>
+#include "LCSF_Bridge_Example.h"
+#include "Example_Main.h"
 
 // *** Definitions ***
 // --- Private Types ---

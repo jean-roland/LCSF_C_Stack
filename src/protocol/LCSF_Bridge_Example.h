@@ -28,7 +28,7 @@
 #include <stdint.h>
 // Custom lib
 #include <LCSF_Validator.h>
-#include <Example_Main.h>
+#include "Example_Main.h"
 
 // *** Definitions ***
 // --- Public Types ---
