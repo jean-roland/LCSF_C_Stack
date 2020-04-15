@@ -11,8 +11,6 @@
 
 // Memory allocation include
 #include <MemAlloc.h>
-//#include <mutek/mem_alloc.h>
 
 // Memory allocation function
 #define MEM_ALLOC(size) MemAllocMalloc(size); // Switch to your own function if needed
-//#define MEM_ALLOC(size) mem_alloc(size, mem_scope_sys);
