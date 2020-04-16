@@ -22,7 +22,7 @@
 #ifndef _Filo_h
 #define _Filo_h
 
-// *** Libraries include *** 
+// *** Libraries include ***
 // Standard lib
 #include <stdbool.h>
 #include <stdint.h>
@@ -31,10 +31,10 @@
 // *** Definitions ***
 // --- Public Types ---
 typedef struct _filo_desc {
-	void *pDataArray; // Pointer to the filo data array
-	uint32_t ItemSize; // Size of the filo item
-	uint32_t ItemNb; // Number of filo items
-	uint32_t FreeItemNb; // Number of free filo space (item number)
+    void *pDataArray; // Pointer to the filo data array
+    uint32_t ItemSize; // Size of the filo item
+    uint32_t ItemNb; // Number of filo items
+    uint32_t FreeItemNb; // Number of free filo space (item number)
 } filo_desc_t;
 
 // --- Public Constants ---
@@ -82,4 +82,4 @@ bool FiloFree(filo_desc_t *pFiloDesc, uint32_t itemNb);
 bool FiloFreeAll(filo_desc_t *pFiloDesc);
 
 // *** End Definitions ***
-#endif // _Filo_h 
+#endif // _Filo_h

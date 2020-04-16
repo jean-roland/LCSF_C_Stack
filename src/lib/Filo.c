@@ -19,7 +19,7 @@
     along with this project. If not, see <https://www.gnu.org/licenses/>
  */
 
-// *** Libraries include *** 
+// *** Libraries include ***
 // Standard lib
 #include <stdio.h>
 #include <stdlib.h>
@@ -40,60 +40,60 @@
 // *** Public Functions ***
 
 filo_desc_t *FiloCreate(uint32_t itemNb, uint32_t itemSize) {
-	// Filo allocation
-	filo_desc_t *pFiloDesc = MEM_ALLOC(sizeof(filo_desc_t));
-	// Filo data array allocation
-	pFiloDesc->pDataArray = MEM_ALLOC(itemNb * itemSize);
-	// Filo Initialization
-	pFiloDesc->ItemSize = itemSize;
-	pFiloDesc->ItemNb = itemNb;
-	pFiloDesc->FreeItemNb = itemNb;
+    // Filo allocation
+    filo_desc_t *pFiloDesc = MEM_ALLOC(sizeof(filo_desc_t));
+    // Filo data array allocation
+    pFiloDesc->pDataArray = MEM_ALLOC(itemNb * itemSize);
+    // Filo Initialization
+    pFiloDesc->ItemSize = itemSize;
+    pFiloDesc->ItemNb = itemNb;
+    pFiloDesc->FreeItemNb = itemNb;
 
-	return pFiloDesc;
+    return pFiloDesc;
 }
 
-bool FiloGet(filo_desc_t *pFiloDesc, uint32_t itemNb, void **pFreeSlot) {	
+bool FiloGet(filo_desc_t *pFiloDesc, uint32_t itemNb, void **pFreeSlot) {
 
-	if ((pFiloDesc != NULL) && (pFreeSlot != NULL)) {
-		// Guard against overflow
-		if (itemNb <= pFiloDesc->FreeItemNb) {
-			// First available index calculation
-			uint32_t slotIndex = pFiloDesc->ItemNb - pFiloDesc->FreeItemNb; 
-			// Resolve index memory address 
-			*pFreeSlot = (uint8_t *)pFiloDesc->pDataArray + slotIndex * pFiloDesc->ItemSize; 
-			// Take allocation into account 
-			pFiloDesc->FreeItemNb -= itemNb;	
-			return true;
-		} else {
-			// Out of memory
-			*pFreeSlot = NULL;	
-		}
-	}
-	return false;
+    if ((pFiloDesc != NULL) && (pFreeSlot != NULL)) {
+        // Guard against overflow
+        if (itemNb <= pFiloDesc->FreeItemNb) {
+            // First available index calculation
+            uint32_t slotIndex = pFiloDesc->ItemNb - pFiloDesc->FreeItemNb;
+            // Resolve index memory address
+            *pFreeSlot = (uint8_t *)pFiloDesc->pDataArray + slotIndex * pFiloDesc->ItemSize;
+            // Take allocation into account
+            pFiloDesc->FreeItemNb -= itemNb;
+            return true;
+        } else {
+            // Out of memory
+            *pFreeSlot = NULL;
+        }
+    }
+    return false;
 }
 
 bool FiloFree(filo_desc_t *pFiloDesc, uint32_t itemNb) {
 
-	if (pFiloDesc != NULL) {
-		uint32_t takenSlotNumber = pFiloDesc->ItemNb - pFiloDesc->FreeItemNb;
-		// Safety limitation
-		if (itemNb > takenSlotNumber) {
-			itemNb = takenSlotNumber;
-		}
-		// Take liberation into account
-		pFiloDesc->FreeItemNb += itemNb;
-		return true;
-	} else {
-		return false;
-	}
+    if (pFiloDesc != NULL) {
+        uint32_t takenSlotNumber = pFiloDesc->ItemNb - pFiloDesc->FreeItemNb;
+        // Safety limitation
+        if (itemNb > takenSlotNumber) {
+            itemNb = takenSlotNumber;
+        }
+        // Take liberation into account
+        pFiloDesc->FreeItemNb += itemNb;
+        return true;
+    } else {
+        return false;
+    }
 }
 
 bool FiloFreeAll(filo_desc_t *pFiloDesc) {
 
-	if (pFiloDesc != NULL) {
-		pFiloDesc->FreeItemNb = pFiloDesc->ItemNb;
-		return true;
-	} else {
-		return false;
-	}
+    if (pFiloDesc != NULL) {
+        pFiloDesc->FreeItemNb = pFiloDesc->ItemNb;
+        return true;
+    } else {
+        return false;
+    }
 }
