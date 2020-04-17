@@ -2,6 +2,8 @@
 
 LCSF C Stack is a C implementation of the LCSF (Light Command Set Format), designed for, but not limited to, small embedded systems.
 
+This adds a software layer to easily encode/decode custom command sets/applicative protocols based on LCSF to your project.
+
 ## How to use
 First, include all the source files in your project. You can find example set-up code in `custom_main.c`.
 
@@ -44,9 +46,9 @@ The default LCSF representation used by the transcoder is the standard one. You 
 ## Protocol files
 
 Each protocol used by the LCSF C stack is composed of 5 files:
-* LCSF_protocol_Desc.h: This file contains the tables describing the protocol commands and attributes.
-* LCSF_Bridge_protocol.c/.h: This files contain the LCSF abstraction layer.
-* protocol_Main.c/.h: This files contain the application code associated with the protocol.
+* `LCSF_protocol_Desc.h`: This file contains the tables describing the protocol commands and attributes.
+* `LCSF_Bridge_protocol.c/.h`: This files contain the LCSF abstraction layer.
+* `<protocol>_Main.c/.h`: This files contain the application code associated with the protocol.
 
 ## Note on recursivity
 
