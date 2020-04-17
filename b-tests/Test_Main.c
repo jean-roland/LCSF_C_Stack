@@ -114,21 +114,21 @@ static bool TestExecuteCC1(test_cmd_payload_t *pCmdPayload) {
        return false;
     }
     // Declare attributes
-    uint8_t m_cc1_sa1;
-    uint16_t m_cc1_sa2;
-    uint32_t m_cc1_sa3;
-    uint8_t *m_cc1_sa4;
-    char *m_cc1_sa5;
+    uint8_t m_cc1_sa1 = 0;
+    uint16_t m_cc1_sa2 = 0;
+    uint32_t m_cc1_sa3 = 0;
+    uint8_t *m_cc1_sa4 = NULL;
+    char *m_cc1_sa5 = NULL;
     bool m_cc1_sa6_isHere = false;
-    uint8_t m_cc1_sa6;
+    uint8_t m_cc1_sa6 = 0;
     bool m_cc1_sa7_isHere = false;
-    uint16_t m_cc1_sa7;
+    uint16_t m_cc1_sa7 = 0;
     bool m_cc1_sa8_isHere = false;
-    uint32_t m_cc1_sa8;
+    uint32_t m_cc1_sa8 = 0;
     bool m_cc1_sa9_isHere = false;
-    uint8_t *m_cc1_sa9;
+    uint8_t *m_cc1_sa9 = NULL;
     bool m_cc1_sa10_isHere = false;
-    char *m_cc1_sa10;
+    char *m_cc1_sa10 = NULL;
     // Retrieve attributes data
     m_cc1_sa1 = pCmdPayload->cc1_payload.sa1;
     m_cc1_sa2 = pCmdPayload->cc1_payload.sa2;
@@ -202,21 +202,21 @@ static bool TestExecuteCC3(test_cmd_payload_t *pCmdPayload) {
        return false;
     }
     // Declare attributes
-    uint8_t m_cc3_sa1;
-    uint16_t m_cc3_sa2;
-    uint32_t m_cc3_sa3;
-    uint8_t *m_cc3_sa4;
-    char *m_cc3_sa5;
+    uint8_t m_cc3_sa1 = 0;
+    uint16_t m_cc3_sa2 = 0;
+    uint32_t m_cc3_sa3 = 0;
+    uint8_t *m_cc3_sa4 = NULL;
+    char *m_cc3_sa5 = NULL;
     bool m_cc3_sa6_isHere = false;
-    uint8_t m_cc3_sa6;
+    uint8_t m_cc3_sa6 = 0;
     bool m_cc3_sa7_isHere = false;
-    uint16_t m_cc3_sa7;
+    uint16_t m_cc3_sa7 = 0;
     bool m_cc3_sa8_isHere = false;
-    uint32_t m_cc3_sa8;
+    uint32_t m_cc3_sa8 = 0;
     bool m_cc3_sa9_isHere = false;
-    uint8_t *m_cc3_sa9;
+    uint8_t *m_cc3_sa9 = NULL;
     bool m_cc3_sa10_isHere = false;
-    char *m_cc3_sa10;
+    char *m_cc3_sa10 = NULL;
     // Retrieve attributes data
     m_cc3_sa1 = pCmdPayload->cc3_payload.sa1;
     m_cc3_sa2 = pCmdPayload->cc3_payload.sa2;
@@ -290,17 +290,17 @@ static bool TestExecuteCC4(test_cmd_payload_t *pCmdPayload) {
        return false;
     }
     // Declare attributes
-    uint8_t m_cc4_sa1;
-    uint8_t m_ca1_sa1;
-    uint16_t m_ca1_sa2;
+    uint8_t m_cc4_sa1 = 0;
+    uint8_t m_ca1_sa1 = 0;
+    uint16_t m_ca1_sa2 = 0;
     bool m_ca1_sa3_isHere = false;
-    uint32_t m_ca1_sa3;
+    uint32_t m_ca1_sa3 = 0;
     bool m_cc4_ca2_isHere = false;
     bool m_ca2_sa1_isHere = false;
-    uint8_t m_ca2_sa1;
+    uint8_t m_ca2_sa1 = 0;
     bool m_ca3_sa1_isHere = false;
-    uint8_t m_ca3_sa1;
-    uint8_t *m_ca4_sa4;
+    uint8_t m_ca3_sa1 = 0;
+    uint8_t *m_ca4_sa4 = NULL;
     // Retrieve attributes data
     m_cc4_sa1 = pCmdPayload->cc4_payload.sa1;
     m_ca1_sa1 = pCmdPayload->cc4_payload.ca1_payload.sa1;
@@ -359,17 +359,17 @@ static bool TestExecuteCC6(test_cmd_payload_t *pCmdPayload) {
        return false;
     }
     // Declare attributes
-    uint8_t *m_cc6_sa4;
-    uint8_t m_ca9_sa1;
-    uint16_t m_ca9_sa2;
+    uint8_t *m_cc6_sa4 = NULL;
+    uint8_t m_ca9_sa1 = 0;
+    uint16_t m_ca9_sa2 = 0;
     bool m_ca9_sa3_isHere = false;
-    uint32_t m_ca9_sa3;
+    uint32_t m_ca9_sa3 = 0;
     bool m_cc6_ca10_isHere = false;
     bool m_ca10_sa1_isHere = false;
-    uint8_t m_ca10_sa1;
+    uint8_t m_ca10_sa1 = 0;
     bool m_ca11_sa1_isHere = false;
-    uint8_t m_ca11_sa1;
-    uint8_t *m_ca12_sa4;
+    uint8_t m_ca11_sa1 = 0;
+    uint8_t *m_ca12_sa4 = NULL;
     // Retrieve attributes data
     m_cc6_sa4 = pCmdPayload->cc6_payload.p_sa4;
     m_ca9_sa1 = pCmdPayload->cc6_payload.ca9_payload.sa1;
