@@ -58,3 +58,45 @@ Recursivity is generally frowned upon in embedded applications, which is why the
 * The number of calls is directly linked to the number of sub-attribute layers in a protocol, that means the user has direct control.
 * The stack is linear in its recursivity (one call will only lead to a maximum of one other call).
 * The stack is limited by the depth of its filo when making new calls, it is guaranteed to not infinitely loop.
+
+## Resource usage
+
+This section aims at providing information regarding the LCSF_C_Stack resource consumption on an embedded target.
+
+The stack was tested on an EFM32 leopard gecko dev board with a si446x rf transceiver. Resource usage will differ depending on your target, toolchain and application.
+
+### Program memory
+
+Program memory usage was evaluated by looking at binary sizes and elf symbol table with and without the stack, using arm-gcc with `-O2` optimization.
+
+The test application included the stack and the protocol used in unit testing which has complex and large commands by design. The results were:
+
+* Lcsf stack: `~3kB`.
+* Test protocol: `~2kB` from generated code, `~1kB` from user protocol code.
+
+
+### Heap usage
+
+LCSF Stack heap usage is mostly due to:
+* Transcoder transmit buffer.
+* Transcoder receive filo.
+* Validator tx and rx filos.
+All of which have configurable sizes in `LCSF_Config.h`. There is also the validator protocol array size which is a parameter of `LCSF_ValidatorInit`.
+
+Protocol heap usage is mostly due to:
+* Bridge transmit filo
+* Bridge receive command payload
+* Protocol main transmit command payload
+The filo size is a parameter of the bridge init function, the command payload size is equal to the size of the command with the largest payload. It will also vary if the user specific code has heavy use of heap memory.
+
+There is also the static variables in each module of the stack and protocol that consumes a bit of heap memory.
+
+For this test, a 12 items value was used for all filos and a 256 value for the buffer size. The consumption was measured by looking at heap statistics usage with and without the stack. The results were:
+* LCSF stack heap usage: `644 bytes` (static + alloc)
+* Protocol heap usage: `212 bytes` (static + alloc)
+
+### Stack usage
+
+### Processing time
+
+### Protocol overhead
