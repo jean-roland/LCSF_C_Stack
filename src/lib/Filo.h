@@ -42,14 +42,15 @@ typedef struct _filo_desc {
 // --- Public Function Prototypes ---
 
 /**
- * \fn filo_desc_t *FiloCreate(uint32_t itemNb, uint32_t itemSize)
- * \brief Create a filo
+ * \fn void FiloInit(filo_desc_t *pFilo, uint32_t itemNb, uint32_t itemSize)
+ * \brief Initialize a filo
  *
+ * \param filo_desc_t *: pointer to the filo
  * \param itemNb number of items in the filo
  * \param itemSize size of each item
- * \return filo_desc_t *: pointer to the created filo
+ * \return bool: true if operation was a success
  */
-filo_desc_t *FiloCreate(uint32_t itemNb, uint32_t itemSize);
+bool FiloInit(filo_desc_t *pFilo, uint32_t itemNb, uint32_t itemSize);
 
 /**
  * \fn bool FiloGet(filo_desc_t *pFiloDesc, uint32_t slotNumber, void **pFreeSlot)

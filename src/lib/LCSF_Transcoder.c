@@ -41,7 +41,7 @@ enum _lcsf_decode_error_enum {
 typedef struct _lcsf_trnscdr_info {
     uint8_t LastErrCode; // Last error code encountered during decoding
     uint8_t *pEncoderBuffer; // Pointer to the transmission buffer
-    filo_desc_t *pDecoderFilo; // Pointer to the decoder filo
+    filo_desc_t DecoderFilo; // Structure of the decoder filo
     LCSFSendCallback *pFnSendMsg; // Function pointer to send buffer to
     lcsf_raw_msg_t DecoderMsg; // Structure of the decoder message header
 } lcsf_trnscdr_info_t;
@@ -79,7 +79,7 @@ static lcsf_trnscdr_info_t LcsfTranscoderInfo;
  */
 static bool LCSF_AllocateAttArray(uint16_t attNb, lcsf_raw_att_t **pAttArray) {
     // Attempt to allocate the array from the filo
-    return FiloGet(LcsfTranscoderInfo.pDecoderFilo, attNb, (void **)pAttArray);
+    return FiloGet(&LcsfTranscoderInfo.DecoderFilo, attNb, (void **)pAttArray);
 }
 
 /**
@@ -259,7 +259,7 @@ static bool LCSF_DecodeBuffer(const uint8_t *pBuffer, uint16_t buffSize, lcsf_ra
     uint16_t buffIdx = 0;
 
     // Clear filo memory
-    FiloFreeAll(LcsfTranscoderInfo.pDecoderFilo);
+    FiloFreeAll(&LcsfTranscoderInfo.DecoderFilo);
     // Message header initialization
     memset(pMsg, 0, sizeof(lcsf_raw_msg_t));
     // Decode message header
@@ -466,7 +466,7 @@ bool LCSF_TranscoderInit(LCSFSendCallback *pFnSendMsg) {
     // Buffer allocation
     LcsfTranscoderInfo.pEncoderBuffer = MEM_ALLOC(LCSF_TRANSCODER_TX_BUFFER_SIZE);
     // Filo creation
-    LcsfTranscoderInfo.pDecoderFilo = FiloCreate(LCSF_TRANSCODER_RX_FILO_SIZE, sizeof(lcsf_raw_att_t));
+    FiloInit(&LcsfTranscoderInfo.DecoderFilo, LCSF_TRANSCODER_RX_FILO_SIZE, sizeof(lcsf_raw_att_t));
     // Structure initialization
     memset(&LcsfTranscoderInfo.DecoderMsg, 0, sizeof(lcsf_raw_msg_t));
     // Variables initialization

@@ -81,8 +81,8 @@ typedef struct _lcsf_validator_info {
     uint8_t ProtNb; // Number of protocol handled by the module
     uint8_t LastErrorCode; // Contains the last error the module encountered
     lcsf_ep_cmd_error_desc_t LastReceivedError; // Contains the last received lcsf error
-    filo_desc_t *pReceiverFilo; // Pointer to the receiver filo
-    filo_desc_t *pSenderFilo; // Pointer to the sender filo
+    filo_desc_t ReceiverFilo; // Structure ot the receiver filo
+    filo_desc_t SenderFilo; // Structure of the sender filo
     const lcsf_validator_protocol_desc_t **pProtArray; // Pointer to contain the module protocol array
 } lcsf_validator_info_t;
 
@@ -126,7 +126,7 @@ static lcsf_validator_info_t LcsfValidatorInfo;
  * \return bool: true if operation was a success
  */
 static bool LCSF_AllocateReceiverAttArray(uint16_t attNb, lcsf_valid_att_t **pAttArray) {
-    return FiloGet(LcsfValidatorInfo.pReceiverFilo, attNb, (void **)pAttArray);
+    return FiloGet(&LcsfValidatorInfo.ReceiverFilo, attNb, (void **)pAttArray);
 }
 
 /**
@@ -138,7 +138,7 @@ static bool LCSF_AllocateReceiverAttArray(uint16_t attNb, lcsf_valid_att_t **pAt
  * \return bool: true if operation was a success
  */
 static bool LCSF_AllocateSenderAttArray(uint16_t attNb, lcsf_raw_att_t **pAttArray) {
-    return FiloGet(LcsfValidatorInfo.pSenderFilo, attNb, (void **)pAttArray);
+    return FiloGet(&LcsfValidatorInfo.SenderFilo, attNb, (void **)pAttArray);
 }
 
 /**
@@ -629,8 +629,8 @@ bool LCSF_ValidatorInit(uint8_t protNb) {
     LcsfValidatorInfo.ProtNb = protNb;
     // Allocate structures
     LcsfValidatorInfo.pProtArray = MEM_ALLOC((uint32_t)(protNb * sizeof(lcsf_validator_protocol_desc_t *)));
-    LcsfValidatorInfo.pSenderFilo = FiloCreate(LCSF_VALIDATOR_TX_FILO_SIZE, sizeof(lcsf_valid_att_t));
-    LcsfValidatorInfo.pReceiverFilo = FiloCreate(LCSF_VALIDATOR_RX_FILO_SIZE, sizeof(lcsf_raw_att_t));
+    FiloInit(&LcsfValidatorInfo.SenderFilo, LCSF_VALIDATOR_TX_FILO_SIZE, sizeof(lcsf_valid_att_t));
+    FiloInit(&LcsfValidatorInfo.ReceiverFilo, LCSF_VALIDATOR_RX_FILO_SIZE, sizeof(lcsf_raw_att_t));
     // Initialize variables
     LcsfValidatorInfo.LastReceivedError.HasReceivedError = false;
     LcsfValidatorInfo.LastReceivedError.ErrorLocation = 0;
@@ -670,7 +670,7 @@ bool LCSF_ValidatorReceive(const lcsf_raw_msg_t *pMessage) {
     // Variables initialization
     uint16_t descCmdIdx = 0;
     lcsf_valid_cmd_t validMsg;
-    FiloFreeAll(LcsfValidatorInfo.pReceiverFilo);
+    FiloFreeAll(&LcsfValidatorInfo.ReceiverFilo);
     memset(&validMsg, 0, sizeof(lcsf_valid_cmd_t));
     // Check if command id is valid
     if (!LCSF_ValidateCmdId(pMessage->CmdId, pProtDesc->CmdNb, &descCmdIdx, pProtDesc->pCmdDescArray)) {
@@ -700,7 +700,7 @@ bool LCSF_ValidatorSend(uint8_t protId, const lcsf_valid_cmd_t *pCommand) {
     uint16_t cmdIdx = 0;
     lcsf_raw_msg_t sendMsg;
     memset(&sendMsg, 0, sizeof(lcsf_raw_msg_t));
-    FiloFreeAll(LcsfValidatorInfo.pSenderFilo);
+    FiloFreeAll(&LcsfValidatorInfo.SenderFilo);
     // Note the protocol id
     sendMsg.ProtId = protId;
     // Validate command id

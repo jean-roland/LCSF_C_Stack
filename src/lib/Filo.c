@@ -39,17 +39,17 @@
 
 // *** Public Functions ***
 
-filo_desc_t *FiloCreate(uint32_t itemNb, uint32_t itemSize) {
-    // Filo allocation
-    filo_desc_t *pFiloDesc = MEM_ALLOC(sizeof(filo_desc_t));
+bool FiloInit(filo_desc_t *pFilo, uint32_t itemNb, uint32_t itemSize) {
+    if (pFilo == NULL) {
+        return false;
+    }
     // Filo data array allocation
-    pFiloDesc->pDataArray = MEM_ALLOC(itemNb * itemSize);
+    pFilo->pDataArray = MEM_ALLOC(itemNb * itemSize);
     // Filo Initialization
-    pFiloDesc->ItemSize = itemSize;
-    pFiloDesc->ItemNb = itemNb;
-    pFiloDesc->FreeItemNb = itemNb;
-
-    return pFiloDesc;
+    pFilo->ItemSize = itemSize;
+    pFilo->ItemNb = itemNb;
+    pFilo->FreeItemNb = itemNb;
+    return true;
 }
 
 bool FiloGet(filo_desc_t *pFiloDesc, uint32_t itemNb, void **pFreeSlot) {
