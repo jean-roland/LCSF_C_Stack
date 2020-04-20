@@ -20,7 +20,7 @@
 
 // Module information structure
 typedef struct _lcsf_bridge_test_info {
-    filo_desc_t *pFilo;
+    filo_desc_t Filo;
     test_cmd_payload_t *pCmdPayload;
 } lcsf_bridge_test_info_t;
 
@@ -344,7 +344,7 @@ static bool LCSF_Bridge_TestCC1FillAtt(lcsf_valid_att_t **pAttArrayAddr, test_cm
         return false;
     }
     // Allocate attribute array
-    if (!FiloGet(LcsfBridgeTestInfo.pFilo, LCSF_TEST_CMD_CC1_ATT_NB, (void *)pAttArrayAddr)) {
+    if (!FiloGet(&LcsfBridgeTestInfo.Filo, LCSF_TEST_CMD_CC1_ATT_NB, (void *)pAttArrayAddr)) {
         return false;
     }
     // Intermediary variable
@@ -399,7 +399,7 @@ static bool LCSF_Bridge_TestCC3FillAtt(lcsf_valid_att_t **pAttArrayAddr, test_cm
         return false;
     }
     // Allocate attribute array
-    if (!FiloGet(LcsfBridgeTestInfo.pFilo, LCSF_TEST_CMD_CC3_ATT_NB, (void *)pAttArrayAddr)) {
+    if (!FiloGet(&LcsfBridgeTestInfo.Filo, LCSF_TEST_CMD_CC3_ATT_NB, (void *)pAttArrayAddr)) {
         return false;
     }
     // Intermediary variable
@@ -454,7 +454,7 @@ static bool LCSF_Bridge_TestCC4FillAtt(lcsf_valid_att_t **pAttArrayAddr, test_cm
         return false;
     }
     // Allocate attribute array
-    if (!FiloGet(LcsfBridgeTestInfo.pFilo, LCSF_TEST_CMD_CC4_ATT_NB, (void *)pAttArrayAddr)) {
+    if (!FiloGet(&LcsfBridgeTestInfo.Filo, LCSF_TEST_CMD_CC4_ATT_NB, (void *)pAttArrayAddr)) {
         return false;
     }
     // Intermediary variable
@@ -465,7 +465,7 @@ static bool LCSF_Bridge_TestCC4FillAtt(lcsf_valid_att_t **pAttArrayAddr, test_cm
     // Intermediary variable
     lcsf_valid_att_t **pSubAttArray = &(pAttArray[TEST_CC4_ATT_CA1].Payload.pSubAttArray);
     // Allocate sub-attribute array
-    if (!FiloGet(LcsfBridgeTestInfo.pFilo, LCSF_TEST_ATT_CA1_SUBATT_NB, (void *)pSubAttArray)) {
+    if (!FiloGet(&LcsfBridgeTestInfo.Filo, LCSF_TEST_ATT_CA1_SUBATT_NB, (void *)pSubAttArray)) {
         return false;
     }
     // Fill data of sub-attribute SA1
@@ -483,7 +483,7 @@ static bool LCSF_Bridge_TestCC4FillAtt(lcsf_valid_att_t **pAttArrayAddr, test_cm
         // Intermediary variable
         lcsf_valid_att_t **pSubAttArray = &(pAttArray[TEST_CC4_ATT_CA2].Payload.pSubAttArray);
         // Allocate sub-attribute array
-        if (!FiloGet(LcsfBridgeTestInfo.pFilo, LCSF_TEST_ATT_CA2_SUBATT_NB, (void *)pSubAttArray)) {
+        if (!FiloGet(&LcsfBridgeTestInfo.Filo, LCSF_TEST_ATT_CA2_SUBATT_NB, (void *)pSubAttArray)) {
             return false;
         }
         // Fill data of sub-attribute SA1
@@ -496,7 +496,7 @@ static bool LCSF_Bridge_TestCC4FillAtt(lcsf_valid_att_t **pAttArrayAddr, test_cm
         // Intermediary variable
         pSubAttArray = &(pAttArray[TEST_CC4_ATT_CA2].Payload.pSubAttArray[TEST_CA2_ATT_CA3].Payload.pSubAttArray);
         // Allocate sub-attribute array
-        if (!FiloGet(LcsfBridgeTestInfo.pFilo, LCSF_TEST_ATT_CA3_SUBATT_NB, (void *)pSubAttArray)) {
+        if (!FiloGet(&LcsfBridgeTestInfo.Filo, LCSF_TEST_ATT_CA3_SUBATT_NB, (void *)pSubAttArray)) {
             return false;
         }
             // Fill data of sub-attribute SA1
@@ -509,7 +509,7 @@ static bool LCSF_Bridge_TestCC4FillAtt(lcsf_valid_att_t **pAttArrayAddr, test_cm
             // Intermediary variable
             pSubAttArray = &(pAttArray[TEST_CC4_ATT_CA2].Payload.pSubAttArray[TEST_CA2_ATT_CA3].Payload.pSubAttArray[TEST_CA3_ATT_CA4].Payload.pSubAttArray);
             // Allocate sub-attribute array
-            if (!FiloGet(LcsfBridgeTestInfo.pFilo, LCSF_TEST_ATT_CA4_SUBATT_NB, (void *)pSubAttArray)) {
+            if (!FiloGet(&LcsfBridgeTestInfo.Filo, LCSF_TEST_ATT_CA4_SUBATT_NB, (void *)pSubAttArray)) {
                 return false;
             }
                 // Fill data of sub-attribute SA4
@@ -526,7 +526,7 @@ static bool LCSF_Bridge_TestCC6FillAtt(lcsf_valid_att_t **pAttArrayAddr, test_cm
         return false;
     }
     // Allocate attribute array
-    if (!FiloGet(LcsfBridgeTestInfo.pFilo, LCSF_TEST_CMD_CC6_ATT_NB, (void *)pAttArrayAddr)) {
+    if (!FiloGet(&LcsfBridgeTestInfo.Filo, LCSF_TEST_CMD_CC6_ATT_NB, (void *)pAttArrayAddr)) {
         return false;
     }
     // Intermediary variable
@@ -538,7 +538,7 @@ static bool LCSF_Bridge_TestCC6FillAtt(lcsf_valid_att_t **pAttArrayAddr, test_cm
     // Intermediary variable
     lcsf_valid_att_t **pSubAttArray = &(pAttArray[TEST_CC6_ATT_CA9].Payload.pSubAttArray);
     // Allocate sub-attribute array
-    if (!FiloGet(LcsfBridgeTestInfo.pFilo, LCSF_TEST_ATT_CA9_SUBATT_NB, (void *)pSubAttArray)) {
+    if (!FiloGet(&LcsfBridgeTestInfo.Filo, LCSF_TEST_ATT_CA9_SUBATT_NB, (void *)pSubAttArray)) {
         return false;
     }
     // Fill data of sub-attribute SA1
@@ -556,7 +556,7 @@ static bool LCSF_Bridge_TestCC6FillAtt(lcsf_valid_att_t **pAttArrayAddr, test_cm
         // Intermediary variable
         lcsf_valid_att_t **pSubAttArray = &(pAttArray[TEST_CC6_ATT_CA10].Payload.pSubAttArray);
         // Allocate sub-attribute array
-        if (!FiloGet(LcsfBridgeTestInfo.pFilo, LCSF_TEST_ATT_CA10_SUBATT_NB, (void *)pSubAttArray)) {
+        if (!FiloGet(&LcsfBridgeTestInfo.Filo, LCSF_TEST_ATT_CA10_SUBATT_NB, (void *)pSubAttArray)) {
             return false;
         }
         // Fill data of sub-attribute SA1
@@ -569,7 +569,7 @@ static bool LCSF_Bridge_TestCC6FillAtt(lcsf_valid_att_t **pAttArrayAddr, test_cm
         // Intermediary variable
         pSubAttArray = &(pAttArray[TEST_CC6_ATT_CA10].Payload.pSubAttArray[TEST_CA10_ATT_CA11].Payload.pSubAttArray);
         // Allocate sub-attribute array
-        if (!FiloGet(LcsfBridgeTestInfo.pFilo, LCSF_TEST_ATT_CA11_SUBATT_NB, (void *)pSubAttArray)) {
+        if (!FiloGet(&LcsfBridgeTestInfo.Filo, LCSF_TEST_ATT_CA11_SUBATT_NB, (void *)pSubAttArray)) {
             return false;
         }
             // Fill data of sub-attribute SA1
@@ -582,7 +582,7 @@ static bool LCSF_Bridge_TestCC6FillAtt(lcsf_valid_att_t **pAttArrayAddr, test_cm
             // Intermediary variable
             pSubAttArray = &(pAttArray[TEST_CC6_ATT_CA10].Payload.pSubAttArray[TEST_CA10_ATT_CA11].Payload.pSubAttArray[TEST_CA11_ATT_CA12].Payload.pSubAttArray);
             // Allocate sub-attribute array
-            if (!FiloGet(LcsfBridgeTestInfo.pFilo, LCSF_TEST_ATT_CA12_SUBATT_NB, (void *)pSubAttArray)) {
+            if (!FiloGet(&LcsfBridgeTestInfo.Filo, LCSF_TEST_ATT_CA12_SUBATT_NB, (void *)pSubAttArray)) {
                 return false;
             }
                 // Fill data of sub-attribute SA4
@@ -631,7 +631,7 @@ static bool LCSF_Bridge_TestFillCmdAtt(uint16_t cmdName, lcsf_valid_att_t **pAtt
 // *** Public Functions ***
 
 bool LCSF_Bridge_TestInit(uint16_t filoSize) {
-    LcsfBridgeTestInfo.pFilo = FiloCreate(filoSize, sizeof(lcsf_valid_att_t));
+    FiloInit(&LcsfBridgeTestInfo.Filo, filoSize, sizeof(lcsf_valid_att_t));
     LcsfBridgeTestInfo.pCmdPayload = (test_cmd_payload_t *)MEM_ALLOC(sizeof(test_cmd_payload_t));
     return true;
 }
@@ -648,7 +648,7 @@ bool LCSF_Bridge_TestReceive(lcsf_valid_cmd_t *pValidCmd) {
 bool LCSF_Bridge_TestSend(uint16_t cmdName, test_cmd_payload_t *pCmdPayload) {
     lcsf_valid_cmd_t sendCmd;
     sendCmd.CmdId = LCSF_Bridge_Test_CMDNAME2CMDID[cmdName];
-    FiloFreeAll(LcsfBridgeTestInfo.pFilo);
+    FiloFreeAll(&LcsfBridgeTestInfo.Filo);
 
     if (!LCSF_Bridge_TestFillCmdAtt(cmdName, &(sendCmd.pAttArray), pCmdPayload)) {
         return false;

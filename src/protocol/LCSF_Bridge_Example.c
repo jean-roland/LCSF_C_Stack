@@ -34,7 +34,7 @@
 
 // Module information structure
 typedef struct _lcsf_bridge_example_info {
-    filo_desc_t *pFilo;
+    filo_desc_t Filo;
     example_cmd_payload_t *pCmdPayload;
 } lcsf_bridge_example_info_t;
 
@@ -174,7 +174,7 @@ static bool LCSF_Bridge_ExampleERRORFillAtt(lcsf_valid_att_t **pAttArray, exampl
     if (pCmdPayload == NULL) {
         return false;
     }
-    if (!FiloGet(LcsfBridgeExampleInfo.pFilo, LCSF_EXAMPLE_CMD_ERROR_ATT_NB, (void **)pAttArray)) {
+    if (!FiloGet(&LcsfBridgeExampleInfo.Filo, LCSF_EXAMPLE_CMD_ERROR_ATT_NB, (void **)pAttArray)) {
         return false;
     }
     // Fill data of attribute ERROR_CODE
@@ -186,14 +186,14 @@ static bool LCSF_Bridge_ExampleCOLOR_SPACEFillAtt(lcsf_valid_att_t **pAttArray, 
     if (pCmdPayload == NULL) {
         return false;
     }
-    if (!FiloGet(LcsfBridgeExampleInfo.pFilo, LCSF_EXAMPLE_CMD_COLOR_SPACE_ATT_NB, (void **)pAttArray)) {
+    if (!FiloGet(&LcsfBridgeExampleInfo.Filo, LCSF_EXAMPLE_CMD_COLOR_SPACE_ATT_NB, (void **)pAttArray)) {
         return false;
     }
     // Fill data of attribute YUV
     if ((pCmdPayload->color_space_payload.optAttFlagsBitfield & EXAMPLE_COLOR_SPACE_ATT_YUV_FLAG) != 0) {
         lcsf_valid_att_t **pSubAttArray = &(((*pAttArray)[EXAMPLE_COLOR_SPACE_ATT_YUV]).Payload.pSubAttArray);
 
-        if (!FiloGet(LcsfBridgeExampleInfo.pFilo, LCSF_EXAMPLE_ATT_YUV_SUBATT_NB, (void **)pSubAttArray)) {
+        if (!FiloGet(&LcsfBridgeExampleInfo.Filo, LCSF_EXAMPLE_ATT_YUV_SUBATT_NB, (void **)pSubAttArray)) {
            return false;
         }
         // Fill data of sub-attribute Y
@@ -209,7 +209,7 @@ static bool LCSF_Bridge_ExampleCOLOR_SPACEFillAtt(lcsf_valid_att_t **pAttArray, 
     if ((pCmdPayload->color_space_payload.optAttFlagsBitfield & EXAMPLE_COLOR_SPACE_ATT_RGB_FLAG) != 0) {
         lcsf_valid_att_t **pSubAttArray = &(((*pAttArray)[EXAMPLE_COLOR_SPACE_ATT_YUV]).Payload.pSubAttArray);
 
-        if (!FiloGet(LcsfBridgeExampleInfo.pFilo, LCSF_EXAMPLE_ATT_RGB_SUBATT_NB, (void **)pSubAttArray)) {
+        if (!FiloGet(&LcsfBridgeExampleInfo.Filo, LCSF_EXAMPLE_ATT_RGB_SUBATT_NB, (void **)pSubAttArray)) {
 	        return false;
         }
         // Fill data of sub-attribute R
@@ -253,7 +253,7 @@ static bool LCSF_Bridge_ExampleFillCmdAtt(uint16_t cmdName, lcsf_valid_att_t **p
 // *** Public Functions ***
 
 bool LCSF_Bridge_ExampleInit(uint16_t filoSize) {
-    LcsfBridgeExampleInfo.pFilo = FiloCreate(filoSize, sizeof(lcsf_valid_att_t));
+    FiloInit(&LcsfBridgeExampleInfo.Filo, filoSize, sizeof(lcsf_valid_att_t));
     LcsfBridgeExampleInfo.pCmdPayload = MEM_ALLOC(sizeof(example_cmd_payload_t));
     return true;
 }
@@ -270,7 +270,7 @@ bool LCSF_Bridge_ExampleReceive(lcsf_valid_cmd_t *pValidCmd) {
 bool LCSF_Bridge_ExampleSend(uint16_t cmdName, example_cmd_payload_t *pCmdPayload) {
     lcsf_valid_cmd_t sendCmd;
     sendCmd.CmdId = LCSF_Bridge_Example_CMDNAME2CMDID[cmdName];
-    FiloFreeAll(LcsfBridgeExampleInfo.pFilo);
+    FiloFreeAll(&LcsfBridgeExampleInfo.Filo);
 
     if (!LCSF_Bridge_ExampleFillCmdAtt(cmdName, &(sendCmd.pAttArray), pCmdPayload)) {
         return false;
