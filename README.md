@@ -74,7 +74,6 @@ The test application included the stack and the protocol used in unit testing wh
 * Lcsf stack: `~3kB`.
 * Test protocol: `~2kB` from generated code, `~1kB` from user protocol code.
 
-
 ### Heap usage
 
 LCSF Stack heap usage is mostly due to:
@@ -92,10 +91,27 @@ The filo size is a parameter of the bridge init function, the command payload si
 There is also the static variables in each module of the stack and protocol that consumes a bit of heap memory.
 
 For this test, a 12 items value was used for all filos and a 256 value for the buffer size. The consumption was measured by looking at heap statistics usage with and without the stack. The results were:
-* LCSF stack heap usage: `644 bytes` (static + alloc)
-* Protocol heap usage: `212 bytes` (static + alloc)
+* LCSF stack heap usage: `632 bytes` (static + alloc)
+* Protocol heap usage: `208 bytes` (static + alloc)
 
 ### Stack usage
+
+Stack usage is evaluated with the values obtained vith the compilation flag `fstack-usage` and sanity checked by evaluating the stack pointer value at key points during run time.
+
+Those key points are:
+* The peak stack usage which should be, since the protocol send a message upon recieving one, in `LCSF_TranscoderSend` with a callstack starting from `LCSF_TranscoderReceive` and crossing the whole stack both ways.
+* The stack recursive functions, to monitor the stack cost of each layer.
+
+The results were:
+* `LCSF_ValidateAttribute_Rec: 56 bytes/call`
+* `LCSF_FillAttribute_Rec: 48 bytes/call`
+* `LCSF_DecodeAtt_Rec: 40 bytes/call`
+* `LCSF_EncodeAtt_Rec: 24 bytes/call`
+* Lcsf stack, compiler measured stack usage: `160 bytes`
+* Protocol compiler measured stack usage: `112 bytes`
+* Maximum run-time measured stack usage: `340 bytes` because of four nested calls to `LCSF_ValidateAttribute_Rec`
+
+With a simpler protocol, we can expect a maximum of `200-250 bytes` of stack usage.
 
 ### Processing time
 
