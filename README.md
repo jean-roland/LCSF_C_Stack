@@ -92,7 +92,7 @@ The filo size is a parameter of the bridge init function, the command payload si
 
 There is also the static variables in each module of the LCSF stack and protocol that consumes a bit of heap memory.
 
-For this test, the command payload size is `40 bytes`, a 12 items value was used for all filos and a 256 value for the buffer size. This represents `544 bytes` for the LCSF stack, `176 bytes` for the protocol.
+For this test, the command payload size is `40 bytes`, a 12 items value was used for all filos and a 256 value for the buffer size. This represents `548 bytes` for the LCSF stack, `176 bytes` for the protocol.
 
 The results were:
 * LCSF stack heap usage: `632 bytes` (static + alloc),
