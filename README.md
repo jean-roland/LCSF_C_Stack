@@ -65,7 +65,7 @@ This section aims at providing information regarding the LCSF_C_Stack resource c
 
 The lcsf stack was tested on a EFM32 leopard gecko dev board with a si446x rf transceiver. Resource usage will differ depending on your target, toolchain and application.
 
-For more information, check the full resource usage report ![here](./Resource_usage.md)
+For more information, check the full resource usage report [here](./Resource_usage.md).
 
 The rough values are:
 * Program memory usage: `~6kB`
