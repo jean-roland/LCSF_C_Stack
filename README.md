@@ -76,6 +76,8 @@ The test application included the stack and the protocol used in unit testing wh
 
 ### Heap usage
 
+The heap memory consumption was measured by looking at heap usage statistics with and without the stack.
+
 LCSF Stack heap usage is mostly due to:
 * Transcoder transmit buffer.
 * Transcoder receive filo.
@@ -90,13 +92,13 @@ The filo size is a parameter of the bridge init function, the command payload si
 
 There is also the static variables in each module of the stack and protocol that consumes a bit of heap memory.
 
-For this test, a 12 items value was used for all filos and a 256 value for the buffer size. The consumption was measured by looking at heap statistics usage with and without the stack. The results were:
+For this test, a 12 items value was used for all filos and a 256 value for the buffer size. The results were:
 * LCSF stack heap usage: `632 bytes` (static + alloc)
 * Protocol heap usage: `208 bytes` (static + alloc)
 
 ### Stack usage
 
-Stack usage is evaluated with the values obtained vith the compilation flag `fstack-usage` and sanity checked by evaluating the stack pointer value at key points during run time.
+Stack usage was evaluated with the values obtained vith the compilation flag `fstack-usage` and sanity checked by evaluating the stack pointer value at key points during run time.
 
 Those key points are:
 * The peak stack usage which should be, since the protocol send a message upon recieving one, in `LCSF_TranscoderSend` with a callstack starting from `LCSF_TranscoderReceive` and crossing the whole stack both ways.
