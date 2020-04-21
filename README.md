@@ -128,6 +128,7 @@ Decoding:
 * Simple command: `40µs @14MHz, 17µs @28MHz`
 * Large command: `191µs @14MHz, 98µs @28MHz`
 * Complex command: `241µs @14MHz, 121µs @28MHz`
+
 Encoding:
 * Simple command: `54µs @14MHz, 28µs @28MHz`
 * Large command: `206µs @14MHz, 104µs @28MHz`
@@ -168,9 +169,11 @@ Decoding process time:
 * Simple command: `36µs (-10%) @14MHz, 18µs (-5.9%) @28MHz`
 * Large command: `178µs (-6.8%) @14MHz, 89µs (-9.2%) @28MHz`
 * Complex command: `218µs (-9.5%) @14MHz, 111µs (-8.3%) @28MHz`
+
 Encoding process time:
 * Simple command: `52µs (-3.7%) @14MHz, 26µs (-7.1%) @28MHz`
 * Large command: `192µs (-6.8%) @14MHz, 95µs (-8.7%) @28MHz`
 * Complex command: `226µs (-7.4%) @14MHz, 114µs (-5%) @28MHz`
+
 Program memory usage:
 * LCSF stack: `2652 bytes (-5.8%)`
