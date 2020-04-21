@@ -68,6 +68,6 @@ The lcsf stack was tested on a EFM32 leopard gecko dev board with a si446x rf tr
 For more information, check the full resource usage report [here](./Resource_usage.md).
 
 The rough values are:
-* Program memory usage: `~6kB`
-* Heap memory usage: `<1kB`
-* Stack memory usage: `~250 bytes`
+* Program memory: `~6kB`
+* Heap memory: `<1kB`
+* Stack memory: `~250 bytes`
