@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.15"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>LCSF C Stack: Lib/LCSF_Transcoder.h File Reference</title>
+<title>LCSF C Stack: src/lib/LCSF_Transcoder.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -109,8 +109,6 @@ Data Structures</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__lcsf__raw__msg.html">_lcsf_raw_msg</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__lcsf__trnscdr__init__desc.html">_lcsf_trnscdr_init_desc</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
@@ -126,15 +124,12 @@ typedef struct <a class="el" href="struct__lcsf__raw__msg.html">_lcsf_raw_msg</a
 <tr class="memitem:afeef914df9b356ab62b7260fc065c85d"><td class="memItemLeft" align="right" valign="top"><a id="afeef914df9b356ab62b7260fc065c85d"></a>
 typedef bool&#160;</td><td class="memItemRight" valign="bottom"><b>LCSFSendCallback</b>(const uint8_t *pBuffer, uint16_t buffSize)</td></tr>
 <tr class="separator:afeef914df9b356ab62b7260fc065c85d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ade118d1330bed51f157f2f661516ce73"><td class="memItemLeft" align="right" valign="top"><a id="ade118d1330bed51f157f2f661516ce73"></a>
-typedef struct <a class="el" href="struct__lcsf__trnscdr__init__desc.html">_lcsf_trnscdr_init_desc</a>&#160;</td><td class="memItemRight" valign="bottom"><b>lcsf_trnscdr_init_desc_t</b></td></tr>
-<tr class="separator:ade118d1330bed51f157f2f661516ce73"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ae2350cbe51440c599d266c3a1b9d256b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_l_c_s_f___transcoder_8h.html#ae2350cbe51440c599d266c3a1b9d256b">LCSF_TranscoderInit</a> (const <a class="el" href="struct__lcsf__trnscdr__init__desc.html">lcsf_trnscdr_init_desc_t</a> *pInitDesc)</td></tr>
-<tr class="memdesc:ae2350cbe51440c599d266c3a1b9d256b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the module.  <a href="#ae2350cbe51440c599d266c3a1b9d256b">More...</a><br /></td></tr>
-<tr class="separator:ae2350cbe51440c599d266c3a1b9d256b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae0bba2d5c135d09ca5ce0dc1e598405"><td class="memItemLeft" align="right" valign="top"><a id="aae0bba2d5c135d09ca5ce0dc1e598405"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>LCSF_TranscoderInit</b> (LCSFSendCallback *pFnSendMsg)</td></tr>
+<tr class="separator:aae0bba2d5c135d09ca5ce0dc1e598405"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaff55fc724b997835cbe897d476f7ecb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_l_c_s_f___transcoder_8h.html#aaff55fc724b997835cbe897d476f7ecb">LCSF_TranscoderReceive</a> (const uint8_t *pBuffer, uint16_t buffSize)</td></tr>
 <tr class="memdesc:aaff55fc724b997835cbe897d476f7ecb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decode a buffer into a raw lcsf message and pass it to receiver.  <a href="#aaff55fc724b997835cbe897d476f7ecb">More...</a><br /></td></tr>
 <tr class="separator:aaff55fc724b997835cbe897d476f7ecb"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -150,33 +145,6 @@ Functions</h2></td></tr>
 <p>LCSF C Stack is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
 <p>You should have received a copy of the GNU General Public License along with this project. If not, see <a href="https://www.gnu.org/licenses/">https://www.gnu.org/licenses/</a> </p>
 </div><h2 class="groupheader">Function Documentation</h2>
-<a id="ae2350cbe51440c599d266c3a1b9d256b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae2350cbe51440c599d266c3a1b9d256b">&#9670;&nbsp;</a></span>LCSF_TranscoderInit()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool LCSF_TranscoderInit </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="struct__lcsf__trnscdr__init__desc.html">lcsf_trnscdr_init_desc_t</a> *&#160;</td>
-          <td class="paramname"><em>pInitDesc</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Initialize the module. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">pInitDesc</td><td>pointer to module initialization descriptor </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>bool: true if operation was a success </dd></dl>
-
-</div>
-</div>
 <a id="aaff55fc724b997835cbe897d476f7ecb"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aaff55fc724b997835cbe897d476f7ecb">&#9670;&nbsp;</a></span>LCSF_TranscoderReceive()</h2>
 
@@ -247,7 +215,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_8f3de2ae926fecfe6abd5379fd2b6eb1.html">Lib</a></li><li class="navelem"><a class="el" href="_l_c_s_f___transcoder_8h.html">LCSF_Transcoder.h</a></li>
+    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_c85d3e3c5052e9ad9ce18c6863244a25.html">lib</a></li><li class="navelem"><a class="el" href="_l_c_s_f___transcoder_8h.html">LCSF_Transcoder.h</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.15 </li>

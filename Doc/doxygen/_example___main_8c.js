@@ -7,6 +7,6 @@ var _example___main_8c =
       [ "EXAMPLE_ERROR_INVALID_COLOR", "_example___main_8c.html#ac8e2514d24ffc1bdbb2f91437dd658fea7eba9458ee8253e11a02fb47693ed7eb", null ],
       [ "EXAMPLE_ERROR_WRONG_CMD", "_example___main_8c.html#ac8e2514d24ffc1bdbb2f91437dd658feacabdff990441e9189ccd29aee24acd5e", null ]
     ] ],
-    [ "Example_MainCommandExecute", "_example___main_8c.html#a04c31a4168041cf5b11a7acc174374d6", null ],
+    [ "Example_MainCommandExecute", "_example___main_8c.html#aacfae65f4e1538c61d616f6a70246775", null ],
     [ "Example_MainInit", "_example___main_8c.html#a16ce5f7a6763938aaecdf7c24d600ac0", null ]
 ];

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.15"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>LCSF C Stack: Protocol/Example_Main.c File Reference</title>
+<title>LCSF C Stack: src/protocol/Example_Main.c File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -98,9 +98,9 @@ $(document).ready(function(){initNavTree('_example___main_8c.html','');});
 <p>Example protocol module.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;string.h&gt;</code><br />
-<code>#include &lt;<a class="el" href="_mem_alloc_8h_source.html">MemAlloc.h</a>&gt;</code><br />
-<code>#include &lt;<a class="el" href="_l_c_s_f___bridge___example_8h_source.html">LCSF_Bridge_Example.h</a>&gt;</code><br />
-<code>#include &lt;<a class="el" href="_example___main_8h_source.html">Example_Main.h</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="_l_c_s_f__config_8h_source.html">LCSF_config.h</a>&gt;</code><br />
+<code>#include &quot;<a class="el" href="_l_c_s_f___bridge___example_8h_source.html">LCSF_Bridge_Example.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="_example___main_8h_source.html">Example_Main.h</a>&quot;</code><br />
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Data Structures</h2></td></tr>
@@ -126,9 +126,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a16ce5f7a6763938aaecdf7c24d600ac0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_example___main_8c.html#a16ce5f7a6763938aaecdf7c24d600ac0">Example_MainInit</a> (const <a class="el" href="struct__example__init__desc.html">example_init_desc_t</a> *pInitDesc)</td></tr>
 <tr class="memdesc:a16ce5f7a6763938aaecdf7c24d600ac0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the module.  <a href="#a16ce5f7a6763938aaecdf7c24d600ac0">More...</a><br /></td></tr>
 <tr class="separator:a16ce5f7a6763938aaecdf7c24d600ac0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a04c31a4168041cf5b11a7acc174374d6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_example___main_8c.html#a04c31a4168041cf5b11a7acc174374d6">Example_MainCommandExecute</a> (uint8_t cmdName, <a class="el" href="union__example__cmd__payload.html">example_cmd_payload_t</a> *pCmdPayload)</td></tr>
-<tr class="memdesc:a04c31a4168041cf5b11a7acc174374d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Execute a command.  <a href="#a04c31a4168041cf5b11a7acc174374d6">More...</a><br /></td></tr>
-<tr class="separator:a04c31a4168041cf5b11a7acc174374d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aacfae65f4e1538c61d616f6a70246775"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_example___main_8c.html#aacfae65f4e1538c61d616f6a70246775">Example_MainCommandExecute</a> (uint16_t cmdName, <a class="el" href="union__example__cmd__payload.html">example_cmd_payload_t</a> *pCmdPayload)</td></tr>
+<tr class="memdesc:aacfae65f4e1538c61d616f6a70246775"><td class="mdescLeft">&#160;</td><td class="mdescRight">Execute a command.  <a href="#aacfae65f4e1538c61d616f6a70246775">More...</a><br /></td></tr>
+<tr class="separator:aacfae65f4e1538c61d616f6a70246775"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Example protocol module. </p>
@@ -138,8 +138,8 @@ Functions</h2></td></tr>
 <p>LCSF C Stack is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
 <p>You should have received a copy of the GNU General Public License along with this project. If not, see <a href="https://www.gnu.org/licenses/">https://www.gnu.org/licenses/</a> </p>
 </div><h2 class="groupheader">Function Documentation</h2>
-<a id="a04c31a4168041cf5b11a7acc174374d6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a04c31a4168041cf5b11a7acc174374d6">&#9670;&nbsp;</a></span>Example_MainCommandExecute()</h2>
+<a id="aacfae65f4e1538c61d616f6a70246775"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aacfae65f4e1538c61d616f6a70246775">&#9670;&nbsp;</a></span>Example_MainCommandExecute()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -147,7 +147,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">bool Example_MainCommandExecute </td>
           <td>(</td>
-          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramtype">uint16_t&#160;</td>
           <td class="paramname"><em>cmdName</em>, </td>
         </tr>
         <tr>
@@ -208,7 +208,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_e49bc37473615c0a07d0284d037ad823.html">Protocol</a></li><li class="navelem"><a class="el" href="_example___main_8c.html">Example_Main.c</a></li>
+    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_5903c71b979204ea1ce2d27420efeaa9.html">protocol</a></li><li class="navelem"><a class="el" href="_example___main_8c.html">Example_Main.c</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.15 </li>

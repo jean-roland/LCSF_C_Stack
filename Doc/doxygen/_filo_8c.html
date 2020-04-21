@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.15"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>LCSF C Stack: Lib/Filo.c File Reference</title>
+<title>LCSF C Stack: src/lib/Filo.c File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -97,14 +97,14 @@ $(document).ready(function(){initNavTree('_filo_8c.html','');});
 <div class="textblock"><code>#include &lt;stdio.h&gt;</code><br />
 <code>#include &lt;stdlib.h&gt;</code><br />
 <code>#include &lt;string.h&gt;</code><br />
-<code>#include &lt;<a class="el" href="_mem_alloc_8h_source.html">MemAlloc.h</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="_l_c_s_f__config_8h_source.html">LCSF_config.h</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="_filo_8h_source.html">Filo.h</a>&gt;</code><br />
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a0cc797302d58766a0d0baf01451fb08e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct__filo__desc.html">filo_desc_t</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_filo_8c.html#a0cc797302d58766a0d0baf01451fb08e">FiloCreate</a> (uint32_t itemNb, uint32_t itemSize)</td></tr>
-<tr class="memdesc:a0cc797302d58766a0d0baf01451fb08e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a filo.  <a href="#a0cc797302d58766a0d0baf01451fb08e">More...</a><br /></td></tr>
-<tr class="separator:a0cc797302d58766a0d0baf01451fb08e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aefcb71a65eb3d60a2a9d0a3ecbf706f4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_filo_8c.html#aefcb71a65eb3d60a2a9d0a3ecbf706f4">FiloInit</a> (<a class="el" href="struct__filo__desc.html">filo_desc_t</a> *pFilo, uint32_t itemNb, uint32_t itemSize)</td></tr>
+<tr class="memdesc:aefcb71a65eb3d60a2a9d0a3ecbf706f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize a filo.  <a href="#aefcb71a65eb3d60a2a9d0a3ecbf706f4">More...</a><br /></td></tr>
+<tr class="separator:aefcb71a65eb3d60a2a9d0a3ecbf706f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1e32610cc1601bb15f3515e8d715726d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_filo_8c.html#a1e32610cc1601bb15f3515e8d715726d">FiloGet</a> (<a class="el" href="struct__filo__desc.html">filo_desc_t</a> *pFiloDesc, uint32_t itemNb, void **pFreeSlot)</td></tr>
 <tr class="memdesc:a1e32610cc1601bb15f3515e8d715726d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocate a table of item from a filo and return the pointer.  <a href="#a1e32610cc1601bb15f3515e8d715726d">More...</a><br /></td></tr>
 <tr class="separator:a1e32610cc1601bb15f3515e8d715726d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -123,44 +123,6 @@ Functions</h2></td></tr>
 <p>LCSF C Stack is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
 <p>You should have received a copy of the GNU General Public License along with this project. If not, see <a href="https://www.gnu.org/licenses/">https://www.gnu.org/licenses/</a> </p>
 </div><h2 class="groupheader">Function Documentation</h2>
-<a id="a0cc797302d58766a0d0baf01451fb08e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0cc797302d58766a0d0baf01451fb08e">&#9670;&nbsp;</a></span>FiloCreate()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="struct__filo__desc.html">filo_desc_t</a> * FiloCreate </td>
-          <td>(</td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>itemNb</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>itemSize</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Create a filo. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">itemNb</td><td>number of items in the filo </td></tr>
-    <tr><td class="paramname">itemSize</td><td>size of each item </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>filo_desc_t *: pointer to the created filo </dd></dl>
-
-</div>
-</div>
 <a id="af9bc329865db290ca420b90b73e04c26"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af9bc329865db290ca420b90b73e04c26">&#9670;&nbsp;</a></span>FiloFree()</h2>
 
@@ -271,12 +233,57 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="aefcb71a65eb3d60a2a9d0a3ecbf706f4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aefcb71a65eb3d60a2a9d0a3ecbf706f4">&#9670;&nbsp;</a></span>FiloInit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void FiloInit </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct__filo__desc.html">filo_desc_t</a> *&#160;</td>
+          <td class="paramname"><em>pFilo</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>itemNb</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>itemSize</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Initialize a filo. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">filo_desc_t</td><td>*: pointer to the filo </td></tr>
+    <tr><td class="paramname">itemNb</td><td>number of items in the filo </td></tr>
+    <tr><td class="paramname">itemSize</td><td>size of each item </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool: true if operation was a success </dd></dl>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_8f3de2ae926fecfe6abd5379fd2b6eb1.html">Lib</a></li><li class="navelem"><a class="el" href="_filo_8c.html">Filo.c</a></li>
+    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_c85d3e3c5052e9ad9ce18c6863244a25.html">lib</a></li><li class="navelem"><a class="el" href="_filo_8c.html">Filo.c</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.15 </li>

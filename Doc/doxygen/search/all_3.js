@@ -1,10 +1,9 @@
 var searchData=
 [
-  ['memalloc_2ec',['MemAlloc.c',['../_mem_alloc_8c.html',1,'']]],
-  ['memalloc_2eh',['MemAlloc.h',['../_mem_alloc_8h.html',1,'']]],
-  ['memalloccalloc',['MemAllocCalloc',['../_mem_alloc_8c.html#a74ae14414e3fb6408bca392df1a29175',1,'MemAllocCalloc(uint32_t size):&#160;MemAlloc.c'],['../_mem_alloc_8h.html#aefdfe64d2b4a67c15dedf99fbcb58e1c',1,'MemAllocCalloc(uint32_t size):&#160;MemAlloc.c']]],
-  ['memalloccallocaligned',['MemAllocCallocAligned',['../_mem_alloc_8c.html#a407dbe7655a44ededfaa616826c42909',1,'MemAllocCallocAligned(uint32_t size, uint8_t alignment):&#160;MemAlloc.c'],['../_mem_alloc_8h.html#a17348411733d2fc593ff8acdb8416444',1,'MemAllocCallocAligned(uint32_t size, uint8_t alignment):&#160;MemAlloc.c']]],
-  ['memallocinit',['MemAllocInit',['../_mem_alloc_8c.html#a5e31e75c6cbfe6f40339b81e08be1fa2',1,'MemAllocInit(const uint8_t *pHeap, uint32_t heapSize):&#160;MemAlloc.c'],['../_mem_alloc_8h.html#a5e31e75c6cbfe6f40339b81e08be1fa2',1,'MemAllocInit(const uint8_t *pHeap, uint32_t heapSize):&#160;MemAlloc.c']]],
-  ['memallocmalloc',['MemAllocMalloc',['../_mem_alloc_8c.html#ab8e70a59f57ae8dd5c806cf3f45cb757',1,'MemAllocMalloc(uint32_t size):&#160;MemAlloc.c'],['../_mem_alloc_8h.html#a8b8e12ebf82eb56c120cf883d75b9cef',1,'MemAllocMalloc(uint32_t size):&#160;MemAlloc.c']]],
-  ['memallocmallocaligned',['MemAllocMallocAligned',['../_mem_alloc_8c.html#afb1736a31b30ab86ebc8f44a48b0ad0d',1,'MemAllocMallocAligned(uint32_t size, uint8_t alignment):&#160;MemAlloc.c'],['../_mem_alloc_8h.html#aba2c0b795630d9ade3f314d67ed52400',1,'MemAllocMallocAligned(uint32_t size, uint8_t alignment):&#160;MemAlloc.c']]]
+  ['filo_2ec',['Filo.c',['../_filo_8c.html',1,'']]],
+  ['filo_2eh',['Filo.h',['../_filo_8h.html',1,'']]],
+  ['filofree',['FiloFree',['../_filo_8c.html#af9bc329865db290ca420b90b73e04c26',1,'FiloFree(filo_desc_t *pFiloDesc, uint32_t itemNb):&#160;Filo.c'],['../_filo_8h.html#af9bc329865db290ca420b90b73e04c26',1,'FiloFree(filo_desc_t *pFiloDesc, uint32_t itemNb):&#160;Filo.c']]],
+  ['filofreeall',['FiloFreeAll',['../_filo_8c.html#a98ae2bb75274c4e67bf862270ae88602',1,'FiloFreeAll(filo_desc_t *pFiloDesc):&#160;Filo.c'],['../_filo_8h.html#a98ae2bb75274c4e67bf862270ae88602',1,'FiloFreeAll(filo_desc_t *pFiloDesc):&#160;Filo.c']]],
+  ['filoget',['FiloGet',['../_filo_8c.html#a1e32610cc1601bb15f3515e8d715726d',1,'FiloGet(filo_desc_t *pFiloDesc, uint32_t itemNb, void **pFreeSlot):&#160;Filo.c'],['../_filo_8h.html#a1e32610cc1601bb15f3515e8d715726d',1,'FiloGet(filo_desc_t *pFiloDesc, uint32_t itemNb, void **pFreeSlot):&#160;Filo.c']]],
+  ['filoinit',['FiloInit',['../_filo_8c.html#aefcb71a65eb3d60a2a9d0a3ecbf706f4',1,'FiloInit(filo_desc_t *pFilo, uint32_t itemNb, uint32_t itemSize):&#160;Filo.c'],['../_filo_8h.html#a7f26f3080f81fd59b9194ae02b772e09',1,'FiloInit(filo_desc_t *pFilo, uint32_t itemNb, uint32_t itemSize):&#160;Filo.c']]]
 ];

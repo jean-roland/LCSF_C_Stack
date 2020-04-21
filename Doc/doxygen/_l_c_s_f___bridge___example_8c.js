@@ -5,5 +5,5 @@ var _l_c_s_f___bridge___example_8c =
     [ "LCSF_Bridge_ExampleInit", "_l_c_s_f___bridge___example_8c.html#a43b02bcbe5d8bd5d875fd214d84e69d0", null ],
     [ "LCSF_Bridge_ExampleReceive", "_l_c_s_f___bridge___example_8c.html#a96dc7e8c07eaeb20173aa49237443444", null ],
     [ "LCSF_Bridge_ExampleSend", "_l_c_s_f___bridge___example_8c.html#a5f946a8a338313c610997e7182d264d7", null ],
-    [ "LCSF_Bridge_Example_CMDNAME2CMDID", "_l_c_s_f___bridge___example_8c.html#a73cb088f935b61f8bfa64217437ee826", null ]
+    [ "LCSF_Bridge_Example_CMDNAME2CMDID", "_l_c_s_f___bridge___example_8c.html#aa1c8b1ba9a20453b54cb8f5e1be80f50", null ]
 ];

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.15"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>LCSF C Stack: Lib/LCSF_Validator.h File Reference</title>
+<title>LCSF C Stack: src/lib/LCSF_Validator.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -119,8 +119,6 @@ Data Structures</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__lcsf__validator__protocol__desc.html">_lcsf_validator_protocol_desc</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__lcsf__validator__init__desc.html">_lcsf_validator_init_desc</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
@@ -148,9 +146,6 @@ typedef bool&#160;</td><td class="memItemRight" valign="bottom"><b>LCSFInterpret
 <tr class="memitem:a0e677867e2e15182fbd51010240a69bf"><td class="memItemLeft" align="right" valign="top"><a id="a0e677867e2e15182fbd51010240a69bf"></a>
 typedef struct <a class="el" href="struct__lcsf__validator__protocol__desc.html">_lcsf_validator_protocol_desc</a>&#160;</td><td class="memItemRight" valign="bottom"><b>lcsf_validator_protocol_desc_t</b></td></tr>
 <tr class="separator:a0e677867e2e15182fbd51010240a69bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a110180b2c23d7485378b0741ffdde06e"><td class="memItemLeft" align="right" valign="top"><a id="a110180b2c23d7485378b0741ffdde06e"></a>
-typedef struct <a class="el" href="struct__lcsf__validator__init__desc.html">_lcsf_validator_init_desc</a>&#160;</td><td class="memItemRight" valign="bottom"><b>lcsf_validator_init_desc_t</b></td></tr>
-<tr class="separator:a110180b2c23d7485378b0741ffdde06e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
@@ -168,9 +163,9 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a33193f045bc864991ab590897760c5a0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_l_c_s_f___validator_8h.html#a33193f045bc864991ab590897760c5a0">LCSF_ValidatorInit</a> (const <a class="el" href="struct__lcsf__validator__init__desc.html">lcsf_validator_init_desc_t</a> *pInitDesc)</td></tr>
-<tr class="memdesc:a33193f045bc864991ab590897760c5a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the module.  <a href="#a33193f045bc864991ab590897760c5a0">More...</a><br /></td></tr>
-<tr class="separator:a33193f045bc864991ab590897760c5a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a682b943a49d4137cf226bcd60c9bf019"><td class="memItemLeft" align="right" valign="top"><a id="a682b943a49d4137cf226bcd60c9bf019"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>LCSF_ValidatorInit</b> (uint8_t protNb)</td></tr>
+<tr class="separator:a682b943a49d4137cf226bcd60c9bf019"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abb54133db0475d64088d2b4258395ffd"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_l_c_s_f___validator_8h.html#abb54133db0475d64088d2b4258395ffd">LCSF_ValidatorAddProtocol</a> (uint8_t protIdx, const <a class="el" href="struct__lcsf__validator__protocol__desc.html">lcsf_validator_protocol_desc_t</a> *pProtDesc)</td></tr>
 <tr class="memdesc:abb54133db0475d64088d2b4258395ffd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a protocol to the module table.  <a href="#abb54133db0475d64088d2b4258395ffd">More...</a><br /></td></tr>
 <tr class="separator:abb54133db0475d64088d2b4258395ffd"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -223,33 +218,6 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>LCSF_ValidatorSend</b
   <table class="params">
     <tr><td class="paramname">protIdx</td><td>protocol index in the module table </td></tr>
     <tr><td class="paramname">pProtDesc</td><td>pointer to protocol descriptor </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>bool: true if operation was a success </dd></dl>
-
-</div>
-</div>
-<a id="a33193f045bc864991ab590897760c5a0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a33193f045bc864991ab590897760c5a0">&#9670;&nbsp;</a></span>LCSF_ValidatorInit()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool LCSF_ValidatorInit </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="struct__lcsf__validator__init__desc.html">lcsf_validator_init_desc_t</a> *&#160;</td>
-          <td class="paramname"><em>pInitDesc</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Initialize the module. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">pInitDesc</td><td>pointer to module initialization descriptor </td></tr>
   </table>
   </dd>
 </dl>
@@ -316,7 +284,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>LCSF_ValidatorSend</b
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_8f3de2ae926fecfe6abd5379fd2b6eb1.html">Lib</a></li><li class="navelem"><a class="el" href="_l_c_s_f___validator_8h.html">LCSF_Validator.h</a></li>
+    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_c85d3e3c5052e9ad9ce18c6863244a25.html">lib</a></li><li class="navelem"><a class="el" href="_l_c_s_f___validator_8h.html">LCSF_Validator.h</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.15 </li>

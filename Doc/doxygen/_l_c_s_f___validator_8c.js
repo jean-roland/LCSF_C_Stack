@@ -29,7 +29,7 @@ var _l_c_s_f___validator_8c =
       [ "LCSF_EP_ERROR_LOC_VALIDATION_ERROR", "_l_c_s_f___validator_8c.html#a2f8855cf3e81120c884ab2da0fa41177a39bc37522f8665a6e42130fdf8a2a2ce", null ]
     ] ],
     [ "LCSF_ValidatorAddProtocol", "_l_c_s_f___validator_8c.html#abb54133db0475d64088d2b4258395ffd", null ],
-    [ "LCSF_ValidatorInit", "_l_c_s_f___validator_8c.html#a33193f045bc864991ab590897760c5a0", null ],
+    [ "LCSF_ValidatorInit", "_l_c_s_f___validator_8c.html#a682b943a49d4137cf226bcd60c9bf019", null ],
     [ "LCSF_ValidatorReceive", "_l_c_s_f___validator_8c.html#a6addb077ae60654378d73881d3ffef15", null ],
     [ "LCSF_ValidatorSend", "_l_c_s_f___validator_8c.html#a7e4c68df453241c9dfbc7cc43989c4db", null ],
     [ "LCSF_ValidatorSendTranscoderError", "_l_c_s_f___validator_8c.html#a18fa6153f8bcbd033ed0ea8fe1a9c6c9", null ]
