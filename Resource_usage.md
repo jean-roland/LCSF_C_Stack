@@ -61,18 +61,18 @@ With a simpler protocol, we can expect a maximum of `200-250 bytes` of stack usa
 
 ## Processing time
 
-Processing time was measured by measuring the value of a timer before and after processing a message, both for decoding and encoding. Measures were repeated 100 times to get a mean. Tests were made with a simple command (no attributes), a large command (10 attributes) and a complex command (4 layers of sub-attributes).
+Processing time was measured by measuring the value of a timer before and after processing a message, both for decoding and encoding. Tests were made with a simple command (no attributes), a large command (10 attributes) and a complex command (4 layers of sub-attributes).
 
-Measurements were made using a `875kHz` timer, which implies measurement uncertainty in the `~1µs` range, without accounting for timer inaccuracy. The results were:
+Measurements were made with a processor clock speed at `14MHz` and `28MHz` and a timer at clock speed, which implies measurement uncertainty in the `~10ns` range, without accounting for clock inaccuracy. The following values are the minimum value of 100 measurements to remove variability (irq...):
 
 Decoding:
-* Simple command: `36.7µs @14MHz, 18.4µs @28MHz`
-* Large command: `196.0µs @14MHz, 97.9µs @28MHz`
-* Complex command: `242.0µs @14MHz, 121.0µs @28MHz`
+* Simple command: `36.6µs @14MHz, 18.3µs @28MHz`
+* Large command: `195.7µs @14MHz, 97.9µs @28MHz`
+* Complex command: `240.1µs @14MHz, 120.0µs @28MHz`
 
 Encoding:
-* Simple command: `53.1µs @14MHz, 26.6µs @28MHz`
-* Large command: `207.7µs @14MHz, 103.9µs @28MHz`
+* Simple command: `52.9µs @14MHz, 26.5µs @28MHz`
+* Large command: `207.5µs @14MHz, 103.8µs @28MHz`
 * Complex command: `245.0µs @14MHz, 122.5µs @28MHz`
 
 Actual processing time will be longer, depending on user application code. This values only account for the lcsf stack + bridge processing time.
@@ -105,14 +105,14 @@ Since variable sizes aren't changed, heap and stack memory usage doesn't change 
 Program memory usage and processing time does improve a little as the messages are shorter:
 
 Decoding process time:
-* Simple command: `34.9µs (-4.9%) @14MHz, 17.5µs (-4.9%) @28MHz`
-* Large command: `178.9µs (-8.7%) @14MHz, 89.5µs (-8.6%) @28MHz`
-* Complex command: `219.3µs (-9.4%) @14MHz, 109.7µs (-9.3%) @28MHz`
+* Simple command: `34.7µs (-5.2%) @14MHz, 17.4µs (-4.9%) @28MHz`
+* Large command: `178.7µs (-8.7%) @14MHz, 89.4µs (-8.7%) @28MHz`
+* Complex command: `218.4µs (-9.0%) @14MHz, 109.2µs (-9.0%) @28MHz`
 
 Encoding process time:
-* Simple command: `51.4µs (-3.2%) @14MHz, 25.8µs (-3.0%) @28MHz`
-* Large command: `194.5µs (-6.4%) @14MHz, 97.3µs (-6.4%) @28MHz`
-* Complex command: `231.2µs (-5.6%) @14MHz, 115.6µs (-5.6%) @28MHz`
+* Simple command: `51.2µs (-3.2%) @14MHz, 25.6µs (-3.4%) @28MHz`
+* Large command: `194.3µs (-6.4%) @14MHz, 97.1µs (-6.5%) @28MHz`
+* Complex command: `231.3µs (-5.6%) @14MHz, 115.6µs (-5.6%) @28MHz`
 
 Program memory usage:
 * LCSF stack: `2652 bytes (-5.8%)`
