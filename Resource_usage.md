@@ -61,19 +61,19 @@ With a simpler protocol, we can expect a maximum of `200-250 bytes` of stack usa
 
 ## Processing time
 
-Processing time was measured by measuring the value of a timer before and after processing a message, both for decoding and encoding. Measures were repeated 50 times to get a mean. Tests were made with a simple command (no attributes), a large command (10 attributes) and a complex command (4 layers of sub-attributes). The results were:
+Processing time was measured by measuring the value of a timer before and after processing a message, both for decoding and encoding. Measures were repeated 100 times to get a mean. Tests were made with a simple command (no attributes), a large command (10 attributes) and a complex command (4 layers of sub-attributes).
+
+Measurements were made using a `875kHz` timer, which implies measurement uncertainty in the `~1µs` range, without accounting for timer inaccuracy. The results were:
 
 Decoding:
-* Simple command: `40µs @14MHz, 17µs @28MHz`
-* Large command: `191µs @14MHz, 98µs @28MHz`
-* Complex command: `241µs @14MHz, 121µs @28MHz`
+* Simple command: `36.7µs @14MHz, 18.4µs @28MHz`
+* Large command: `196.0µs @14MHz, 97.9µs @28MHz`
+* Complex command: `242.0µs @14MHz, 121.0µs @28MHz`
 
 Encoding:
-* Simple command: `54µs @14MHz, 28µs @28MHz`
-* Large command: `206µs @14MHz, 104µs @28MHz`
-* Complex command: `244µs @14MHz, 120µs @28MHz`
-
-Measurements were made using a timer with a `31.25µs` resolution, which implies measurement uncertainty in the `~10µs` range, without accounting for timer inaccuracy.
+* Simple command: `53.1µs @14MHz, 26.6µs @28MHz`
+* Large command: `207.7µs @14MHz, 103.9µs @28MHz`
+* Complex command: `245.0µs @14MHz, 122.5µs @28MHz`
 
 Actual processing time will be longer, depending on user application code. This values only account for the lcsf stack + bridge processing time.
 
@@ -102,17 +102,17 @@ The most important change is message sizes, since that's the main thing differen
 
 Since variable sizes aren't changed, heap and stack memory usage doesn't change at the exception of `LCSF_EncodeAtt_Rec` which uses now `32 bytes` of stack per call, most probably because of compiler optimization.
 
-Program memory usage and processing time does improve a little as the messages are shorter but only on the transcoder side of things.
+Program memory usage and processing time does improve a little as the messages are shorter:
 
 Decoding process time:
-* Simple command: `36µs (-10%) @14MHz, 18µs (-5.9%) @28MHz`
-* Large command: `178µs (-6.8%) @14MHz, 89µs (-9.2%) @28MHz`
-* Complex command: `218µs (-9.5%) @14MHz, 111µs (-8.3%) @28MHz`
+* Simple command: `34.9µs (-4.9%) @14MHz, 17.5µs (-4.9%) @28MHz`
+* Large command: `178.9µs (-8.7%) @14MHz, 89.5µs (-8.6%) @28MHz`
+* Complex command: `219.3µs (-9.4%) @14MHz, 109.7µs (-9.3%) @28MHz`
 
 Encoding process time:
-* Simple command: `52µs (-3.7%) @14MHz, 26µs (-7.1%) @28MHz`
-* Large command: `192µs (-6.8%) @14MHz, 95µs (-8.7%) @28MHz`
-* Complex command: `226µs (-7.4%) @14MHz, 114µs (-5%) @28MHz`
+* Simple command: `51.4µs (-3.2%) @14MHz, 25.8µs (-3.0%) @28MHz`
+* Large command: `194.5µs (-6.4%) @14MHz, 97.3µs (-6.4%) @28MHz`
+* Complex command: `231.2µs (-5.6%) @14MHz, 115.6µs (-5.6%) @28MHz`
 
 Program memory usage:
 * LCSF stack: `2652 bytes (-5.8%)`
