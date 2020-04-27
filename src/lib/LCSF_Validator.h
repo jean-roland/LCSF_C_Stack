@@ -134,6 +134,16 @@ bool LCSF_ValidatorAddProtocol(uint8_t protIdx, const lcsf_validator_protocol_de
 bool LCSF_ValidatorSendTranscoderError(uint8_t errorType);
 
 /**
+ * \fn bool LCSF_ValidatorTakeReceivedError(uint8_t *pErrLoc, uint8_t *pErrType)
+ * \brief Retrieve the last received lcsf error
+ *
+ * \param pErrLoc pointer to contain error location
+ * \param pErrType pointer to contain error type
+ * \return bool: true if error available and successfully copied to arguments
+ */
+bool LCSF_ValidatorTakeReceivedError(uint8_t *pErrLoc, uint8_t *pErrType);
+
+/**
  * \fn bool LCSF_ValidatorReceive(const lcsf_raw_msg_t *pMessage)
  * \brief Validate a raw lcsf message and send to interpreter
  *

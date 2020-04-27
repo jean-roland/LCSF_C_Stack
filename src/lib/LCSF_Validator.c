@@ -649,6 +649,18 @@ bool LCSF_ValidatorSendTranscoderError(uint8_t errorType) {
     return LCSF_ValidatorSendError(LCSF_EP_ERROR_LOC_DECODE_ERROR, errorType);
 }
 
+bool LCSF_ValidatorTakeReceivedError(uint8_t *pErrLoc, uint8_t *pErrType) {
+    if ((pErrLoc == NULL) || (pErrType == NULL) || (!LcsfValidatorInfo.ReceivedErr.HasError)) {
+        return false;
+    }
+    // Note values
+    *pErrLoc = LcsfValidatorInfo.ReceivedErr.ErrorLoc;
+    *pErrType = LcsfValidatorInfo.ReceivedErr.ErrorType;
+    // Clear error status
+    LcsfValidatorInfo.ReceivedErr.HasError = false;
+    return true;
+}
+
 bool LCSF_ValidatorReceive(const lcsf_raw_msg_t *pMessage) {
 
     if (pMessage == NULL) {
