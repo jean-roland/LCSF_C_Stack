@@ -61,6 +61,8 @@ static bool LCSF_FillAttHeader(uint16_t *pBuffIdx, uint8_t *pBuffer, const lcsf_
 static bool LCSF_FillAttData(uint16_t *pBuffIdx, uint8_t *pBuffer, const lcsf_raw_att_t *pAtt);
 static bool LCSF_EncodeAtt_Rec(uint16_t *pBuffIdx, uint8_t *pBuffer, uint16_t attNb, const lcsf_raw_att_t *pAttArray);
 static bool LCSF_EncodeBuffer(uint16_t *pBuffIdx, uint8_t *pBuffer, const lcsf_raw_msg_t *pMsg);
+// External functions
+extern bool LCSF_ValidatorSendTranscoderError(uint8_t errorType);
 
 // --- Private Variables ---
 static lcsf_trnscdr_info_t LcsfTranscoderInfo;

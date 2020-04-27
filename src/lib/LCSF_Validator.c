@@ -630,6 +630,17 @@ static bool LCSF_ProcessReceivedError(const lcsf_raw_msg_t *pErrorMsg) {
     return true;
 }
 
+/**
+ * \fn bool LCSF_ValidatorSendTranscoderError(uint8_t errorType)
+ * \brief Send an LCSF transcoder error message, should only be used by LCSF_Transcoder.
+ *
+ * \param errorType error code to send
+ * \return bool: true if operation was a success
+ */
+bool LCSF_ValidatorSendTranscoderError(uint8_t errorType) {
+    return LCSF_ValidatorSendError(LCSF_EP_ERROR_LOC_DECODE_ERROR, errorType);
+}
+
 // *** Public Functions ***
 
 bool LCSF_ValidatorInit(uint8_t protNb) {
@@ -651,10 +662,6 @@ bool LCSF_ValidatorAddProtocol(uint8_t protIdx, const lcsf_validator_protocol_de
     } else {
         return false;
     }
-}
-
-bool LCSF_ValidatorSendTranscoderError(uint8_t errorType) {
-    return LCSF_ValidatorSendError(LCSF_EP_ERROR_LOC_DECODE_ERROR, errorType);
 }
 
 bool LCSF_ValidatorTakeReceivedError(uint8_t *pErrLoc, uint8_t *pErrType) {

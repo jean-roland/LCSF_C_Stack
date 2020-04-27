@@ -101,6 +101,9 @@ typedef struct _lcsf_validator_protocol_desc {
     LCSFInterpretCallback *pFnInterpretMsg; // Pointer to the message interpretation function
 } lcsf_validator_protocol_desc_t;
 
+// Functions used by transcoder to send errors
+bool LCSF_ValidatorSendTranscoderError(uint8_t errorType);
+
 // --- Public Constants ---
 // --- Public Variables ---
 // --- Public Function Prototypes ---
@@ -123,15 +126,6 @@ bool LCSF_ValidatorInit(uint8_t protNb);
  * \return bool: true if operation was a success
  */
 bool LCSF_ValidatorAddProtocol(uint8_t protIdx, const lcsf_validator_protocol_desc_t *pProtDesc);
-
-/**
- * \fn bool LCSF_ValidatorSendTranscoderError(uint8_t errorType)
- * \brief Send an LCSF transcoder error message
- *
- * \param errorType error code to send
- * \return bool: true if operation was a success
- */
-bool LCSF_ValidatorSendTranscoderError(uint8_t errorType);
 
 /**
  * \fn bool LCSF_ValidatorTakeReceivedError(uint8_t *pErrLoc, uint8_t *pErrType)
