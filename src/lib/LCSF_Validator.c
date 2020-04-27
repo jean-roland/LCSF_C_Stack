@@ -71,16 +71,16 @@ enum _lcsf_ep_cmd_error_att_err_code_val_enum {
 
 // LCSF_EP error command description structure
 typedef struct _lcsf_ep_cmd_error_desc {
-    bool HasReceivedError;
-    uint8_t ErrorLocation;
-    uint8_t ErrorCode;
+    bool HasError;
+    uint8_t ErrorLoc;
+    uint8_t ErrorType;
 } lcsf_ep_cmd_error_desc_t;
 
 // Module information structure
 typedef struct _lcsf_validator_info {
     uint8_t ProtNb; // Number of protocol handled by the module
-    uint8_t LastErrorCode; // Contains the last error the module encountered
-    lcsf_ep_cmd_error_desc_t LastReceivedError; // Contains the last received lcsf error
+    uint8_t LastErrorType; // Contains the last error the module encountered
+    lcsf_ep_cmd_error_desc_t ReceivedErr; // Contains the last received lcsf error
     filo_desc_t ReceiverFilo; // Structure ot the receiver filo
     filo_desc_t SenderFilo; // Structure of the sender filo
     const lcsf_validator_protocol_desc_t **pProtArray; // Pointer to contain the module protocol array
@@ -316,23 +316,23 @@ static bool LCSF_ValidateDataType(uint16_t dataSize, uint8_t descDataType) {
 static bool LCSF_ValidateAttribute_Rec(uint16_t attNb, const lcsf_raw_att_t *pAttArray, uint16_t descAttNb, const lcsf_attribute_desc_t *pAttDescArray, lcsf_valid_att_t **pValidAttArray) {
 
     if (pAttDescArray == NULL) {
-        LcsfValidatorInfo.LastErrorCode = LCSF_EP_ERROR_CODE_UNKNOWN_ERROR;
+        LcsfValidatorInfo.LastErrorType = LCSF_EP_ERROR_CODE_UNKNOWN_ERROR;
         return false;
     }
     if (pAttArray == NULL) {
         // No received attributes, we check if this is normal
         if(LCSF_HasNonOptionalAttribute(descAttNb, pAttDescArray)) {
-            LcsfValidatorInfo.LastErrorCode = LCSF_EP_ERROR_CODE_MISS_NONOPT_ATT;
+            LcsfValidatorInfo.LastErrorType = LCSF_EP_ERROR_CODE_MISS_NONOPT_ATT;
             return false;
         }
     }
     if (attNb > descAttNb) {
-        LcsfValidatorInfo.LastErrorCode = LCSF_EP_ERROR_CODE_TOO_MANY_ATT;
+        LcsfValidatorInfo.LastErrorType = LCSF_EP_ERROR_CODE_TOO_MANY_ATT;
         return false;
     }
     // Allocate the valid attribute array
     if (!LCSF_AllocateReceiverAttArray(descAttNb, pValidAttArray)){
-        LcsfValidatorInfo.LastErrorCode = LCSF_EP_ERROR_CODE_UNKNOWN_ERROR;
+        LcsfValidatorInfo.LastErrorType = LCSF_EP_ERROR_CODE_UNKNOWN_ERROR;
         return false;
     }
     // We note the base number of received attributes
@@ -358,13 +358,13 @@ static bool LCSF_ValidateAttribute_Rec(uint16_t attNb, const lcsf_raw_att_t *pAt
                     }
                 } else if (LCSF_HasNonOptionalAttribute(pCurrDescAtt->SubAttNb, pCurrDescAtt->pSubAttDescArray)) {
                     // Missing sub-attributes
-                    LcsfValidatorInfo.LastErrorCode = LCSF_EP_ERROR_CODE_MISS_NONOPT_ATT;
+                    LcsfValidatorInfo.LastErrorType = LCSF_EP_ERROR_CODE_MISS_NONOPT_ATT;
                     return false;
                 }
             } else {
                 // Check if data type is valid
                 if (!LCSF_ValidateDataType(pCurrRxAtt->PayloadSize, pCurrDescAtt->DataType)) {
-                    LcsfValidatorInfo.LastErrorCode = LCSF_EP_ERROR_CODE_WRONG_ATT_DATA_TYPE;
+                    LcsfValidatorInfo.LastErrorType = LCSF_EP_ERROR_CODE_WRONG_ATT_DATA_TYPE;
                     return false;
                 }
                 // Note the data and data size
@@ -373,7 +373,7 @@ static bool LCSF_ValidateAttribute_Rec(uint16_t attNb, const lcsf_raw_att_t *pAt
             }
         } else if (!pCurrDescAtt->IsOptional) {
             // Missing non-optional attribute, error
-            LcsfValidatorInfo.LastErrorCode = LCSF_EP_ERROR_CODE_MISS_NONOPT_ATT;
+            LcsfValidatorInfo.LastErrorType = LCSF_EP_ERROR_CODE_MISS_NONOPT_ATT;
             return false;
         } else {
             // Missing optional attribute, valid case
@@ -382,7 +382,7 @@ static bool LCSF_ValidateAttribute_Rec(uint16_t attNb, const lcsf_raw_att_t *pAt
     }
     // Check if we processed everything
     if (rxAttNb > 0) {
-        LcsfValidatorInfo.LastErrorCode = LCSF_EP_ERROR_CODE_UNKNOWN_ATT_ID;
+        LcsfValidatorInfo.LastErrorType = LCSF_EP_ERROR_CODE_UNKNOWN_ATT_ID;
         return false;
     }
     return true;
@@ -401,12 +401,12 @@ static bool LCSF_ValidateAttribute(const lcsf_raw_msg_t *pMessage, const lcsf_co
 
     if ((pCmdDesc->AttNb == 0) && (pMessage->AttNb > 0)) {
         // We received attributes while the descriptor says we expect none
-        LcsfValidatorInfo.LastErrorCode = LCSF_EP_ERROR_CODE_TOO_MANY_ATT;
+        LcsfValidatorInfo.LastErrorType = LCSF_EP_ERROR_CODE_TOO_MANY_ATT;
         return false;
     } else if ((pCmdDesc->AttNb != 0) && (pMessage->AttNb == 0)) {
         // We received no attributes, we check if this is normal or if there is missing attributes
         if (LCSF_HasNonOptionalAttribute(pCmdDesc->AttNb, pCmdDesc->pAttDescArray)) {
-            LcsfValidatorInfo.LastErrorCode = LCSF_EP_ERROR_CODE_MISS_NONOPT_ATT;
+            LcsfValidatorInfo.LastErrorType = LCSF_EP_ERROR_CODE_MISS_NONOPT_ATT;
             return false;
         }
     } else if ((pCmdDesc->AttNb != 0) && (pCmdDesc->pAttDescArray != NULL)) {
@@ -579,7 +579,7 @@ static bool LCSF_ValidatorSendError(uint8_t errorLoc, uint8_t errorType) {
     lcsf_raw_msg_t errorMsg;
     lcsf_raw_att_t msgAttArray[LCSF_EP_CMD_ERROR_ATT_NB];
     uint8_t errorLocVal = errorLoc;
-    uint8_t errorCodeVal = errorType;
+    uint8_t errorTypeVal = errorType;
     // Fill message information
     errorMsg.ProtId = LCSF_ERROR_PROTOCOL_ID;
     errorMsg.CmdId = LCSF_EP_CMD_ERROR_ID;
@@ -594,7 +594,7 @@ static bool LCSF_ValidatorSendError(uint8_t errorLoc, uint8_t errorType) {
     msgAttArray[1].AttId = LCSF_EP_CMD_ERROR_ATT_ERR_TYPE_ID;
     msgAttArray[1].PayloadSize = LCSF_EP_CMD_ERROR_ATT_ERR_TYPE_SIZE;
     msgAttArray[1].HasSubAtt = false;
-    msgAttArray[1].Payload.pData = &errorCodeVal;
+    msgAttArray[1].Payload.pData = &errorTypeVal;
     // Send the message to transcoder
     return LCSF_TranscoderSend(&errorMsg);
 }
@@ -616,9 +616,9 @@ static bool LCSF_ProcessReceivedError(const lcsf_raw_msg_t *pErrorMsg) {
         return false;
     }
     // Save error message information
-    LcsfValidatorInfo.LastReceivedError.HasReceivedError = true;
-    LcsfValidatorInfo.LastReceivedError.ErrorLocation = *(pErrorMsg->pAttArray[0].Payload.pData);
-    LcsfValidatorInfo.LastReceivedError.ErrorCode = *(pErrorMsg->pAttArray[1].Payload.pData);
+    LcsfValidatorInfo.ReceivedErr.HasError = true;
+    LcsfValidatorInfo.ReceivedErr.ErrorLoc = *(pErrorMsg->pAttArray[0].Payload.pData);
+    LcsfValidatorInfo.ReceivedErr.ErrorType = *(pErrorMsg->pAttArray[1].Payload.pData);
     return true;
 }
 
@@ -632,9 +632,7 @@ bool LCSF_ValidatorInit(uint8_t protNb) {
     FiloInit(&LcsfValidatorInfo.SenderFilo, LCSF_VALIDATOR_TX_FILO_SIZE, sizeof(lcsf_valid_att_t));
     FiloInit(&LcsfValidatorInfo.ReceiverFilo, LCSF_VALIDATOR_RX_FILO_SIZE, sizeof(lcsf_raw_att_t));
     // Initialize variables
-    LcsfValidatorInfo.LastReceivedError.HasReceivedError = false;
-    LcsfValidatorInfo.LastReceivedError.ErrorLocation = 0;
-    LcsfValidatorInfo.LastReceivedError.ErrorCode = 0;
+    LcsfValidatorInfo.ReceivedErr.HasError = false;
     return true;
 }
 
@@ -647,8 +645,8 @@ bool LCSF_ValidatorAddProtocol(uint8_t protIdx, const lcsf_validator_protocol_de
     }
 }
 
-bool LCSF_ValidatorSendTranscoderError(uint8_t errorCode) {
-    return LCSF_ValidatorSendError(LCSF_EP_ERROR_LOC_DECODE_ERROR, errorCode);
+bool LCSF_ValidatorSendTranscoderError(uint8_t errorType) {
+    return LCSF_ValidatorSendError(LCSF_EP_ERROR_LOC_DECODE_ERROR, errorType);
 }
 
 bool LCSF_ValidatorReceive(const lcsf_raw_msg_t *pMessage) {
@@ -680,7 +678,7 @@ bool LCSF_ValidatorReceive(const lcsf_raw_msg_t *pMessage) {
     validMsg.CmdId = pMessage->CmdId;
     // Check if command attributes are valid
     if (!LCSF_ValidateAttribute(pMessage, &(pProtDesc->pCmdDescArray[descCmdIdx]), &(validMsg.pAttArray))) {
-        return LCSF_ValidatorSendError(LCSF_EP_ERROR_LOC_VALIDATION_ERROR, LcsfValidatorInfo.LastErrorCode);
+        return LCSF_ValidatorSendError(LCSF_EP_ERROR_LOC_VALIDATION_ERROR, LcsfValidatorInfo.LastErrorType);
     }
     // Send validated message to interpreter function
     return pFnInterpreter(&validMsg);

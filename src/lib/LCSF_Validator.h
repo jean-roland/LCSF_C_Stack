@@ -125,13 +125,13 @@ bool LCSF_ValidatorInit(uint8_t protNb);
 bool LCSF_ValidatorAddProtocol(uint8_t protIdx, const lcsf_validator_protocol_desc_t *pProtDesc);
 
 /**
- * \fn bool LCSF_ValidatorSendTranscoderError(uint8_t errorCode)
+ * \fn bool LCSF_ValidatorSendTranscoderError(uint8_t errorType)
  * \brief Send an LCSF transcoder error message
  *
- * \param errorCode error code to send
+ * \param errorType error code to send
  * \return bool: true if operation was a success
  */
-bool LCSF_ValidatorSendTranscoderError(uint8_t errorCode);
+bool LCSF_ValidatorSendTranscoderError(uint8_t errorType);
 
 /**
  * \fn bool LCSF_ValidatorReceive(const lcsf_raw_msg_t *pMessage)
