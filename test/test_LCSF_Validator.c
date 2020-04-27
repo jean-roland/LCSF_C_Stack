@@ -213,6 +213,14 @@ void tearDown(void) {
 void test_LCSF_Validator_Receive(void) {
     TEST_ASSERT_FALSE(LCSF_ValidatorReceive(NULL));
     TEST_ASSERT_TRUE(LCSF_ValidatorReceive(&rxMsg));
+
+    // Test error receive
+    uint8_t errLoc, errType;
+    TEST_ASSERT_FALSE(LCSF_ValidatorTakeReceivedError(NULL, NULL));
+    TEST_ASSERT_FALSE(LCSF_ValidatorTakeReceivedError(&errLoc, &errType));
+    TEST_ASSERT_TRUE(LCSF_ValidatorReceive(&errMsg));
+    TEST_ASSERT_TRUE(LCSF_ValidatorTakeReceivedError(&errLoc, &errType));
+    TEST_ASSERT_TRUE(((errLoc == errloc) && (errType == errcode)));
 }
 
 void test_LCSF_Validator_Send(void) {
