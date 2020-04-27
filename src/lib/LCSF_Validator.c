@@ -595,6 +595,10 @@ static bool LCSF_ValidatorSendError(uint8_t errorLoc, uint8_t errorType) {
     msgAttArray[1].PayloadSize = LCSF_EP_CMD_ERROR_ATT_ERR_TYPE_SIZE;
     msgAttArray[1].HasSubAtt = false;
     msgAttArray[1].Payload.pData = &errorTypeVal;
+    // Log error message
+#ifdef LCSF_LOG_ERROR
+    LOG_ERROR("[LCSF] Sending error, location: %d, type: %d\n", errorLoc, errorType);
+#endif
     // Send the message to transcoder
     return LCSF_TranscoderSend(&errorMsg);
 }
@@ -619,6 +623,10 @@ static bool LCSF_ProcessReceivedError(const lcsf_raw_msg_t *pErrorMsg) {
     LcsfValidatorInfo.ReceivedErr.HasError = true;
     LcsfValidatorInfo.ReceivedErr.ErrorLoc = *(pErrorMsg->pAttArray[0].Payload.pData);
     LcsfValidatorInfo.ReceivedErr.ErrorType = *(pErrorMsg->pAttArray[1].Payload.pData);
+    // Log error message
+#ifdef LCSF_LOG_ERROR
+    LOG_ERROR("[LCSF] Received error, location: %d, type: %d\n", LcsfValidatorInfo.ReceivedErr.ErrorLoc, LcsfValidatorInfo.ReceivedErr.ErrorType);
+#endif
     return true;
 }
 
