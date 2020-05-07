@@ -124,6 +124,9 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:a0716250df5da9b950064bb09d3d599b8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_l_c_s_f___transcoder_8c.html#a0716250df5da9b950064bb09d3d599b8">LCSF_ValidatorSendTranscoderError</a> (uint8_t errorType)</td></tr>
+<tr class="memdesc:a0716250df5da9b950064bb09d3d599b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send an LCSF transcoder error message, should only be used by LCSF_Transcoder.  <a href="#a0716250df5da9b950064bb09d3d599b8">More...</a><br /></td></tr>
+<tr class="separator:a0716250df5da9b950064bb09d3d599b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aae0bba2d5c135d09ca5ce0dc1e598405"><td class="memItemLeft" align="right" valign="top"><a id="aae0bba2d5c135d09ca5ce0dc1e598405"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>LCSF_TranscoderInit</b> (LCSFSendCallback *pFnSendMsg)</td></tr>
 <tr class="separator:aae0bba2d5c135d09ca5ce0dc1e598405"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -200,6 +203,33 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>LCSF_TranscoderInit</
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">pMessage</td><td>pointer to the raw lcsf message to encode </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool: true if operation was a success </dd></dl>
+
+</div>
+</div>
+<a id="a0716250df5da9b950064bb09d3d599b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0716250df5da9b950064bb09d3d599b8">&#9670;&nbsp;</a></span>LCSF_ValidatorSendTranscoderError()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool LCSF_ValidatorSendTranscoderError </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>errorType</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Send an LCSF transcoder error message, should only be used by LCSF_Transcoder. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">errorType</td><td>error code to send </td></tr>
   </table>
   </dd>
 </dl>

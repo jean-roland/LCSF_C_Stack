@@ -163,15 +163,18 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:a0716250df5da9b950064bb09d3d599b8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_l_c_s_f___validator_8h.html#a0716250df5da9b950064bb09d3d599b8">LCSF_ValidatorSendTranscoderError</a> (uint8_t errorType)</td></tr>
+<tr class="memdesc:a0716250df5da9b950064bb09d3d599b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send an LCSF transcoder error message, should only be used by LCSF_Transcoder.  <a href="#a0716250df5da9b950064bb09d3d599b8">More...</a><br /></td></tr>
+<tr class="separator:a0716250df5da9b950064bb09d3d599b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a682b943a49d4137cf226bcd60c9bf019"><td class="memItemLeft" align="right" valign="top"><a id="a682b943a49d4137cf226bcd60c9bf019"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>LCSF_ValidatorInit</b> (uint8_t protNb)</td></tr>
 <tr class="separator:a682b943a49d4137cf226bcd60c9bf019"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abb54133db0475d64088d2b4258395ffd"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_l_c_s_f___validator_8h.html#abb54133db0475d64088d2b4258395ffd">LCSF_ValidatorAddProtocol</a> (uint8_t protIdx, const <a class="el" href="struct__lcsf__validator__protocol__desc.html">lcsf_validator_protocol_desc_t</a> *pProtDesc)</td></tr>
 <tr class="memdesc:abb54133db0475d64088d2b4258395ffd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a protocol to the module table.  <a href="#abb54133db0475d64088d2b4258395ffd">More...</a><br /></td></tr>
 <tr class="separator:abb54133db0475d64088d2b4258395ffd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a18fa6153f8bcbd033ed0ea8fe1a9c6c9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_l_c_s_f___validator_8h.html#a18fa6153f8bcbd033ed0ea8fe1a9c6c9">LCSF_ValidatorSendTranscoderError</a> (uint8_t errorCode)</td></tr>
-<tr class="memdesc:a18fa6153f8bcbd033ed0ea8fe1a9c6c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send an LCSF transcoder error message.  <a href="#a18fa6153f8bcbd033ed0ea8fe1a9c6c9">More...</a><br /></td></tr>
-<tr class="separator:a18fa6153f8bcbd033ed0ea8fe1a9c6c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46287074f5a2fcfe5587d667a2f6468b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_l_c_s_f___validator_8h.html#a46287074f5a2fcfe5587d667a2f6468b">LCSF_ValidatorTakeReceivedError</a> (uint8_t *pErrLoc, uint8_t *pErrType)</td></tr>
+<tr class="memdesc:a46287074f5a2fcfe5587d667a2f6468b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve the last received lcsf error.  <a href="#a46287074f5a2fcfe5587d667a2f6468b">More...</a><br /></td></tr>
+<tr class="separator:a46287074f5a2fcfe5587d667a2f6468b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6addb077ae60654378d73881d3ffef15"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_l_c_s_f___validator_8h.html#a6addb077ae60654378d73881d3ffef15">LCSF_ValidatorReceive</a> (const <a class="el" href="struct__lcsf__raw__msg.html">lcsf_raw_msg_t</a> *pMessage)</td></tr>
 <tr class="memdesc:a6addb077ae60654378d73881d3ffef15"><td class="mdescLeft">&#160;</td><td class="mdescRight">Validate a raw lcsf message and send to interpreter.  <a href="#a6addb077ae60654378d73881d3ffef15">More...</a><br /></td></tr>
 <tr class="separator:a6addb077ae60654378d73881d3ffef15"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -252,8 +255,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>LCSF_ValidatorSend</b
 
 </div>
 </div>
-<a id="a18fa6153f8bcbd033ed0ea8fe1a9c6c9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a18fa6153f8bcbd033ed0ea8fe1a9c6c9">&#9670;&nbsp;</a></span>LCSF_ValidatorSendTranscoderError()</h2>
+<a id="a0716250df5da9b950064bb09d3d599b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0716250df5da9b950064bb09d3d599b8">&#9670;&nbsp;</a></span>LCSF_ValidatorSendTranscoderError()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -262,20 +265,58 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>LCSF_ValidatorSend</b
           <td class="memname">bool LCSF_ValidatorSendTranscoderError </td>
           <td>(</td>
           <td class="paramtype">uint8_t&#160;</td>
-          <td class="paramname"><em>errorCode</em></td><td>)</td>
+          <td class="paramname"><em>errorType</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Send an LCSF transcoder error message. </p>
+<p>Send an LCSF transcoder error message, should only be used by LCSF_Transcoder. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">errorCode</td><td>error code to send </td></tr>
+    <tr><td class="paramname">errorType</td><td>error code to send </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>bool: true if operation was a success </dd></dl>
+
+</div>
+</div>
+<a id="a46287074f5a2fcfe5587d667a2f6468b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a46287074f5a2fcfe5587d667a2f6468b">&#9670;&nbsp;</a></span>LCSF_ValidatorTakeReceivedError()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool LCSF_ValidatorTakeReceivedError </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>pErrLoc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>pErrType</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Retrieve the last received lcsf error. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pErrLoc</td><td>pointer to contain error location </td></tr>
+    <tr><td class="paramname">pErrType</td><td>pointer to contain error type </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool: true if error available and successfully copied to arguments </dd></dl>
 
 </div>
 </div>

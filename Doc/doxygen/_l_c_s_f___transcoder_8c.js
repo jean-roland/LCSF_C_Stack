@@ -9,5 +9,6 @@ var _l_c_s_f___transcoder_8c =
     ] ],
     [ "LCSF_TranscoderInit", "_l_c_s_f___transcoder_8c.html#aae0bba2d5c135d09ca5ce0dc1e598405", null ],
     [ "LCSF_TranscoderReceive", "_l_c_s_f___transcoder_8c.html#aaff55fc724b997835cbe897d476f7ecb", null ],
-    [ "LCSF_TranscoderSend", "_l_c_s_f___transcoder_8c.html#af48ab1a0badae0271e23479e858ac3b3", null ]
+    [ "LCSF_TranscoderSend", "_l_c_s_f___transcoder_8c.html#af48ab1a0badae0271e23479e858ac3b3", null ],
+    [ "LCSF_ValidatorSendTranscoderError", "_l_c_s_f___transcoder_8c.html#a0716250df5da9b950064bb09d3d599b8", null ]
 ];

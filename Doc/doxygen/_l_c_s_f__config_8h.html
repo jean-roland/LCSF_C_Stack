@@ -95,11 +95,15 @@ $(document).ready(function(){initNavTree('_l_c_s_f__config_8h.html','');});
 <p>Light Command Set Format configuration file.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;<a class="el" href="_mem_alloc_8h_source.html">MemAlloc.h</a>&gt;</code><br />
+<code>#include &lt;stdio.h&gt;</code><br />
 </div>
 <p><a href="_l_c_s_f__config_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
+<tr class="memitem:aa9143782f0aa8880494463b8823c6623"><td class="memItemLeft" align="right" valign="top"><a id="aa9143782f0aa8880494463b8823c6623"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>LCSF_LOG_ERROR</b></td></tr>
+<tr class="separator:aa9143782f0aa8880494463b8823c6623"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7ce55498af79fa525d4efe5e6867a656"><td class="memItemLeft" align="right" valign="top"><a id="a7ce55498af79fa525d4efe5e6867a656"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>LCSF_TRANSCODER_RX_FILO_SIZE</b>&#160;&#160;&#160;20</td></tr>
 <tr class="separator:a7ce55498af79fa525d4efe5e6867a656"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -112,6 +116,12 @@ Macros</h2></td></tr>
 <tr class="memitem:ad7124f89d670624a52bdf6191cff8896"><td class="memItemLeft" align="right" valign="top"><a id="ad7124f89d670624a52bdf6191cff8896"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>LCSF_VALIDATOR_RX_FILO_SIZE</b>&#160;&#160;&#160;20</td></tr>
 <tr class="separator:ad7124f89d670624a52bdf6191cff8896"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae5ecd3e5ab7931a4da0e902f4b0d99ef"><td class="memItemLeft" align="right" valign="top"><a id="ae5ecd3e5ab7931a4da0e902f4b0d99ef"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>MEM_ALLOC</b>(size)&#160;&#160;&#160;<a class="el" href="_mem_alloc_8h.html#a8b8e12ebf82eb56c120cf883d75b9cef">MemAllocMalloc</a>(size)</td></tr>
+<tr class="separator:ae5ecd3e5ab7931a4da0e902f4b0d99ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af86aacd92f8153570c530b39a4b8ae72"><td class="memItemLeft" align="right" valign="top"><a id="af86aacd92f8153570c530b39a4b8ae72"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>LOG_ERROR</b>(msg,  errLoc,  errVal)&#160;&#160;&#160;printf(msg, errLoc, errVal)</td></tr>
+<tr class="separator:af86aacd92f8153570c530b39a4b8ae72"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Light Command Set Format configuration file. </p>
