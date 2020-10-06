@@ -388,7 +388,7 @@ static bool LCSF_FillAttHeader(uint16_t *pBuffIdx, uint8_t *pBuffer, const lcsf_
  */
 static bool LCSF_FillAttData(uint16_t *pBuffIdx, uint8_t *pBuffer, const lcsf_raw_att_t *pAtt) {
     // Guard against buffer overflow
-    if (pAtt->PayloadSize < LCSF_TRANSCODER_TX_BUFFER_SIZE) {
+    if (pAtt->PayloadSize < LCSF_TRANSCODER_TX_BUFFER_SIZE -  *pBuffIdx) {
         // Copy data into the buffer
         memcpy(&(pBuffer[*pBuffIdx]), pAtt->Payload.pData, pAtt->PayloadSize);
         // Increment buffer index
