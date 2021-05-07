@@ -4,6 +4,12 @@ LCSF C Stack is a C implementation of the LCSF (Light Command Set Format), desig
 
 This adds a software layer to easily encode/decode custom command sets/applicative protocols based on LCSF to your project.
 
+## About LCSF
+
+LCSF is a specification to easily create and deploy custom command sets.
+
+For more information on the project, check the official LCSF documentation [here](https://jean-roland.github.io/LCSF_Doc/).
+
 ## How to use
 First, include all the source files in your project. You can find example set-up code in `custom_main.c`.
 
@@ -16,12 +22,6 @@ Then, to interface with your project:
 Finally, to fit your application's needs, create a custom protocol either by modifying the example protocol files or by using the [LCSF Generator](https://github.com/jean-roland/LCSF_Generator) (recommanded).
 
 You can change the memory allocation function used by the stack to use your own or change other parameters (buffer sizes, filo sizes) in `LCSF_config.h`.
-
-## About LCSF
-
-LCSF is a specification to easily create and deploy custom command sets.
-
-For more information, check the official LCSF documentation [here](https://jean-roland.github.io/LCSF_Doc/).
 
 ## How the stack works
 
