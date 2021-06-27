@@ -1,8 +1,8 @@
 ## Presentation
 
-LCSF C Stack is a C implementation of the LCSF (Light Command Set Format), designed for, but not limited to, small embedded systems.
+LCSF C Stack is a C implementation of the LCSF (Light Command Set Format), designed for, but not limited to, small embedded systems (bare metal friendly, static memory allocation, small footprint <3kB data, 1kB ram).
 
-This adds a software layer to easily encode/decode custom command sets/applicative protocols based on LCSF to your project.
+This adds a software layer to easily encode/decode custom command sets based on LCSF to your project.
 
 ## About LCSF
 
