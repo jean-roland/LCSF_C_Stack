@@ -34,52 +34,52 @@
 // --- Public Function Prototypes ---
 
 /**
- * \fn void MemAllocInit(const uint8_t *pHeap, uint32_t heapSize)
+ * \fn void MemAllocInit(const uint8_t *pHeap, size_t heapSize)
  * \brief Heap initialization function, memory will be used for permanent allocation
  *
  * \param pHeap address to the heap (must be 32-bits aligned)
  * \param heapSize heap's size (bytes)
  * \return void
  */
-void MemAllocInit(const uint8_t *pHeap, uint32_t heapSize);
+void MemAllocInit(const uint8_t *pHeap, size_t heapSize);
 
 /**
- * \fn void *MemAllocMalloc(uint32_t size)
+ * \fn void *MemAllocMalloc(size_t size)
  * \brief Standard memory allocation function
  *
  * \param size size of the memory block (bytes)
  * \return void *: pointer to the allocated memory
  */
-void *MemAllocMalloc(uint32_t size);
+void *MemAllocMalloc(size_t size);
 
 /**
- * \fn void * MemAllocCalloc(uint32_t size)
+ * \fn void * MemAllocCalloc(size_t size)
  * \brief Standard memory allocation function with initialization to 0
  *
  * \param size size of the memory block (bytes)
  * \return void *: pointer to the allocated memory
  */
-void *MemAllocCalloc(uint32_t size);
+void *MemAllocCalloc(size_t size);
 
 /**
- * \fn void * MemAllocMallocAligned(uint32_t size, uint8_t alignment)
+ * \fn void * MemAllocMallocAligned(size_t size, uint_fast8_t alignment)
  * \brief Memory allocation function with alignment (must be multiple of 4)
  *
  * \param size size of the memory block (bytes)
  * \param alignment alignment of the memory block (bits)
  * \return void *: pointer to the allocated memory
  */
-void *MemAllocMallocAligned(uint32_t size, uint8_t alignment);
+void *MemAllocMallocAligned(size_t size, uint_fast8_t alignment);
 
 /**
- * \fn void * MemAllocCallocAligned(uint32_t size, uint8_t alignment)
+ * \fn void * MemAllocCallocAligned(size_t size, uint_fast8_t alignment)
  * \brief Memory allocation function with alignment (must be multiple of 4) and initialization to 0
  *
  * \param size size of the memory block (bytes)
  * \param alignment alignment of the memory block (bits)
  * \return void *: pointer to the allocated memory
  */
-void *MemAllocCallocAligned(uint32_t size, uint8_t alignment);
+void *MemAllocCallocAligned(size_t size, uint_fast8_t alignment);
 
 // *** End Definitions ***
 #endif // _Mem_Alloc_h

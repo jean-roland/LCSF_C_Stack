@@ -44,7 +44,7 @@ static bool dummyReceiveProcess(void) {
     return LCSF_TranscoderReceive(dummyTxBuff, 6);
 }
 
-static bool dummySend(const uint8_t *pBuffer, uint16_t buffSize) {
+static bool dummySend(const uint8_t *pBuffer, size_t buffSize) {
     if (pBuffer == NULL) {
         return false;
     }

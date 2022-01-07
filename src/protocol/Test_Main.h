@@ -355,14 +355,14 @@ void Test_MainSetPattern(const uint8_t *pattern);
 void Test_MainClearPattern(void);
 
 /**
- * \fn bool Test_MainExecute(uint16_t cmdName, test_cmd_payload_t *pCmdPayload)
+ * \fn bool Test_MainExecute(uint_fast16_t cmdName, test_cmd_payload_t *pCmdPayload)
  * \brief Execute a command
  *
  * \param cmdName name of the command
  * \param pCmdPayload pointer to command payload
  * \return bool: true if operation was a success
  */
-bool Test_MainExecute(uint16_t cmdName, test_cmd_payload_t *pCmdPayload);
+bool Test_MainExecute(uint_fast16_t cmdName, test_cmd_payload_t *pCmdPayload);
 
 // *** End Definitions ***
 #endif // test_Main_h

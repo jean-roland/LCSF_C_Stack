@@ -102,30 +102,30 @@ typedef struct _lcsf_validator_protocol_desc {
 } lcsf_validator_protocol_desc_t;
 
 // Functions used by transcoder to send errors
-bool LCSF_ValidatorSendTranscoderError(uint8_t errorType);
+bool LCSF_ValidatorSendTranscoderError(uint_fast8_t errorType);
 
 // --- Public Constants ---
 // --- Public Variables ---
 // --- Public Function Prototypes ---
 
 /**
- * \fn bool LCSF_ValidatorInit(const lcsf_validator_init_desc_t *pInitDesc)
+ * \fn bool LCSF_ValidatorInit(uint_fast16_t protNb)
  * \brief Initialize the module
  *
  * \param protNb Number of protocols the module will handle
  * \return bool: true if operation was a success
  */
-bool LCSF_ValidatorInit(uint8_t protNb);
+bool LCSF_ValidatorInit(uint_fast16_t protNb);
 
 /**
- * \fn bool LCSF_ValidatorAddProtocol(uint8_t protId, const lcsf_validator_protocol_desc_t *pProtDesc)
+ * \fn bool LCSF_ValidatorAddProtocol(uint_fast16_t protId, const lcsf_validator_protocol_desc_t *pProtDesc)
  * \brief Add a protocol to the module table
  *
  * \param protIdx protocol index in the module table
  * \param pProtDesc pointer to protocol descriptor
  * \return bool: true if operation was a success
  */
-bool LCSF_ValidatorAddProtocol(uint8_t protIdx, const lcsf_validator_protocol_desc_t *pProtDesc);
+bool LCSF_ValidatorAddProtocol(uint_fast16_t protIdx, const lcsf_validator_protocol_desc_t *pProtDesc);
 
 /**
  * \fn bool LCSF_ValidatorTakeReceivedError(uint8_t *pErrLoc, uint8_t *pErrType)
@@ -147,14 +147,14 @@ bool LCSF_ValidatorTakeReceivedError(uint8_t *pErrLoc, uint8_t *pErrType);
 bool LCSF_ValidatorReceive(const lcsf_raw_msg_t *pMessage);
 
 /**
- * \fn bool LCSF_ValidatorSend(uint8_t protId, lcsf_valid_cmd_t *pCommand)
+ * \fn bool LCSF_ValidatorSend(uint_fast16_t protId, lcsf_valid_cmd_t *pCommand)
  * \brief Send a valid command to lcsf transcoder
  *
  * \param protId protocol identifier
  * \param pCommand Pointer to the command to send
  * \return bool: true if operation was a success
  */
-bool LCSF_ValidatorSend(uint8_t protId, const lcsf_valid_cmd_t *pCommand);
+bool LCSF_ValidatorSend(uint_fast16_t protId, const lcsf_valid_cmd_t *pCommand);
 
 // *** End Definitions ***
 #endif // _LCSF_Interpreter_h

@@ -49,20 +49,20 @@ typedef struct _lcsf_trnscdr_info {
 // --- Private Constants ---
 // --- Private Function Prototypes ---
 // Decode functions
-static bool LCSF_AllocateAttArray(uint16_t attNb, lcsf_raw_att_t **pAttArray);
-static bool LCSF_FetchMsgHeader(uint16_t *pBuffIdx, uint16_t buffSize, const uint8_t *pBuffer, lcsf_raw_msg_t *pMsg);
-static bool LCSF_FetchAttHeader(uint16_t *pBuffIdx, uint16_t buffSize, const uint8_t *pBuffer, lcsf_raw_att_t *pAtt);
-static bool LCSF_FetchAttData(uint16_t *pBuffIdx, uint16_t buffSize, const uint8_t *pBuffer, uint16_t attDataSize, uint8_t **pAttData);
-static bool LCSF_DecodeAtt_Rec(uint16_t *pBuffIdx, const uint8_t *pBuffer, uint16_t buffSize, uint16_t attNb, lcsf_raw_att_t *pAttArray);
-static bool LCSF_DecodeBuffer(const uint8_t *pBuffer, uint16_t buffSize, lcsf_raw_msg_t *pMsg);
+static bool LCSF_AllocateAttArray(uint_fast16_t attNb, lcsf_raw_att_t **pAttArray);
+static bool LCSF_FetchMsgHeader(uint16_t *pBuffIdx, size_t buffSize, const uint8_t *pBuffer, lcsf_raw_msg_t *pMsg);
+static bool LCSF_FetchAttHeader(uint16_t *pBuffIdx, size_t buffSize, const uint8_t *pBuffer, lcsf_raw_att_t *pAtt);
+static bool LCSF_FetchAttData(uint16_t *pBuffIdx, size_t buffSize, const uint8_t *pBuffer, size_t attDataSize, uint8_t **pAttData);
+static bool LCSF_DecodeAtt_Rec(uint16_t *pBuffIdx, const uint8_t *pBuffer, size_t buffSize, uint_fast16_t attNb, lcsf_raw_att_t *pAttArray);
+static bool LCSF_DecodeBuffer(const uint8_t *pBuffer, size_t buffSize, lcsf_raw_msg_t *pMsg);
 // Encode functions
 static bool LCSF_FillMsgHeader(uint16_t *pBuffIdx, uint8_t *pBuffer, const lcsf_raw_msg_t *pMsg);
 static bool LCSF_FillAttHeader(uint16_t *pBuffIdx, uint8_t *pBuffer, const lcsf_raw_att_t *pAtt);
 static bool LCSF_FillAttData(uint16_t *pBuffIdx, uint8_t *pBuffer, const lcsf_raw_att_t *pAtt);
-static bool LCSF_EncodeAtt_Rec(uint16_t *pBuffIdx, uint8_t *pBuffer, uint16_t attNb, const lcsf_raw_att_t *pAttArray);
+static bool LCSF_EncodeAtt_Rec(uint16_t *pBuffIdx, uint8_t *pBuffer, uint_fast16_t attNb, const lcsf_raw_att_t *pAttArray);
 static bool LCSF_EncodeBuffer(uint16_t *pBuffIdx, uint8_t *pBuffer, const lcsf_raw_msg_t *pMsg);
 // External functions
-extern bool LCSF_ValidatorSendTranscoderError(uint8_t errorType);
+extern bool LCSF_ValidatorSendTranscoderError(uint_fast8_t errorType);
 
 // --- Private Variables ---
 static lcsf_trnscdr_info_t LcsfTranscoderInfo;
@@ -72,20 +72,20 @@ static lcsf_trnscdr_info_t LcsfTranscoderInfo;
 // *** Private Functions ***
 
 /**
- * \fn static bool LCSF_AllocateAttArray(uint16_t attNb, lcsf_raw_att_t **pAttArray)
+ * \fn static bool LCSF_AllocateAttArray(uint_fast16_t attNb, lcsf_raw_att_t **pAttArray)
  * \brief Allocate an lcsf attribute array
  *
  * \param attNb number of attributes in the array
  * \param pAttArray pointer to contain the array address
  * \return bool: true if operation was a success
  */
-static bool LCSF_AllocateAttArray(uint16_t attNb, lcsf_raw_att_t **pAttArray) {
+static bool LCSF_AllocateAttArray(uint_fast16_t attNb, lcsf_raw_att_t **pAttArray) {
     // Attempt to allocate the array from the filo
     return FiloGet(&LcsfTranscoderInfo.DecoderFilo, attNb, (void **)pAttArray);
 }
 
 /**
- * \fn static bool LCSF_FetchMsgHeader(uint16_t *pBuffIdx, uint16_t buffSize, const uint8_t *pBuffer, lcsf_raw_msg_t *pMsg)
+ * \fn static bool LCSF_FetchMsgHeader(uint16_t *pBuffIdx, size_t buffSize, const uint8_t *pBuffer, lcsf_raw_msg_t *pMsg)
  * \brief Fill an lcsf_msg_header struct from a buffer
  *
  * \param pBuffIdx pointer to the buffer index
@@ -94,7 +94,7 @@ static bool LCSF_AllocateAttArray(uint16_t attNb, lcsf_raw_att_t **pAttArray) {
  * \param pMsg pointer to the lcsf_msg_header
  * \return bool: true if operation was a success
  */
-static bool LCSF_FetchMsgHeader(uint16_t *pBuffIdx, uint16_t buffSize, const uint8_t *pBuffer, lcsf_raw_msg_t *pMsg) {
+static bool LCSF_FetchMsgHeader(uint16_t *pBuffIdx, size_t buffSize, const uint8_t *pBuffer, lcsf_raw_msg_t *pMsg) {
     // Guard against buffer overflow
 #ifdef LCSF_SMALL
     if (*pBuffIdx + 2 < buffSize) {
@@ -127,7 +127,7 @@ static bool LCSF_FetchMsgHeader(uint16_t *pBuffIdx, uint16_t buffSize, const uin
 }
 
 /**
- * \fn static bool LCSF_FetchAttHeader(uint16_t *pBuffIdx, uint16_t buffSize, const uint8_t *pBuffer, lcsf_raw_att_t *pAtt)
+ * \fn static bool LCSF_FetchAttHeader(uint16_t *pBuffIdx, size_t buffSize, const uint8_t *pBuffer, lcsf_raw_att_t *pAtt)
  * \brief Fill an lcsf_att_header struct from a buffer
  *
  * \param pBuffIdx pointer to the buffer index
@@ -136,7 +136,7 @@ static bool LCSF_FetchMsgHeader(uint16_t *pBuffIdx, uint16_t buffSize, const uin
  * \param pAtt pointer to the lcsf_msg_header
  * \return bool: true if operation was a success
  */
-static bool LCSF_FetchAttHeader(uint16_t *pBuffIdx, uint16_t buffSize, const uint8_t *pBuffer, lcsf_raw_att_t *pAtt) {
+static bool LCSF_FetchAttHeader(uint16_t *pBuffIdx, size_t buffSize, const uint8_t *pBuffer, lcsf_raw_att_t *pAtt) {
     // Guard against buffer overflow
 #ifdef LCSF_SMALL
     if (*pBuffIdx + 1 < buffSize) {
@@ -176,17 +176,17 @@ static bool LCSF_FetchAttHeader(uint16_t *pBuffIdx, uint16_t buffSize, const uin
 }
 
 /**
- * \fn static bool LCSF_FetchAttData(uint16_t *pBuffIdx, uint16_t buffSize, const uint8_t *pBuffer, uint16_t attDataSize, uint8_t **pAttData)
+ * \fn static bool LCSF_FetchAttData(uint16_t *pBuffIdx, size_t buffSize, const uint8_t *pBuffer, size_t attDataSize, uint8_t **pAttData)
  * \brief Retrieve the data of an lcsf attribute from a buffer
  *
  * \param pBuffIdx pointer to the buffer index
  * \param buffSize size of the buffer
  * \param pBuffer pointer to the buffer
  * \param attDataSize size of the data to retrieve
- * \param pAtt pointer to contain the data address
+ * \param pAttData pointer to contain the data address
  * \return bool: true if operation was a success
  */
-static bool LCSF_FetchAttData(uint16_t *pBuffIdx, uint16_t buffSize, const uint8_t *pBuffer, uint16_t attDataSize, uint8_t **pAttData) {
+static bool LCSF_FetchAttData(uint16_t *pBuffIdx, size_t buffSize, const uint8_t *pBuffer, size_t attDataSize, uint8_t **pAttData) {
     // Guard against buffer overflow
     if (*pBuffIdx + attDataSize - 1 < buffSize) {
         // We only recopy the pointer, the buffer must not to be re-written before being processed !
@@ -200,7 +200,7 @@ static bool LCSF_FetchAttData(uint16_t *pBuffIdx, uint16_t buffSize, const uint8
 }
 
 /**
- * \fn static bool LCSF_AttDecode_Rec(uint16_t *pBuffIdx, const uint8_t *pBuffer, uint16_t buffSize, uint16_t attNb, lcsf_raw_att_t *pAttArray)
+ * \fn static bool LCSF_AttDecode_Rec(uint16_t *pBuffIdx, const uint8_t *pBuffer, size_t buffSize, uint_fast16_t attNb, lcsf_raw_att_t *pAttArray)
  * \brief Decode recursively the lcsf attributes from a buffer
  *
  * \param pBuffIdx pointer to the buffer index
@@ -208,10 +208,9 @@ static bool LCSF_FetchAttData(uint16_t *pBuffIdx, uint16_t buffSize, const uint8
  * \param buffSize size of the buffer
  * \param attNb number of attributes in the array
  * \param pAttArray pointer to the attributes array
- * \param pFilo pointer to the decoder filo
  * \return bool: true if operation was a success
  */
-static bool LCSF_DecodeAtt_Rec(uint16_t *pBuffIdx, const uint8_t *pBuffer, uint16_t buffSize, uint16_t attNb, lcsf_raw_att_t *pAttArray) {
+static bool LCSF_DecodeAtt_Rec(uint16_t *pBuffIdx, const uint8_t *pBuffer, size_t buffSize, uint_fast16_t attNb, lcsf_raw_att_t *pAttArray) {
     // We go through the attribute array
     for (uint16_t attIdx = 0; attIdx < attNb; attIdx++) {
         // Guard against buffer overflow
@@ -248,7 +247,7 @@ static bool LCSF_DecodeAtt_Rec(uint16_t *pBuffIdx, const uint8_t *pBuffer, uint1
 }
 
 /**
- * \fn static bool LCSF_DecodeBuffer(const uint8_t *pBuffer, uint16_t buffSize, lcsf_raw_msg_t *pMsg)
+ * \fn static bool LCSF_DecodeBuffer(const uint8_t *pBuffer, size_t buffSize, lcsf_raw_msg_t *pMsg)
  * \brief Decode a buffer into an lcsf_msg_header
  *
  * \param pBuffer pointer to the buffer
@@ -257,7 +256,7 @@ static bool LCSF_DecodeAtt_Rec(uint16_t *pBuffIdx, const uint8_t *pBuffer, uint1
  * \param pFilo pointer to the decoder filo
  * \return bool: true if operation was a success
  */
-static bool LCSF_DecodeBuffer(const uint8_t *pBuffer, uint16_t buffSize, lcsf_raw_msg_t *pMsg) {
+static bool LCSF_DecodeBuffer(const uint8_t *pBuffer, size_t buffSize, lcsf_raw_msg_t *pMsg) {
     uint16_t buffIdx = 0;
 
     // Clear filo memory
@@ -331,7 +330,7 @@ static bool LCSF_FillMsgHeader(uint16_t *pBuffIdx, uint8_t *pBuffer, const lcsf_
 }
 
 /**
- * \fn static bool LCSF_FillAttHeader(uint16_t *pBuffIdx, uint8_t *pBuffer, const lcsf_raw_att_t *pAtt, uint16_t subAttSize)
+ * \fn static bool LCSF_FillAttHeader(uint16_t *pBuffIdx, uint8_t *pBuffer, const lcsf_raw_att_t *pAtt)
  * \brief Encode an lcsf_att_header into a buffer
  *
  * \param pBuffIdx pointer to the buffer index
@@ -400,7 +399,7 @@ static bool LCSF_FillAttData(uint16_t *pBuffIdx, uint8_t *pBuffer, const lcsf_ra
 }
 
 /**
- * \fn static int32_t LCSF_AttEncode_Rec(uint16_t *pBuffIdx, uint8_t *pBuffer, uint16_t attNb, const lcsf_raw_att_t *pAttArray)
+ * \fn static int32_t LCSF_AttEncode_Rec(uint16_t *pBuffIdx, uint8_t *pBuffer, uint_fast16_t attNb, const lcsf_raw_att_t *pAttArray)
  * \brief Recursively encode an lcsf_att_header array into a buffer
  *
  * \param pBuffIdx pointer to the buffer index
@@ -409,7 +408,7 @@ static bool LCSF_FillAttData(uint16_t *pBuffIdx, uint8_t *pBuffer, const lcsf_ra
  * \param pAttArray pointer to the attribute header array
  * \return int32_t: Number of data bytes (sub-attributes included) of an attribute (-1 if error)
  */
-static bool LCSF_EncodeAtt_Rec(uint16_t *pBuffIdx, uint8_t *pBuffer, uint16_t attNb, const lcsf_raw_att_t *pAttArray) {
+static bool LCSF_EncodeAtt_Rec(uint16_t *pBuffIdx, uint8_t *pBuffer, uint_fast16_t attNb, const lcsf_raw_att_t *pAttArray) {
     // We go through the attribute array
     for (uint16_t attIdx = 0; attIdx < attNb; attIdx++) {
         // Guard against buffer overflow
@@ -437,7 +436,7 @@ static bool LCSF_EncodeAtt_Rec(uint16_t *pBuffIdx, uint8_t *pBuffer, uint16_t at
 }
 
 /**
- * \fn static bool LCSF_BufferEncode(uint16_t *pBuffIdx, uint8_t *pBuffer, uint16_t attNb, const lcsf_raw_att_t *pAttArray)
+ * \fn static bool LCSF_BufferEncode(uint16_t *pBuffIdx, uint8_t *pBuffer, const lcsf_raw_msg_t *pMsg)
  * \brief Encode lcsf_msg_header into a buffer
  *
  * \param pBuffIdx pointer to the buffer index
@@ -477,7 +476,7 @@ bool LCSF_TranscoderInit(LCSFSendCallback *pFnSendMsg) {
     return true;
 }
 
-bool LCSF_TranscoderReceive(const uint8_t *pBuffer, uint16_t buffSize) {
+bool LCSF_TranscoderReceive(const uint8_t *pBuffer, size_t buffSize) {
     if (pBuffer == NULL) {
         return false;
     }

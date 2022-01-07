@@ -123,14 +123,14 @@ typedef struct _example_init_desc {
 bool Example_MainInit(const example_init_desc_t *pInitDesc);
 
 /**
- * \fn bool Example_MainCommandExecute(uint16_t cmdName, example_cmd_payload_t *pCmdPayload)
+ * \fn bool Example_MainCommandExecute(uint_fast16_t cmdName, example_cmd_payload_t *pCmdPayload)
  * \brief Execute a command
  *
  * \param cmdName name of the command
  * \param pCmdPayload pointer to command payload
  * \return bool: true if operation was a success
  */
-bool Example_MainCommandExecute(uint16_t cmdName, example_cmd_payload_t *pCmdPayload);
+bool Example_MainCommandExecute(uint_fast16_t cmdName, example_cmd_payload_t *pCmdPayload);
 
 // *** End Definitions ***
 #endif // Example_Main_h

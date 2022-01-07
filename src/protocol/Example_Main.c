@@ -44,9 +44,9 @@ typedef struct _example_info {
 // --- Private Constants ---
 // --- Private Function Prototypes ---
 static bool Example_MainCheckAddrValidity(uintptr_t addr);
-static bool Example_MainSendError(uint8_t errorCode);
+static bool Example_MainSendError(int_fast8_t errorCode);
 static bool Example_MainSendAck(void);
-static bool Example_MainSendCommand(uint16_t cmdName, bool hasPayload);
+static bool Example_MainSendCommand(uint_fast16_t cmdName, bool hasPayload);
 static bool Example_MainExecutePING(void);
 static bool Example_MainExecuteRESET(void);
 static bool Example_MainExecuteABORT(void);
@@ -77,13 +77,13 @@ static bool Example_MainCheckAddrValidity(uintptr_t addr) {
 }
 
 /**
- * \fn static bool Example_MainSendError(uint8_t errorCode)
+ * \fn static bool Example_MainSendError(int_fast8_t errorCode)
  * \brief Send an example error command
  *
  * \param errorCode error code to send
  * \return bool: true if operation was a success
  */
-static bool Example_MainSendError(uint8_t errorCode) {
+static bool Example_MainSendError(int_fast8_t errorCode) {
     ExampleInfo.pSendCmdPayload->error_payload.error_code = errorCode;
     return Example_MainSendCommand(EXAMPLE_CMD_ERROR, true);
 }
@@ -99,14 +99,14 @@ static bool Example_MainSendAck(void) {
 }
 
 /**
- * \fn static bool Example_MainSendCommand(uint16_t cmdName, bool hasPayload)
+ * \fn static bool Example_MainSendCommand(uint_fast16_t cmdName, bool hasPayload)
  * \brief Send an example command
  *
  * \param cmdName name of the command to send
  * \param hasPayload indicates if command has a payload or not
  * \return bool: true if operation was a success
  */
-static bool Example_MainSendCommand(uint16_t cmdName, bool hasPayload) {
+static bool Example_MainSendCommand(uint_fast16_t cmdName, bool hasPayload) {
 
     if (cmdName >= EXAMPLE_CMD_COUNT) {
         return false;
@@ -215,7 +215,7 @@ bool Example_MainInit(const example_init_desc_t * pInitDesc) {
     return true;
 }
 
-bool Example_MainCommandExecute(uint16_t cmdName, example_cmd_payload_t *pCmdPayload) {
+bool Example_MainCommandExecute(uint_fast16_t cmdName, example_cmd_payload_t *pCmdPayload) {
 
     switch (cmdName) {
         case EXAMPLE_CMD_PING:

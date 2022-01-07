@@ -42,7 +42,7 @@ typedef struct _filo_desc {
 // --- Public Function Prototypes ---
 
 /**
- * \fn void FiloInit(filo_desc_t *pFilo, uint32_t itemNb, uint32_t itemSize)
+ * \fn void FiloInit(filo_desc_t *pFilo, size_t itemNb, size_t itemSize)
  * \brief Initialize a filo
  *
  * \param filo_desc_t *: pointer to the filo
@@ -50,10 +50,10 @@ typedef struct _filo_desc {
  * \param itemSize size of each item
  * \return bool: true if operation was a success
  */
-bool FiloInit(filo_desc_t *pFilo, uint32_t itemNb, uint32_t itemSize);
+bool FiloInit(filo_desc_t *pFilo, size_t itemNb, size_t itemSize);
 
 /**
- * \fn bool FiloGet(filo_desc_t *pFiloDesc, uint32_t slotNumber, void **pFreeSlot)
+ * \fn bool FiloGet(filo_desc_t *pFiloDesc, size_t slotNumber, void **pFreeSlot)
  * \brief Allocate a table of item from a filo and return the pointer
  *
  * \param pFiloDesc pointer to the filo
@@ -61,17 +61,17 @@ bool FiloInit(filo_desc_t *pFilo, uint32_t itemNb, uint32_t itemSize);
  * \param pFreeSlot pointer to contain the item table pointer
  * \return bool: true if operation was a success
  */
-bool FiloGet(filo_desc_t *pFiloDesc, uint32_t itemNb, void **pFreeSlot);
+bool FiloGet(filo_desc_t *pFiloDesc, size_t itemNb, void **pFreeSlot);
 
 /**
- * \fn bool FiloFree(filo_desc_t *pFiloDesc, uint32_t itemNb)
+ * \fn bool FiloFree(filo_desc_t *pFiloDesc, size_t itemNb)
  * \brief Free items from a filo
  *
  * \param pFiloDesc pointer to the filo
  * \param itemNb number of items
  * \return bool: true if operation was a success
  */
-bool FiloFree(filo_desc_t *pFiloDesc, uint32_t itemNb);
+bool FiloFree(filo_desc_t *pFiloDesc, size_t itemNb);
 
 /**
  * \fn bool FiloFreeAll(filo_desc_t *pFiloDesc)

@@ -39,17 +39,17 @@ static const uint16_t LCSF_Bridge_Test_CMDNAME2CMDID[LCSF_TEST_CMD_NB] = {
 };
 
 // --- Private Function Prototypes ---
-static uint16_t LCSF_Bridge_Test_CMDID2CMDNAME(uint16_t cmdId);
+static uint16_t LCSF_Bridge_Test_CMDID2CMDNAME(uint_fast16_t cmdId);
 static void LCSF_Bridge_TestCC2GetData(lcsf_valid_att_t *pAttArray, test_cmd_payload_t *pCmdPayload);
 static void LCSF_Bridge_TestCC3GetData(lcsf_valid_att_t *pAttArray, test_cmd_payload_t *pCmdPayload);
 static void LCSF_Bridge_TestCC5GetData(lcsf_valid_att_t *pAttArray, test_cmd_payload_t *pCmdPayload);
 static void LCSF_Bridge_TestCC6GetData(lcsf_valid_att_t *pAttArray, test_cmd_payload_t *pCmdPayload);
-static void LCSF_Bridge_TestGetCmdData(uint16_t cmdName, lcsf_valid_att_t *pAttArray, test_cmd_payload_t *pCmdPayload);
+static void LCSF_Bridge_TestGetCmdData(uint_fast16_t cmdName, lcsf_valid_att_t *pAttArray, test_cmd_payload_t *pCmdPayload);
 static bool LCSF_Bridge_TestCC1FillAtt(lcsf_valid_att_t **pAttArrayAddr, test_cmd_payload_t *pCmdPayload);
 static bool LCSF_Bridge_TestCC3FillAtt(lcsf_valid_att_t **pAttArrayAddr, test_cmd_payload_t *pCmdPayload);
 static bool LCSF_Bridge_TestCC4FillAtt(lcsf_valid_att_t **pAttArrayAddr, test_cmd_payload_t *pCmdPayload);
 static bool LCSF_Bridge_TestCC6FillAtt(lcsf_valid_att_t **pAttArrayAddr, test_cmd_payload_t *pCmdPayload);
-static bool LCSF_Bridge_TestFillCmdAtt(uint16_t cmdName, lcsf_valid_att_t **pAttArrayAddr, test_cmd_payload_t *pCmdPayload);
+static bool LCSF_Bridge_TestFillCmdAtt(uint_fast16_t cmdName, lcsf_valid_att_t **pAttArrayAddr, test_cmd_payload_t *pCmdPayload);
 
 // --- Private Variables ---
 static lcsf_bridge_test_info_t LcsfBridgeTestInfo;
@@ -59,13 +59,13 @@ static lcsf_bridge_test_info_t LcsfBridgeTestInfo;
 // *** Private Functions ***
 
 /**
- * \fn static uint16_t LCSF_Bridge_Test_CMDID2CMDNAME(uint16_t cmdId)
+ * \fn static uint16_t LCSF_Bridge_Test_CMDID2CMDNAME(uint_fast16_t cmdId)
  * \brief Translate an lcsf command id to its name value
  *
  * \param cmdId lcsf command identifier to translate
  * \return uint16_t: name value of the command
  */
-static uint16_t LCSF_Bridge_Test_CMDID2CMDNAME(uint16_t cmdId) {
+static uint16_t LCSF_Bridge_Test_CMDID2CMDNAME(uint_fast16_t cmdId) {
     switch (cmdId) {
         default:
         case LCSF_TEST_CMD_ID_SC1:
@@ -296,7 +296,7 @@ static void LCSF_Bridge_TestCC6GetData(lcsf_valid_att_t *pAttArray, test_cmd_pay
 }
 
 /**
- * \fn static void LCSF_Bridge_TestGetCmdData(uint16_t cmdName, lcsf_valid_att_t *pAttArray, test_cmd_payload_t *pCmdPayload)
+ * \fn static void LCSF_Bridge_TestGetCmdData(uint_fast16_t cmdName, lcsf_valid_att_t *pAttArray, test_cmd_payload_t *pCmdPayload)
  * \brief Retrieve command data from its attribute array and store it in a payload
  *
  * \param cmdName name of the command
@@ -304,7 +304,7 @@ static void LCSF_Bridge_TestCC6GetData(lcsf_valid_att_t *pAttArray, test_cmd_pay
  * \param pPayload pointer to the payload to contain the command data
  * \return void
  */
-static void LCSF_Bridge_TestGetCmdData(uint16_t cmdName, lcsf_valid_att_t *pAttArray, test_cmd_payload_t *pCmdPayload) {
+static void LCSF_Bridge_TestGetCmdData(uint_fast16_t cmdName, lcsf_valid_att_t *pAttArray, test_cmd_payload_t *pCmdPayload) {
     if (pAttArray == NULL) {
 	    return;
     }
@@ -595,7 +595,7 @@ static bool LCSF_Bridge_TestCC6FillAtt(lcsf_valid_att_t **pAttArrayAddr, test_cm
 }
 
 /**
- * \fn static bool LCSF_Bridge_TestFillCmdAtt(uint16_t cmdName, lcsf_valid_att_t **pAttArrayAddr, test_cmd_payload_t *pCmdPayload)
+ * \fn static bool LCSF_Bridge_TestFillCmdAtt(uint_fast16_t cmdName, lcsf_valid_att_t **pAttArrayAddr, test_cmd_payload_t *pCmdPayload)
  * \brief Fill the attribute array of a command from its payload
  *
  * \param cmdName name of the command
@@ -603,7 +603,7 @@ static bool LCSF_Bridge_TestCC6FillAtt(lcsf_valid_att_t **pAttArrayAddr, test_cm
  * \param pCmdPayload pointer to the command payload
  * \return bool: true if operation was a success
  */
-static bool LCSF_Bridge_TestFillCmdAtt(uint16_t cmdName, lcsf_valid_att_t **pAttArrayAddr, test_cmd_payload_t *pCmdPayload) {
+static bool LCSF_Bridge_TestFillCmdAtt(uint_fast16_t cmdName, lcsf_valid_att_t **pAttArrayAddr, test_cmd_payload_t *pCmdPayload) {
     switch (cmdName) {
         case TEST_CMD_CC1:
             return LCSF_Bridge_TestCC1FillAtt(pAttArrayAddr, pCmdPayload);
@@ -630,7 +630,7 @@ static bool LCSF_Bridge_TestFillCmdAtt(uint16_t cmdName, lcsf_valid_att_t **pAtt
 
 // *** Public Functions ***
 
-bool LCSF_Bridge_TestInit(uint16_t filoSize) {
+bool LCSF_Bridge_TestInit(size_t filoSize) {
     FiloInit(&LcsfBridgeTestInfo.Filo, filoSize, sizeof(lcsf_valid_att_t));
     LcsfBridgeTestInfo.pCmdPayload = (test_cmd_payload_t *)MEM_ALLOC(sizeof(test_cmd_payload_t));
     return true;
@@ -645,7 +645,7 @@ bool LCSF_Bridge_TestReceive(lcsf_valid_cmd_t *pValidCmd) {
     return Test_MainExecute(cmdName, pCmdPayload);
 }
 
-bool LCSF_Bridge_TestSend(uint16_t cmdName, test_cmd_payload_t *pCmdPayload) {
+bool LCSF_Bridge_TestSend(uint_fast16_t cmdName, test_cmd_payload_t *pCmdPayload) {
     lcsf_valid_cmd_t sendCmd;
     sendCmd.CmdId = LCSF_Bridge_Test_CMDNAME2CMDID[cmdName];
     FiloFreeAll(&LcsfBridgeTestInfo.Filo);

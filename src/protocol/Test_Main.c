@@ -27,7 +27,7 @@ typedef struct _test_info {
 
 // --- Private Function Prototypes ---
 // Generated functions
-static bool TestSendCommand(uint16_t cmdName, bool hasPayload);
+static bool TestSendCommand(uint_fast16_t cmdName, bool hasPayload);
 static bool TestExecuteSC2(void);
 static bool TestExecuteSC3(void);
 static bool TestExecuteCC2(test_cmd_payload_t *pCmdPayload);
@@ -66,14 +66,14 @@ static test_info_t TestInfo;
  }
 
 /**
- * \fn static bool TestSendCommand(uint16_t cmdName, bool hasPayload)
+ * \fn static bool TestSendCommand(uint_fast16_t cmdName, bool hasPayload)
  * \brief Send a command
  *=
  * \param cmdName name of the command to send
  * \param hasPayload indicates if command has a payload or not=
  * \return bool: true if operation was a success=
  */
-static bool TestSendCommand(uint16_t cmdName, bool hasPayload) {
+static bool TestSendCommand(uint_fast16_t cmdName, bool hasPayload) {
 
     if (cmdName >= TEST_CMD_COUNT) {
         return false;
@@ -462,14 +462,14 @@ void Test_MainClearPattern(void) {
 }
 
 /**
- * \fn bool Test_MainExecute(uint16_t cmdName, test_cmd_payload_t *pCmdPayload)
+ * \fn bool Test_MainExecute(uint_fast16_t cmdName, test_cmd_payload_t *pCmdPayload)
  * \brief Execute a command
  *
  * \param cmdName name of the command
  * \param pCmdPayload pointer to command payload
  * \return bool: true if operation was a success
  */
-bool Test_MainExecute(uint16_t cmdName, test_cmd_payload_t *pCmdPayload) {
+bool Test_MainExecute(uint_fast16_t cmdName, test_cmd_payload_t *pCmdPayload) {
     switch (cmdName) {
         case TEST_CMD_SC2:
             return TestExecuteSC2();

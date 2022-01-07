@@ -37,7 +37,7 @@ typedef struct _memalloc_info {
 #define MEM_ALLOC_BASE_ALIGNMENT 4
 
 // --- Private Function Prototypes ---
-static void *MemAllocGetAddr(uint32_t size, uint8_t alignment);
+static void *MemAllocGetAddr(size_t size, uint8_t alignment);
 
 // --- Private Variables ---
 static memalloc_info_t MemAllocInfo;
@@ -47,14 +47,14 @@ static memalloc_info_t MemAllocInfo;
 // *** Private Functions ***
 
 /**
- * \fn static void *MemAllocGetAddr(uint32_t size, uint8_t alignment)
+ * \fn static void *MemAllocGetAddr(size_t size, uint_fast8_t alignment)
  * \brief Function that returns the heap's earliest free aligned memory address (Alignment must be multiple of 4)
  *
  * \param size size of the memory block (bytes)
  * \param alignment alignment of the memory block (bits)
  * \return void *: Pointer to a free aligned memory address
  */
-static void *MemAllocGetAddr(uint32_t size, uint8_t alignment) {
+static void *MemAllocGetAddr(size_t size, uint_fast8_t alignment) {
     // Size and alignment verification
     if ((size == 0) || ((alignment & 0x3) > 0)) {
         return NULL;
@@ -81,7 +81,7 @@ static void *MemAllocGetAddr(uint32_t size, uint8_t alignment) {
 
 // *** Public Functions ***
 
-void MemAllocInit(const uint8_t *pHeap, uint32_t heapSize) {
+void MemAllocInit(const uint8_t *pHeap, size_t heapSize) {
     // Pointer validity and 32-bit alignment test
     if ((pHeap != NULL) && (((uintptr_t)pHeap & 0x3) > 0)) {
         // Address is invalid, blocking error
@@ -92,11 +92,11 @@ void MemAllocInit(const uint8_t *pHeap, uint32_t heapSize) {
     MemAllocInfo.MemoryOffset = 0;
 }
 
-void *MemAllocMalloc(uint32_t size) {
+void *MemAllocMalloc(size_t size) {
     return MemAllocGetAddr(size, MEM_ALLOC_BASE_ALIGNMENT);
 }
 
-void *MemAllocCalloc(uint32_t size) {
+void *MemAllocCalloc(size_t size) {
     void *pData = MemAllocMalloc(size);
     // Check pData validity
     if (pData != NULL) {
@@ -105,11 +105,11 @@ void *MemAllocCalloc(uint32_t size) {
     return pData;
 }
 
-void *MemAllocMallocAligned(uint32_t size, uint8_t alignment) {
+void *MemAllocMallocAligned(size_t size, uint_fast8_t alignment) {
     return MemAllocGetAddr(size, alignment);
 }
 
-void *MemAllocCallocAligned(uint32_t size, uint8_t alignment) {
+void *MemAllocCallocAligned(size_t size, uint_fast8_t alignment) {
     void *pData = MemAllocMallocAligned(size, alignment);
     // Check pData validity
     if (pData != NULL) {

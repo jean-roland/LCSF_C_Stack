@@ -39,7 +39,7 @@
 
 // *** Public Functions ***
 
-bool FiloInit(filo_desc_t *pFilo, uint32_t itemNb, uint32_t itemSize) {
+bool FiloInit(filo_desc_t *pFilo, size_t itemNb, size_t itemSize) {
     if (pFilo == NULL) {
         return false;
     }
@@ -52,7 +52,7 @@ bool FiloInit(filo_desc_t *pFilo, uint32_t itemNb, uint32_t itemSize) {
     return true;
 }
 
-bool FiloGet(filo_desc_t *pFiloDesc, uint32_t itemNb, void **pFreeSlot) {
+bool FiloGet(filo_desc_t *pFiloDesc, size_t itemNb, void **pFreeSlot) {
 
     if ((pFiloDesc != NULL) && (pFreeSlot != NULL)) {
         // Guard against overflow
@@ -72,7 +72,7 @@ bool FiloGet(filo_desc_t *pFiloDesc, uint32_t itemNb, void **pFreeSlot) {
     return false;
 }
 
-bool FiloFree(filo_desc_t *pFiloDesc, uint32_t itemNb) {
+bool FiloFree(filo_desc_t *pFiloDesc, size_t itemNb) {
 
     if (pFiloDesc != NULL) {
         uint32_t takenSlotNumber = pFiloDesc->ItemNb - pFiloDesc->FreeItemNb;
