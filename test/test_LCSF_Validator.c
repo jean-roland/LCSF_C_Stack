@@ -22,8 +22,7 @@ static bool compare_validatt(const lcsf_valid_att_t *pAtt1, const lcsf_valid_att
 static bool compare_validmsg(const lcsf_valid_cmd_t *pMsg1, const lcsf_valid_cmd_t *pMsg2);
 static bool compare_rawatt(const lcsf_raw_att_t *pAtt1, const lcsf_raw_att_t *pAtt2);
 static bool compare_rawmsg(const lcsf_raw_msg_t *pMsg1, const lcsf_raw_msg_t *pMsg2);
-static void *calloc_Callback(uint32_t size, int num_calls);
-static void *malloc_Callback(uint32_t size, int num_calls);
+static void *malloc_Callback(size_t size, int num_calls);
 static bool process_Callback(const lcsf_raw_msg_t *pMsg, int num_calls);
 static bool interpret_Callback(lcsf_valid_cmd_t *pValidCmd);
 
@@ -171,7 +170,7 @@ static bool compare_rawmsg(const lcsf_raw_msg_t *pMsg1, const lcsf_raw_msg_t *pM
     return true;
 }
 
-static void *malloc_Callback(uint32_t size, int num_calls) {
+static void *malloc_Callback(size_t size, int num_calls) {
     memPtr[memIdx] = malloc(size);
     return memPtr[memIdx++];
 }

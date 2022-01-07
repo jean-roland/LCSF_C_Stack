@@ -13,11 +13,10 @@
 // *** Private functions prototypes
 static bool compare_rawatt(const lcsf_raw_att_t *pAtt1, const lcsf_raw_att_t *pAtt2);
 static bool compare_rawmsg(const lcsf_raw_msg_t *pMsg1, const lcsf_raw_msg_t *pMsg2);
-static void *calloc_Callback(uint32_t size, int num_calls);
-static void *malloc_Callback(uint32_t size, int num_calls);
+static void *malloc_Callback(size_t size, int num_calls);
 static bool process_error_Callback(uint8_t error_code, int num_calls);
 static bool process_msg_Callback(const lcsf_raw_msg_t *pMsg, int num_calls);
-static bool send_Callback(const uint8_t *pBuffer, uint16_t buffSize);
+static bool send_Callback(const uint8_t *pBuffer, size_t buffSize);
 
 // *** Descriptors ***
 // *** Private global vars ***
@@ -247,12 +246,12 @@ static bool compare_rawmsg(const lcsf_raw_msg_t *pMsg1, const lcsf_raw_msg_t *pM
     return true;
 }
 
-static void *malloc_Callback(uint32_t size, int num_calls) {
+static void *malloc_Callback(size_t size, int num_calls) {
     memPtr[memIdx] = malloc(size);
     return memPtr[memIdx++];
 }
 
-static bool process_error_Callback(uint8_t error_code, int num_calls) {
+static bool process_error_Callback(uint_fast8_t error_code, int num_calls) {
     switch (num_calls) {
         case 0:
             return (error_code == 0x01);
@@ -267,7 +266,7 @@ static bool process_msg_Callback(const lcsf_raw_msg_t *pMsg, int num_calls) {
     return compare_rawmsg(pMsg, &txMsg);
 }
 
-static bool send_Callback(const uint8_t *pBuffer, uint16_t buffSize) {
+static bool send_Callback(const uint8_t *pBuffer, size_t buffSize) {
     return (memcmp(pBuffer, rxMsg, buffSize) == 0);
 }
 

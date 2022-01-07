@@ -14,7 +14,7 @@
 #define ARRAY_SIZE 5
 
 // *** Private functions prototypes ***
-static void *malloc_Callback(uint32_t size, int num_calls);
+static void *malloc_Callback(size_t size, int num_calls);
 
 // *** Private global vars ***
 static void *memPtr[64];
@@ -683,16 +683,16 @@ static bool compare_payload_cc5(const test_cc5_att_payload_t *p1, const test_cc5
 }
 
 // *** Callback Functions ***
-static void *malloc_Callback(uint32_t size, int num_calls) {
+static void *malloc_Callback(size_t size, int num_calls) {
     memPtr[memIdx] = malloc(size);
     return memPtr[memIdx++];
 }
 
-static bool tx_Callback(uint8_t protId, const lcsf_valid_cmd_t *pCommand, int num_calls) {
+static bool tx_Callback(uint_fast16_t protId, const lcsf_valid_cmd_t *pCommand, int num_calls) {
     printf("Sending cmd: %d\n", pCommand->CmdId);
 
     if (protId != LCSF_TEST_PROTOCOL_ID) {
-        printf("Wrong protocol id: %d\n", protId);
+        printf("Wrong protocol id: %ld\n", protId);
         return false;
     }
     switch (num_calls) {
@@ -718,8 +718,8 @@ static bool tx_Callback(uint8_t protId, const lcsf_valid_cmd_t *pCommand, int nu
     }
 }
 
-static bool rx_Callback(uint16_t cmdName, test_cmd_payload_t *pCmdPayload, int num_calls) {
-    printf("Received send cmd: %d\n", cmdName);
+static bool rx_Callback(uint_fast16_t cmdName, test_cmd_payload_t *pCmdPayload, int num_calls) {
+    printf("Received send cmd: %ld\n", cmdName);
 
     switch (num_calls) {
         case 0:

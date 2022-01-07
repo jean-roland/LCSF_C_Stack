@@ -18,9 +18,9 @@
 #define PROTOCOL_NB 1
 
 // *** Private functions prototypes ***
-static void *calloc_Callback(uint32_t size, int num_calls);
-static void *malloc_Callback(uint32_t size, int num_calls);
-static bool send_Callback(const uint8_t *pBuffer, uint16_t buffSize);
+static void *calloc_Callback(size_t size, int num_calls);
+static void *malloc_Callback(size_t size, int num_calls);
+static bool send_Callback(const uint8_t *pBuffer, size_t buffSize);
 
 // *** Descriptors ***
 static const lcsf_validator_protocol_desc_t test_prot_desc = {
@@ -305,17 +305,17 @@ static void print_buffer(const uint8_t *p1, const uint8_t *p2, uint16_t buffSize
 }
 
 // *** Callback Functions ***
-static void *calloc_Callback(uint32_t size, int num_calls) {
+static void *calloc_Callback(size_t size, int num_calls) {
     memPtr[memIdx] = calloc(size,1);
     return memPtr[memIdx++];
 }
 
-static void *malloc_Callback(uint32_t size, int num_calls) {
+static void *malloc_Callback(size_t size, int num_calls) {
     memPtr[memIdx] = malloc(size);
     return memPtr[memIdx++];
 }
 
-static bool send_Callback(const uint8_t *pBuffer, uint16_t buffSize) {
+static bool send_Callback(const uint8_t *pBuffer, size_t buffSize) {
     bool res = false;
     switch (send_num_calls) {
         case 0:

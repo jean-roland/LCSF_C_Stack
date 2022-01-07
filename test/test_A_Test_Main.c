@@ -11,7 +11,7 @@
 #define ARRAY_SIZE 5
 
 // *** Private functions prototypes ***
-static void *malloc_Callback(uint32_t size, int num_calls);
+static void *malloc_Callback(size_t size, int num_calls);
 
 // *** Private global vars ***
 static void *memPtr[64];
@@ -279,13 +279,13 @@ static bool compare_payload_cc4(const test_cc4_att_payload_t *p1, const test_cc4
 }
 
 // *** Callback Functions ***
-static void *malloc_Callback(uint32_t size, int num_calls) {
+static void *malloc_Callback(size_t size, int num_calls) {
     memPtr[memIdx] = malloc(size);
     return memPtr[memIdx++];
 }
 
-static bool process_Callback(uint16_t cmdName, test_cmd_payload_t *pCmdPayload, int num_calls) {
-    printf("Received send cmd: %d\n", cmdName);
+static bool process_Callback(uint_fast16_t cmdName, test_cmd_payload_t *pCmdPayload, int num_calls) {
+    printf("Received send cmd: %ld\n", cmdName);
 
     switch (num_calls) {
         case 0:
