@@ -59,6 +59,20 @@ Recursivity is generally frowned upon in embedded applications, which is why the
 * The stack is linear in its recursivity (one call will only lead to a maximum of one other call).
 * The stack is limited by the depth of its filo when making new calls, it is guaranteed to not infinitely loop.
 
+## Build & tests
+
+If you want to build the project as is, or run the test suite, you'll first need to install [Ceedling](https://github.com/ThrowTheSwitch/Ceedling). Then, use the following commands:
+
+Build command:
+ `ceedling release`
+
+A Tests command:
+`ceedling test`
+
+B Tests commands:
+`cd b-tests/`
+`./b-tests.sh`
+
 ## Resource usage
 
 This section aims at providing information regarding the LCSF_C_Stack resource consumption on an embedded target.
