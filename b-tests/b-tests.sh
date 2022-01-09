@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Run from b-tests directory
+
 # Copy & backup files
 cp test_B* ../test/
 mkdir ../src/protocol/bckup
