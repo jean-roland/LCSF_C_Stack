@@ -15,15 +15,17 @@
 #include "Test_Main.h"
 
 // *** Definitions ***
+// --- Private Macros ---
+#define SEND_BUFF_SIZE 255
+#define TEST_ARRAY_SIZE 5
+
 // --- Private Types ---
 typedef struct _test_info {
-    test_cmd_payload_t *pSendCmdPayload;
+    uint8_t sendBuffer[SEND_BUFF_SIZE];
+    test_cmd_payload_t SendCmdPayload;
     bool hasPattern;
     const uint8_t *pattern;
 } test_info_t;
-
-// --- Private Constants ---
-#define TEST_ARRAY_SIZE 5
 
 // --- Private Function Prototypes ---
 // Generated functions
@@ -78,12 +80,18 @@ static bool TestSendCommand(uint_fast16_t cmdName, bool hasPayload) {
     if (cmdName >= TEST_CMD_COUNT) {
         return false;
     }
+    int msgSize = 0;
     if (hasPayload) {
-        test_cmd_payload_t *pCmdPayload = TestInfo.pSendCmdPayload;
-        return LCSF_Bridge_TestSend(cmdName, pCmdPayload);
+        test_cmd_payload_t *pCmdPayload = &TestInfo.SendCmdPayload;
+        msgSize = LCSF_Bridge_TestEncode(cmdName, pCmdPayload, TestInfo.sendBuffer, SEND_BUFF_SIZE);
     } else {
-        return LCSF_Bridge_TestSend(cmdName, NULL);
+        msgSize = LCSF_Bridge_TestEncode(cmdName, NULL, TestInfo.sendBuffer, SEND_BUFF_SIZE);
     }
+    if (msgSize <= 0) {
+        return false;
+    }
+    // TODO Pass buffer to send function e.g: return DummySend(ExampleInfo.sendBuffer, (size_t)msgSize);
+    return true;
 }
 
 /**
@@ -156,42 +164,42 @@ static bool TestExecuteCC2(test_cmd_payload_t *pCmdPayload) {
         m_cc2_sa10_isHere = true;
     }
     // Init payload optAttFlagsBitfield
-    TestInfo.pSendCmdPayload->cc1_payload.optAttFlagsBitfield = 0;
+    TestInfo.SendCmdPayload.cc1_payload.optAttFlagsBitfield = 0;
     // Process data
-    TestInfo.pSendCmdPayload->cc1_payload.sa1 = m_cc2_sa1 + 1;
-    TestInfo.pSendCmdPayload->cc1_payload.sa2 = m_cc2_sa2 + 1;
-    TestInfo.pSendCmdPayload->cc1_payload.sa3 = m_cc2_sa3 + 1;
-    TestInfo.pSendCmdPayload->cc1_payload.sa4Size = TEST_ARRAY_SIZE;
-    TestInfo.pSendCmdPayload->cc1_payload.p_sa4 = m_cc2_sa4;
-    Test_FillArray(TestInfo.pSendCmdPayload->cc1_payload.p_sa4, true);
-    TestInfo.pSendCmdPayload->cc1_payload.p_sa5 = m_cc2_sa5;
+    TestInfo.SendCmdPayload.cc1_payload.sa1 = m_cc2_sa1 + 1;
+    TestInfo.SendCmdPayload.cc1_payload.sa2 = m_cc2_sa2 + 1;
+    TestInfo.SendCmdPayload.cc1_payload.sa3 = m_cc2_sa3 + 1;
+    TestInfo.SendCmdPayload.cc1_payload.sa4Size = TEST_ARRAY_SIZE;
+    TestInfo.SendCmdPayload.cc1_payload.p_sa4 = m_cc2_sa4;
+    Test_FillArray(TestInfo.SendCmdPayload.cc1_payload.p_sa4, true);
+    TestInfo.SendCmdPayload.cc1_payload.p_sa5 = m_cc2_sa5;
     for (uint8_t idx = 0; idx < strlen(m_cc2_sa5); idx++) {
-        TestInfo.pSendCmdPayload->cc1_payload.p_sa5[idx] += 1;
+        TestInfo.SendCmdPayload.cc1_payload.p_sa5[idx] += 1;
     }
     if (m_cc2_sa6_isHere) {
-        TestInfo.pSendCmdPayload->cc1_payload.sa6 = m_cc2_sa6 + 1;
-        TestInfo.pSendCmdPayload->cc1_payload.optAttFlagsBitfield |= TEST_CC1_ATT_SA6_FLAG;
+        TestInfo.SendCmdPayload.cc1_payload.sa6 = m_cc2_sa6 + 1;
+        TestInfo.SendCmdPayload.cc1_payload.optAttFlagsBitfield |= TEST_CC1_ATT_SA6_FLAG;
     }
     if (m_cc2_sa7_isHere) {
-        TestInfo.pSendCmdPayload->cc1_payload.sa7 = m_cc2_sa7 + 1;
-        TestInfo.pSendCmdPayload->cc1_payload.optAttFlagsBitfield |= TEST_CC1_ATT_SA7_FLAG;
+        TestInfo.SendCmdPayload.cc1_payload.sa7 = m_cc2_sa7 + 1;
+        TestInfo.SendCmdPayload.cc1_payload.optAttFlagsBitfield |= TEST_CC1_ATT_SA7_FLAG;
     }
     if (m_cc2_sa8_isHere) {
-        TestInfo.pSendCmdPayload->cc1_payload.sa8 = m_cc2_sa8 + 1;
-        TestInfo.pSendCmdPayload->cc1_payload.optAttFlagsBitfield |= TEST_CC1_ATT_SA8_FLAG;
+        TestInfo.SendCmdPayload.cc1_payload.sa8 = m_cc2_sa8 + 1;
+        TestInfo.SendCmdPayload.cc1_payload.optAttFlagsBitfield |= TEST_CC1_ATT_SA8_FLAG;
     }
     if (m_cc2_sa9_isHere) {
-        TestInfo.pSendCmdPayload->cc1_payload.sa9Size = TEST_ARRAY_SIZE;
-        TestInfo.pSendCmdPayload->cc1_payload.p_sa9 = m_cc2_sa9;
-        Test_FillArray(TestInfo.pSendCmdPayload->cc1_payload.p_sa9, true);
-        TestInfo.pSendCmdPayload->cc1_payload.optAttFlagsBitfield |= TEST_CC1_ATT_SA9_FLAG;
+        TestInfo.SendCmdPayload.cc1_payload.sa9Size = TEST_ARRAY_SIZE;
+        TestInfo.SendCmdPayload.cc1_payload.p_sa9 = m_cc2_sa9;
+        Test_FillArray(TestInfo.SendCmdPayload.cc1_payload.p_sa9, true);
+        TestInfo.SendCmdPayload.cc1_payload.optAttFlagsBitfield |= TEST_CC1_ATT_SA9_FLAG;
     }
     if (m_cc2_sa10_isHere) {
-        TestInfo.pSendCmdPayload->cc1_payload.p_sa10 = m_cc2_sa10;
+        TestInfo.SendCmdPayload.cc1_payload.p_sa10 = m_cc2_sa10;
         for (uint8_t idx = 0; idx < strlen(m_cc2_sa10); idx++) {
-            TestInfo.pSendCmdPayload->cc1_payload.p_sa10[idx] += 1;
+            TestInfo.SendCmdPayload.cc1_payload.p_sa10[idx] += 1;
         }
-        TestInfo.pSendCmdPayload->cc1_payload.optAttFlagsBitfield |= TEST_CC1_ATT_SA10_FLAG;
+        TestInfo.SendCmdPayload.cc1_payload.optAttFlagsBitfield |= TEST_CC1_ATT_SA10_FLAG;
     }
     // Send command
     return TestSendCommand(TEST_CMD_CC1, true);
@@ -244,42 +252,42 @@ static bool TestExecuteCC3(test_cmd_payload_t *pCmdPayload) {
         m_cc3_sa10_isHere = true;
     }
     // Init payload optAttFlagsBitfield
-    TestInfo.pSendCmdPayload->cc3_payload.optAttFlagsBitfield = 0;
+    TestInfo.SendCmdPayload.cc3_payload.optAttFlagsBitfield = 0;
     // Process data
-    TestInfo.pSendCmdPayload->cc3_payload.sa1 = m_cc3_sa1 - 1;
-    TestInfo.pSendCmdPayload->cc3_payload.sa2 = m_cc3_sa2 - 1;
-    TestInfo.pSendCmdPayload->cc3_payload.sa3 = m_cc3_sa3 - 1;
-    TestInfo.pSendCmdPayload->cc3_payload.sa4Size = TEST_ARRAY_SIZE;
-    TestInfo.pSendCmdPayload->cc3_payload.p_sa4 = m_cc3_sa4;
-    Test_FillArray(TestInfo.pSendCmdPayload->cc3_payload.p_sa4, false);
-    TestInfo.pSendCmdPayload->cc3_payload.p_sa5 = m_cc3_sa5;
+    TestInfo.SendCmdPayload.cc3_payload.sa1 = m_cc3_sa1 - 1;
+    TestInfo.SendCmdPayload.cc3_payload.sa2 = m_cc3_sa2 - 1;
+    TestInfo.SendCmdPayload.cc3_payload.sa3 = m_cc3_sa3 - 1;
+    TestInfo.SendCmdPayload.cc3_payload.sa4Size = TEST_ARRAY_SIZE;
+    TestInfo.SendCmdPayload.cc3_payload.p_sa4 = m_cc3_sa4;
+    Test_FillArray(TestInfo.SendCmdPayload.cc3_payload.p_sa4, false);
+    TestInfo.SendCmdPayload.cc3_payload.p_sa5 = m_cc3_sa5;
     for (uint8_t idx = 0; idx < strlen(m_cc3_sa5); idx++) {
-        TestInfo.pSendCmdPayload->cc3_payload.p_sa5[idx] -= 1;
+        TestInfo.SendCmdPayload.cc3_payload.p_sa5[idx] -= 1;
     }
     if (m_cc3_sa6_isHere) {
-        TestInfo.pSendCmdPayload->cc3_payload.sa6 = m_cc3_sa6 - 1;
-        TestInfo.pSendCmdPayload->cc3_payload.optAttFlagsBitfield |= TEST_CC3_ATT_SA6_FLAG;
+        TestInfo.SendCmdPayload.cc3_payload.sa6 = m_cc3_sa6 - 1;
+        TestInfo.SendCmdPayload.cc3_payload.optAttFlagsBitfield |= TEST_CC3_ATT_SA6_FLAG;
     }
     if (m_cc3_sa7_isHere) {
-        TestInfo.pSendCmdPayload->cc3_payload.sa7 = m_cc3_sa7 - 1;
-        TestInfo.pSendCmdPayload->cc3_payload.optAttFlagsBitfield |= TEST_CC3_ATT_SA7_FLAG;
+        TestInfo.SendCmdPayload.cc3_payload.sa7 = m_cc3_sa7 - 1;
+        TestInfo.SendCmdPayload.cc3_payload.optAttFlagsBitfield |= TEST_CC3_ATT_SA7_FLAG;
     }
     if (m_cc3_sa8_isHere) {
-        TestInfo.pSendCmdPayload->cc3_payload.sa8 = m_cc3_sa8 - 1;
-        TestInfo.pSendCmdPayload->cc3_payload.optAttFlagsBitfield |= TEST_CC3_ATT_SA8_FLAG;
+        TestInfo.SendCmdPayload.cc3_payload.sa8 = m_cc3_sa8 - 1;
+        TestInfo.SendCmdPayload.cc3_payload.optAttFlagsBitfield |= TEST_CC3_ATT_SA8_FLAG;
     }
     if (m_cc3_sa9_isHere) {
-        TestInfo.pSendCmdPayload->cc3_payload.sa9Size = TEST_ARRAY_SIZE;
-        TestInfo.pSendCmdPayload->cc3_payload.p_sa9 = m_cc3_sa9;
-        Test_FillArray(TestInfo.pSendCmdPayload->cc3_payload.p_sa9, false);
-        TestInfo.pSendCmdPayload->cc3_payload.optAttFlagsBitfield |= TEST_CC3_ATT_SA9_FLAG;
+        TestInfo.SendCmdPayload.cc3_payload.sa9Size = TEST_ARRAY_SIZE;
+        TestInfo.SendCmdPayload.cc3_payload.p_sa9 = m_cc3_sa9;
+        Test_FillArray(TestInfo.SendCmdPayload.cc3_payload.p_sa9, false);
+        TestInfo.SendCmdPayload.cc3_payload.optAttFlagsBitfield |= TEST_CC3_ATT_SA9_FLAG;
     }
     if (m_cc3_sa10_isHere) {
-        TestInfo.pSendCmdPayload->cc3_payload.p_sa10 = m_cc3_sa10;
+        TestInfo.SendCmdPayload.cc3_payload.p_sa10 = m_cc3_sa10;
         for (uint8_t idx = 0; idx < strlen(m_cc3_sa10); idx++) {
-            TestInfo.pSendCmdPayload->cc3_payload.p_sa10[idx] -= 1;
+            TestInfo.SendCmdPayload.cc3_payload.p_sa10[idx] -= 1;
         }
-        TestInfo.pSendCmdPayload->cc3_payload.optAttFlagsBitfield |= TEST_CC3_ATT_SA10_FLAG;
+        TestInfo.SendCmdPayload.cc3_payload.optAttFlagsBitfield |= TEST_CC3_ATT_SA10_FLAG;
     }
     // Send command
     return TestSendCommand(TEST_CMD_CC3, true);
@@ -322,32 +330,32 @@ static bool TestExecuteCC5(test_cmd_payload_t *pCmdPayload) {
         m_ca8_sa4 = pCmdPayload->cc5_payload.ca6_payload.ca7_payload.ca8_payload.p_sa4;
     }
     // Init payload optAttFlagsBitfields
-    TestInfo.pSendCmdPayload->cc4_payload.optAttFlagsBitfield = 0;
-    TestInfo.pSendCmdPayload->cc4_payload.ca1_payload.optAttFlagsBitfield = 0;
-    TestInfo.pSendCmdPayload->cc4_payload.ca2_payload.optAttFlagsBitfield = 0;
-    TestInfo.pSendCmdPayload->cc4_payload.ca2_payload.ca3_payload.optAttFlagsBitfield = 0;
+    TestInfo.SendCmdPayload.cc4_payload.optAttFlagsBitfield = 0;
+    TestInfo.SendCmdPayload.cc4_payload.ca1_payload.optAttFlagsBitfield = 0;
+    TestInfo.SendCmdPayload.cc4_payload.ca2_payload.optAttFlagsBitfield = 0;
+    TestInfo.SendCmdPayload.cc4_payload.ca2_payload.ca3_payload.optAttFlagsBitfield = 0;
     // Process data
-    TestInfo.pSendCmdPayload->cc4_payload.sa1 = (uint8_t)m_cc5_sa2 + 1;
-    TestInfo.pSendCmdPayload->cc4_payload.ca1_payload.sa1 = m_ca5_sa1 + 1;
-    TestInfo.pSendCmdPayload->cc4_payload.ca1_payload.sa2 = m_ca5_sa2 + 1;
+    TestInfo.SendCmdPayload.cc4_payload.sa1 = (uint8_t)m_cc5_sa2 + 1;
+    TestInfo.SendCmdPayload.cc4_payload.ca1_payload.sa1 = m_ca5_sa1 + 1;
+    TestInfo.SendCmdPayload.cc4_payload.ca1_payload.sa2 = m_ca5_sa2 + 1;
     // Optional attributes
     if (m_ca5_sa3_isHere) {
-        TestInfo.pSendCmdPayload->cc4_payload.ca1_payload.sa3 = m_ca5_sa3;
-        TestInfo.pSendCmdPayload->cc4_payload.ca1_payload.optAttFlagsBitfield |= TEST_CA1_ATT_SA3_FLAG;
+        TestInfo.SendCmdPayload.cc4_payload.ca1_payload.sa3 = m_ca5_sa3;
+        TestInfo.SendCmdPayload.cc4_payload.ca1_payload.optAttFlagsBitfield |= TEST_CA1_ATT_SA3_FLAG;
     }
     if (m_cc5_ca6_isHere) {
-        TestInfo.pSendCmdPayload->cc4_payload.optAttFlagsBitfield |= TEST_CC4_ATT_CA2_FLAG;
+        TestInfo.SendCmdPayload.cc4_payload.optAttFlagsBitfield |= TEST_CC4_ATT_CA2_FLAG;
 
         if (m_ca6_sa1_isHere) {
-            TestInfo.pSendCmdPayload->cc4_payload.ca2_payload.sa1 = m_ca6_sa1 + 1;
-            TestInfo.pSendCmdPayload->cc4_payload.ca2_payload.optAttFlagsBitfield |= TEST_CA2_ATT_SA1_FLAG;
+            TestInfo.SendCmdPayload.cc4_payload.ca2_payload.sa1 = m_ca6_sa1 + 1;
+            TestInfo.SendCmdPayload.cc4_payload.ca2_payload.optAttFlagsBitfield |= TEST_CA2_ATT_SA1_FLAG;
         }
         if (m_ca7_sa1_isHere) {
-            TestInfo.pSendCmdPayload->cc4_payload.ca2_payload.ca3_payload.sa1 = m_ca7_sa1 + 1;
-            TestInfo.pSendCmdPayload->cc4_payload.ca2_payload.ca3_payload.optAttFlagsBitfield |= TEST_CA3_ATT_SA1_FLAG;
+            TestInfo.SendCmdPayload.cc4_payload.ca2_payload.ca3_payload.sa1 = m_ca7_sa1 + 1;
+            TestInfo.SendCmdPayload.cc4_payload.ca2_payload.ca3_payload.optAttFlagsBitfield |= TEST_CA3_ATT_SA1_FLAG;
         }
-        TestInfo.pSendCmdPayload->cc4_payload.ca2_payload.ca3_payload.ca4_payload.sa4Size = TEST_ARRAY_SIZE;
-        TestInfo.pSendCmdPayload->cc4_payload.ca2_payload.ca3_payload.ca4_payload.p_sa4 = m_ca8_sa4;
+        TestInfo.SendCmdPayload.cc4_payload.ca2_payload.ca3_payload.ca4_payload.sa4Size = TEST_ARRAY_SIZE;
+        TestInfo.SendCmdPayload.cc4_payload.ca2_payload.ca3_payload.ca4_payload.p_sa4 = m_ca8_sa4;
         Test_FillArray(m_ca8_sa4, true);
     }
     // Send command
@@ -391,34 +399,34 @@ static bool TestExecuteCC6(test_cmd_payload_t *pCmdPayload) {
         m_ca12_sa4 = pCmdPayload->cc6_payload.ca10_payload.ca11_payload.ca12_payload.p_sa4;
     }
     // Init payload optAttFlagsBitfields
-    TestInfo.pSendCmdPayload->cc6_payload.optAttFlagsBitfield = 0;
-    TestInfo.pSendCmdPayload->cc6_payload.ca9_payload.optAttFlagsBitfield = 0;
-    TestInfo.pSendCmdPayload->cc6_payload.ca10_payload.optAttFlagsBitfield = 0;
-    TestInfo.pSendCmdPayload->cc6_payload.ca10_payload.ca11_payload.optAttFlagsBitfield = 0;
+    TestInfo.SendCmdPayload.cc6_payload.optAttFlagsBitfield = 0;
+    TestInfo.SendCmdPayload.cc6_payload.ca9_payload.optAttFlagsBitfield = 0;
+    TestInfo.SendCmdPayload.cc6_payload.ca10_payload.optAttFlagsBitfield = 0;
+    TestInfo.SendCmdPayload.cc6_payload.ca10_payload.ca11_payload.optAttFlagsBitfield = 0;
     // Process data
-    TestInfo.pSendCmdPayload->cc6_payload.sa4Size = TEST_ARRAY_SIZE;
-    TestInfo.pSendCmdPayload->cc6_payload.p_sa4 = m_cc6_sa4;
+    TestInfo.SendCmdPayload.cc6_payload.sa4Size = TEST_ARRAY_SIZE;
+    TestInfo.SendCmdPayload.cc6_payload.p_sa4 = m_cc6_sa4;
     Test_FillArray(m_cc6_sa4, false);
-    TestInfo.pSendCmdPayload->cc6_payload.ca9_payload.sa1 = m_ca9_sa1 - 1;
-    TestInfo.pSendCmdPayload->cc6_payload.ca9_payload.sa2 = m_ca9_sa2 - 1;
+    TestInfo.SendCmdPayload.cc6_payload.ca9_payload.sa1 = m_ca9_sa1 - 1;
+    TestInfo.SendCmdPayload.cc6_payload.ca9_payload.sa2 = m_ca9_sa2 - 1;
     // Optional attributes
     if (m_ca9_sa3_isHere) {
-        TestInfo.pSendCmdPayload->cc6_payload.ca9_payload.sa3 = m_ca9_sa3 - 1;
-        TestInfo.pSendCmdPayload->cc6_payload.ca9_payload.optAttFlagsBitfield |= TEST_CA9_ATT_SA3_FLAG;
+        TestInfo.SendCmdPayload.cc6_payload.ca9_payload.sa3 = m_ca9_sa3 - 1;
+        TestInfo.SendCmdPayload.cc6_payload.ca9_payload.optAttFlagsBitfield |= TEST_CA9_ATT_SA3_FLAG;
     }
     if (m_cc6_ca10_isHere) {
-        TestInfo.pSendCmdPayload->cc6_payload.optAttFlagsBitfield |= TEST_CC6_ATT_CA10_FLAG;
+        TestInfo.SendCmdPayload.cc6_payload.optAttFlagsBitfield |= TEST_CC6_ATT_CA10_FLAG;
 
         if (m_ca10_sa1_isHere) {
-            TestInfo.pSendCmdPayload->cc6_payload.ca10_payload.sa1 = m_ca10_sa1 - 1;
-            TestInfo.pSendCmdPayload->cc6_payload.ca10_payload.optAttFlagsBitfield |= TEST_CA10_ATT_SA1_FLAG;
+            TestInfo.SendCmdPayload.cc6_payload.ca10_payload.sa1 = m_ca10_sa1 - 1;
+            TestInfo.SendCmdPayload.cc6_payload.ca10_payload.optAttFlagsBitfield |= TEST_CA10_ATT_SA1_FLAG;
         }
         if (m_ca11_sa1_isHere) {
-            TestInfo.pSendCmdPayload->cc6_payload.ca10_payload.ca11_payload.sa1 = m_ca11_sa1 - 1;
-            TestInfo.pSendCmdPayload->cc6_payload.ca10_payload.ca11_payload.optAttFlagsBitfield |= TEST_CA11_ATT_SA1_FLAG;
+            TestInfo.SendCmdPayload.cc6_payload.ca10_payload.ca11_payload.sa1 = m_ca11_sa1 - 1;
+            TestInfo.SendCmdPayload.cc6_payload.ca10_payload.ca11_payload.optAttFlagsBitfield |= TEST_CA11_ATT_SA1_FLAG;
         }
-        TestInfo.pSendCmdPayload->cc6_payload.ca10_payload.ca11_payload.ca12_payload.sa4Size = TEST_ARRAY_SIZE;
-        TestInfo.pSendCmdPayload->cc6_payload.ca10_payload.ca11_payload.ca12_payload.p_sa4 = m_ca12_sa4;
+        TestInfo.SendCmdPayload.cc6_payload.ca10_payload.ca11_payload.ca12_payload.sa4Size = TEST_ARRAY_SIZE;
+        TestInfo.SendCmdPayload.cc6_payload.ca10_payload.ca11_payload.ca12_payload.p_sa4 = m_ca12_sa4;
         Test_FillArray(m_ca12_sa4, false);
     }
     // Send command
@@ -434,7 +442,6 @@ static bool TestExecuteCC6(test_cmd_payload_t *pCmdPayload) {
  * \return bool: true if operation was a success
  */
 bool Test_MainInit(void) {
-    TestInfo.pSendCmdPayload = (test_cmd_payload_t *)MEM_ALLOC(sizeof(test_cmd_payload_t));
     return true;
 }
 

@@ -6,7 +6,6 @@
 #include "LCSF_Transcoder.h"
 #include "Filo.h"
 
-#include "mock_MemAlloc.h"
 #include "mock_LCSF_Validator.h"
 
 // *** Constants ***

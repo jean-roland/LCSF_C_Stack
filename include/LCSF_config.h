@@ -23,22 +23,16 @@
 
 // --- LCSF Transcoder ---
 // #define LCSF_SMALL // Uncomment to use the smaller representation LCSF variant
-#define LCSF_LOG_ERROR // Comment if you don't need to log lcsf error send/receive
 #define LCSF_TRANSCODER_RX_FILO_SIZE 20 // Number of items (8 bytes / item)
-#define LCSF_TRANSCODER_TX_BUFFER_SIZE 255 // Bytes
 
 // --- LCSF Validator ---
 #define LCSF_VALIDATOR_TX_FILO_SIZE 20 // Number of items (8 bytes / item)
 #define LCSF_VALIDATOR_RX_FILO_SIZE 20 // Number of items (8 bytes / item)
+#define LCSF_VALIDATOR_PROTOCOL_NB  2
 
-// Memory allocation include
-#include <MemAlloc.h>
-// Memory allocation function (switch to your own function if needed)
-#define MEM_ALLOC(size) MemAllocMalloc(size) 
-
-#ifdef LCSF_LOG_ERROR
-    // Log error include
-    #include <stdio.h>
-    // Log error function (switch to your own function if needed)
-    #define LOG_ERROR(msg, errLoc, errVal) printf(msg, errLoc, errVal) 
+#ifdef _APP_DEBUG
+   #include <stdio.h>
+   #define DEBUG_PRINT(...) do { printf(__VA_ARGS__); } while(false)
+#else
+   #define DEBUG_PRINT(...) do { } while(false)
 #endif

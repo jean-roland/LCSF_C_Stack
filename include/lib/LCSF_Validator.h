@@ -91,14 +91,16 @@ typedef struct _lcsf_valid_cmd {
 
 // Lcsf validator module types
 
-// Callback prototype
-typedef bool LCSFInterpretCallback(lcsf_valid_cmd_t *pValidCmd);
+// Callback prototypes
+typedef bool (LCSFInterpretCallback_t)(lcsf_valid_cmd_t *pValidCmd);
+typedef bool (LCSFSendErrCallback_t)(const uint8_t *pBuffer, size_t buffSize);
+typedef void (LCSFReceiveErrCallback_t)(uint_fast8_t errorLoc, uint_fast8_t errorType);
 
 // Protocol description structure
 typedef struct _lcsf_validator_protocol_desc {
     uint8_t ProtId; // Protocol identifier
     const lcsf_protocol_desc_t *pProtDesc; // Pointer to protocol descriptor
-    LCSFInterpretCallback *pFnInterpretMsg; // Pointer to the message interpretation function
+    LCSFInterpretCallback_t *pFnInterpretMsg; // Pointer to the message interpretation function
 } lcsf_validator_protocol_desc_t;
 
 // Functions used by transcoder to send errors
@@ -109,13 +111,14 @@ bool LCSF_ValidatorSendTranscoderError(uint_fast8_t errorType);
 // --- Public Function Prototypes ---
 
 /**
- * \fn bool LCSF_ValidatorInit(uint_fast16_t protNb)
+ * \fn bool LCSF_ValidatorInit(LCSFSendErrCallback_t *pFnSendErrCb, LCSFReceiveErrCallback_t *pFnRecErrCb)
  * \brief Initialize the module
  *
- * \param protNb Number of protocols the module will handle
+ * \param pFnSendErrCb Function pointer to send lcsf error messages (optional)
+ * \param pFnSendErrCb Function pointer to receive lcsf error messages (optional)
  * \return bool: true if operation was a success
  */
-bool LCSF_ValidatorInit(uint_fast16_t protNb);
+bool LCSF_ValidatorInit(LCSFSendErrCallback_t *pFnSendErrCb, LCSFReceiveErrCallback_t *pFnRecErrCb);
 
 /**
  * \fn bool LCSF_ValidatorAddProtocol(uint_fast16_t protId, const lcsf_validator_protocol_desc_t *pProtDesc)
@@ -128,16 +131,6 @@ bool LCSF_ValidatorInit(uint_fast16_t protNb);
 bool LCSF_ValidatorAddProtocol(uint_fast16_t protIdx, const lcsf_validator_protocol_desc_t *pProtDesc);
 
 /**
- * \fn bool LCSF_ValidatorTakeReceivedError(uint8_t *pErrLoc, uint8_t *pErrType)
- * \brief Retrieve the last received lcsf error
- *
- * \param pErrLoc pointer to contain error location
- * \param pErrType pointer to contain error type
- * \return bool: true if error available and successfully copied to arguments
- */
-bool LCSF_ValidatorTakeReceivedError(uint8_t *pErrLoc, uint8_t *pErrType);
-
-/**
  * \fn bool LCSF_ValidatorReceive(const lcsf_raw_msg_t *pMessage)
  * \brief Validate a raw lcsf message and send to interpreter
  *
@@ -147,14 +140,16 @@ bool LCSF_ValidatorTakeReceivedError(uint8_t *pErrLoc, uint8_t *pErrType);
 bool LCSF_ValidatorReceive(const lcsf_raw_msg_t *pMessage);
 
 /**
- * \fn bool LCSF_ValidatorSend(uint_fast16_t protId, lcsf_valid_cmd_t *pCommand)
- * \brief Send a valid command to lcsf transcoder
+ * \fn int LCSF_ValidatorEncode(uint_fast16_t protId, lcsf_valid_cmd_t *pCommand)
+ * \brief Send a valid command to lcsf transcoder for encoding
  *
  * \param protId protocol identifier
  * \param pCommand Pointer to the command to send
- * \return bool: true if operation was a success
+ * \param pBuffer pointer to the send buffer
+ * \param buffSize buffer size
+ * \return int: -1 if operation failed, encoded message size if success
  */
-bool LCSF_ValidatorSend(uint_fast16_t protId, const lcsf_valid_cmd_t *pCommand);
+int LCSF_ValidatorEncode(uint_fast16_t protId, const lcsf_valid_cmd_t *pCommand, uint8_t *pBuffer, size_t buffSize);
 
 // *** End Definitions ***
 #endif // _LCSF_Interpreter_h

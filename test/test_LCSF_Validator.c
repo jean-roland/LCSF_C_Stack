@@ -9,7 +9,6 @@
 #include "LCSF_Bridge_Example.h"
 #include "Example_Main.h"
 
-#include "mock_MemAlloc.h"
 #include "mock_LCSF_Transcoder.h"
 
 // *** Constants ***

@@ -4,7 +4,6 @@
 #include "unity.h"
 #include "LCSF_config.h"
 #include "Filo.h"
-#include "mock_MemAlloc.h"
 
 #define FILO_SIZE 100
 

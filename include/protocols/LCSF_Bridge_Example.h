@@ -33,6 +33,8 @@
 // *** Definitions ***
 // --- Public Types ---
 
+#define LCSF_EXAMPLE_BRIDGE_FILO_SIZE 5 // Max number of attributes
+
 // Lcsf example protocol identifier
 #define LCSF_EXAMPLE_PROTOCOL_ID 0x00
 
@@ -78,11 +80,10 @@ enum _lcsf_example_att_id {
 /**
  * \fn bool LCSF_Bridge_ExampleInit(size_t filoSize)
  * \brief Initialize the module
- *
- * \param filoSize size of the module filo (number of element)
+
  * \return bool: true if operation was a success
  */
-bool LCSF_Bridge_ExampleInit(size_t filoSize);
+bool LCSF_Bridge_ExampleInit(void);
 
 /**
  * \fn bool LCSF_Bridge_ExampleReceive(lcsf_valid_cmd_t *pValidCmd)
@@ -94,14 +95,16 @@ bool LCSF_Bridge_ExampleInit(size_t filoSize);
 bool LCSF_Bridge_ExampleReceive(lcsf_valid_cmd_t *pValidCmd);
 
 /**
- * \fn bool LCSF_Bridge_ExampleSend(uint_fast16_t cmdName, void *pCmdPayload)
- * \brief Receive command from Example_Main and transmit to LCSF_Validator
+ * \fn int LCSF_Bridge_ExampleEncode(uint_fast16_t cmdName, void *pCmdPayload)
+ * \brief Receive command from Example_Main and transmit to LCSF_Validator for encoding
  *
  * \param cmdName name of the command
  * \param pValidCmd pointer to the valid command
- * \return bool: true if operation was a success
+ * \param pBuffer pointer to the send buffer
+ * \param buffSize buffer size
+ * \return int: -1 if operation failed, encoded message size if success
  */
-bool LCSF_Bridge_ExampleSend(uint_fast16_t cmdName, example_cmd_payload_t *pCmdPayload);
+int LCSF_Bridge_ExampleEncode(uint_fast16_t cmdName, example_cmd_payload_t *pCmdPayload, uint8_t *pBuffer, size_t buffSize);
 
 // *** End Definitions ***
 #endif // LCSF_Bridge_Example_h

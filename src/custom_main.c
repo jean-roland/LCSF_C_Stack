@@ -26,7 +26,6 @@
 #include <stdint.h>
 #include <string.h>
 // Custom lib
-#include <MemAlloc.h>
 #include <Filo.h>
 #include <LCSF_Transcoder.h>
 #include <LCSF_Validator.h>
@@ -38,17 +37,19 @@
 
 // Dummy interface
 static const uint8_t dummyTxBuff[20] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-static uint8_t dummyRxBuff[20];
 
 static bool dummyReceiveProcess(void) {
     return LCSF_TranscoderReceive(dummyTxBuff, 6);
 }
 
-static bool dummySend(const uint8_t *pBuffer, size_t buffSize) {
+static bool dummyErrSend(const uint8_t *pBuffer, size_t buffSize) {
     if (pBuffer == NULL) {
         return false;
     }
-    memcpy(dummyRxBuff, pBuffer, buffSize);
+    if (buffSize == 0) {
+        return false;
+    }
+    // Send data
     return true;
 }
 
@@ -72,7 +73,6 @@ static const example_init_desc_t ExampleMainInitDesc = {
 // *** End of module definitions ***
 
 // Variables
-static uint8_t _HEAP[0x2000];
 
 // Functions
 
@@ -83,14 +83,12 @@ static uint8_t _HEAP[0x2000];
  * \return void
  */
 static void app_init(void) {
-    // Memory allocation
-    MemAllocInit(_HEAP, sizeof(_HEAP));
     // Lcsf stack
- 	LCSF_TranscoderInit(dummySend);
- 	LCSF_ValidatorInit(LCSF_PROTOCOL_COUNT);
+ 	LCSF_TranscoderInit();
+ 	LCSF_ValidatorInit(&dummyErrSend, NULL);
  	LCSF_ValidatorAddProtocol(LCSF_PROTOCOL_EXAMPLE, &LcsfProtocolExampleDesc);
     // Lcsf example
-    LCSF_Bridge_ExampleInit(20);
+    LCSF_Bridge_ExampleInit();
     Example_MainInit(&ExampleMainInitDesc);
 }
 

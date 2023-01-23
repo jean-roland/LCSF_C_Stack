@@ -34,8 +34,9 @@
 
 // Module information structure
 typedef struct _lcsf_bridge_example_info {
+    uint8_t FiloData[LCSF_EXAMPLE_BRIDGE_FILO_SIZE * sizeof(lcsf_valid_att_t)];
     filo_desc_t Filo;
-    example_cmd_payload_t *pCmdPayload;
+    example_cmd_payload_t CmdPayload;
 } lcsf_bridge_example_info_t;
 
 // --- Private Constants ---
@@ -252,28 +253,26 @@ static bool LCSF_Bridge_ExampleFillCmdAtt(uint_fast16_t cmdName, lcsf_valid_att_
 
 // *** Public Functions ***
 
-bool LCSF_Bridge_ExampleInit(size_t filoSize) {
-    FiloInit(&LcsfBridgeExampleInfo.Filo, filoSize, sizeof(lcsf_valid_att_t));
-    LcsfBridgeExampleInfo.pCmdPayload = MEM_ALLOC(sizeof(example_cmd_payload_t));
-    return true;
+bool LCSF_Bridge_ExampleInit(void) {
+    return FiloInit(&LcsfBridgeExampleInfo.Filo, LcsfBridgeExampleInfo.FiloData, LCSF_EXAMPLE_BRIDGE_FILO_SIZE, sizeof(lcsf_valid_att_t));
 }
 
 bool LCSF_Bridge_ExampleReceive(lcsf_valid_cmd_t *pValidCmd) {
     uint16_t cmdName = LCSF_Bridge_Example_CMDID2CMDNAME(pValidCmd->CmdId);
-    example_cmd_payload_t *pCmdPayload = LcsfBridgeExampleInfo.pCmdPayload;
-    memset(pCmdPayload, 0, sizeof(example_cmd_payload_t));
+    example_cmd_payload_t *pCmdPayload = &LcsfBridgeExampleInfo.CmdPayload;
+    // memset(pCmdPayload, 0, sizeof(example_cmd_payload_t));
 
     LCSF_Bridge_ExampleGetCmdData(cmdName, pValidCmd->pAttArray, pCmdPayload);
     return Example_MainCommandExecute(cmdName, pCmdPayload);
 }
 
-bool LCSF_Bridge_ExampleSend(uint_fast16_t cmdName, example_cmd_payload_t *pCmdPayload) {
+int LCSF_Bridge_ExampleEncode(uint_fast16_t cmdName, example_cmd_payload_t *pCmdPayload, uint8_t *pBuffer, size_t buffSize) {
     lcsf_valid_cmd_t sendCmd;
     sendCmd.CmdId = LCSF_Bridge_Example_CMDNAME2CMDID[cmdName];
     FiloFreeAll(&LcsfBridgeExampleInfo.Filo);
 
     if (!LCSF_Bridge_ExampleFillCmdAtt(cmdName, &(sendCmd.pAttArray), pCmdPayload)) {
-        return false;
+        return -1;
     }
-    return LCSF_ValidatorSend(LCSF_EXAMPLE_PROTOCOL_ID, &sendCmd);
+    return LCSF_ValidatorEncode(LCSF_EXAMPLE_PROTOCOL_ID, &sendCmd, pBuffer, buffSize);
 }

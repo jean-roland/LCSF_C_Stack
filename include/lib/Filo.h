@@ -45,12 +45,13 @@ typedef struct _filo_desc {
  * \fn void FiloInit(filo_desc_t *pFilo, size_t itemNb, size_t itemSize)
  * \brief Initialize a filo
  *
- * \param filo_desc_t *: pointer to the filo
+ * \param pFilo: pointer to the filo
+ * \param pBuffer: pointer to the filo data buffer (size must be itemNb * itemSize)
  * \param itemNb number of items in the filo
  * \param itemSize size of each item
  * \return bool: true if operation was a success
  */
-bool FiloInit(filo_desc_t *pFilo, size_t itemNb, size_t itemSize);
+bool FiloInit(filo_desc_t *pFilo, void *pBuffer, size_t itemNb, size_t itemSize);
 
 /**
  * \fn bool FiloGet(filo_desc_t *pFiloDesc, size_t slotNumber, void **pFreeSlot)

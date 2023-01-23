@@ -10,7 +10,6 @@
 #include "LCSF_Bridge_Test.h"
 #include "LCSF_Desc_Test.h"
 #include "Test_Main.h"
-#include "mock_MemAlloc.h"
 
 // *** Constants ***
 #define FILO_SIZE 20

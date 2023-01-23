@@ -52,9 +52,6 @@ typedef struct _lcsf_raw_msg {
     lcsf_raw_att_t *pAttArray; // Pointer to the lcsf attribute header list
 } lcsf_raw_msg_t; // total : 12 bytes, 2 padding
 
-// Callback prototype
-typedef bool LCSFSendCallback(const uint8_t *pBuffer, size_t buffSize);
-
 // --- Public Constants ---
 // --- Public Variables ---
 // --- Public Function Prototypes ---
@@ -63,10 +60,9 @@ typedef bool LCSFSendCallback(const uint8_t *pBuffer, size_t buffSize);
  * \fn bool LCSF_TranscoderInit(LCSFSendCallback *pFnSendMsg)
  * \brief Initialize the module
  *
- * \param pFnSendMsg function pointer to send encoded lcsf messages
  * \return bool: true if operation was a success
  */
-bool LCSF_TranscoderInit(LCSFSendCallback *pFnSendMsg);
+bool LCSF_TranscoderInit(void);
 
 /**
  * \fn bool LCSF_TranscoderReceive(const uint8_t *pBuffer, size_t buffSize)
@@ -79,13 +75,15 @@ bool LCSF_TranscoderInit(LCSFSendCallback *pFnSendMsg);
 bool LCSF_TranscoderReceive(const uint8_t *pBuffer, size_t buffSize);
 
 /**
- * \fn bool LCSF_TranscoderSend(const lcsf_raw_msg_t *pMessage)
- * \brief Encode a raw lcsf message into a buffer and pass it to sender
+ * \fn int LCSF_TranscoderEncode(const lcsf_raw_msg_t *pMessage, uint8_t* pBuffer, size_t buffSize)
+ * \brief Encode a raw lcsf message into a buffer
  *
  * \param pMessage pointer to the raw lcsf message to encode
- * \return bool: true if operation was a success
+ * \param pBuffer pointer to the send buffer
+ * \param buffSize buffer size
+ * \return int: -1 if operation fail, encoded message size if success
  */
-bool LCSF_TranscoderSend(const lcsf_raw_msg_t *pMessage);
+int LCSF_TranscoderEncode(const lcsf_raw_msg_t *pMessage, uint8_t* pBuffer, size_t buffSize);
 
 // *** End Definitions ***
 #endif // _LCSF_Transcoder_h

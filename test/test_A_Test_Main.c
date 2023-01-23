@@ -4,7 +4,6 @@
 #include "unity.h"
 
 #include "Test_Main.h"
-#include "mock_MemAlloc.h"
 #include "mock_LCSF_Bridge_Test.h"
 
 // *** Constants ***

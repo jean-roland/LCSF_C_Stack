@@ -31,6 +31,13 @@
 // *** Definitions ***
 // --- Private Types ---
 
+// Error buffer size
+#ifdef LCSF_SMALL
+#define ERR_BUFF_SIZE 9
+#else
+#define ERR_BUFF_SIZE 16
+#endif
+
 // Lcsf error protocol (LCSF_EP) id
 #define LCSF_ERROR_PROTOCOL_ID 0xFFFF
 
@@ -78,12 +85,18 @@ typedef struct _lcsf_ep_cmd_error_desc {
 
 // Module information structure
 typedef struct _lcsf_validator_info {
-    uint8_t LastErrorType; // Contains the last error the module encountered
-    lcsf_ep_cmd_error_desc_t ReceivedErr; // Contains the last received lcsf error
     uint16_t ProtNb; // Number of protocol handled by the module
+    // Error values
+    uint8_t LastErrorType; // Contains the last error the module encountered
+    uint8_t Err_buff[ERR_BUFF_SIZE]; // Buffer to contain encoded error message
+    LCSFSendErrCallback_t *pFnSendErrCb; // Optional function pointer to send lcsf error messages
+    LCSFReceiveErrCallback_t *pFnRecErrCb; // Optional function pointer to receive lcsf error messages
+    // Filo values
+    uint8_t ReceiverFiloData[LCSF_VALIDATOR_RX_FILO_SIZE * sizeof(lcsf_raw_att_t)]; // Receiver filo data buffer
+    uint8_t SenderFiloData[LCSF_VALIDATOR_TX_FILO_SIZE * sizeof(lcsf_valid_att_t)]; // Sender filo data buffer
     filo_desc_t ReceiverFilo; // Structure ot the receiver filo
     filo_desc_t SenderFilo; // Structure of the sender filo
-    const lcsf_validator_protocol_desc_t **pProtArray; // Pointer to contain the module protocol array
+    const lcsf_validator_protocol_desc_t *pProtArray[LCSF_VALIDATOR_PROTOCOL_NB * sizeof(lcsf_validator_protocol_desc_t *)]; // Pointer to contain the module protocol array
 } lcsf_validator_info_t;
 
 // --- Private Constants ---
@@ -91,7 +104,7 @@ typedef struct _lcsf_validator_info {
 // Utility functions
 static bool LCSF_AllocateReceiverAttArray(uint_fast16_t attNb, lcsf_valid_att_t **pAttArray);
 static bool LCSF_AllocateSenderAttArray(uint_fast16_t attNb, lcsf_raw_att_t **pAttArray);
-static LCSFInterpretCallback *LCSF_GetCallback(uint_fast16_t protId);
+static LCSFInterpretCallback_t *LCSF_GetCallback(uint_fast16_t protId);
 static const lcsf_protocol_desc_t *LCSF_GetDescriptor(uint_fast16_t protId);
 // Table look up functions
 static bool LCSF_ValidateCmdId(uint_fast16_t cmdId, uint_fast16_t cmdNb, uint16_t *pCmdIdx, const lcsf_command_desc_t *pCmdDescArray);
@@ -105,7 +118,7 @@ static bool LCSF_ValidateAttribute(const lcsf_raw_msg_t *pMessage, const lcsf_co
 // Sender functions
 static bool LCSF_FillAttributeInfo(lcsf_raw_att_t *pRawAtt, uint_fast8_t descDataType, uint_fast16_t subAttNb, const lcsf_valid_att_t *pValidAtt);
 static bool LCSF_FillAttribute_Rec(uint_fast16_t descAttNb, const lcsf_attribute_desc_t *pAttDescArray, const lcsf_valid_att_t *pValidAttArray, lcsf_raw_att_t *pRawAttArray);
-static bool LCSF_FillAttributeArray(uint_fast16_t attNb, uint_fast16_t descAttNb, const lcsf_valid_att_t *pAttArray, const lcsf_command_desc_t *pCmdDesc, lcsf_raw_att_t **pRawAttArray);
+static bool LCSF_FillAttributeArray(uint_fast16_t attNb, const lcsf_valid_att_t *pAttArray, const lcsf_command_desc_t *pCmdDesc, lcsf_raw_att_t **pRawAttArray);
 // Lcsf error processing functions
 static bool LCSF_ValidatorSendError(uint_fast8_t errorLoc, uint_fast8_t errorType);
 static bool LCSF_ProcessReceivedError(const lcsf_raw_msg_t *pErrorMsg);
@@ -142,13 +155,13 @@ static bool LCSF_AllocateSenderAttArray(uint_fast16_t attNb, lcsf_raw_att_t **pA
 }
 
 /**
- * \fn static LCSFInterpretCallback *LCSF_GetCallback(uint_fast16_t protId)
+ * \fn static LCSFInterpretCallback_t *LCSF_GetCallback(uint_fast16_t protId)
  * \brief Return the corresponding protocol interpretor function
  *
  * \param protId protocol identifier
- * \return LCSFInterpretCallback *: Pointer to the interpretor callback (NULL if unknown protocol)
+ * \return LCSFInterpretCallback_t *: Pointer to the interpretor callback (NULL if unknown protocol)
  */
-static LCSFInterpretCallback *LCSF_GetCallback(uint_fast16_t protId) {
+static LCSFInterpretCallback_t *LCSF_GetCallback(uint_fast16_t protId) {
     for (uint8_t idx = 0; idx < LcsfValidatorInfo.ProtNb; idx++) {
         const lcsf_validator_protocol_desc_t *pProtocol = LcsfValidatorInfo.pProtArray[idx];
 
@@ -551,13 +564,12 @@ static bool LCSF_FillAttribute_Rec(uint_fast16_t descAttNb, const lcsf_attribute
  * \brief Fill a raw attribute array with data from a valid attribute array and a command descriptor
  *
  * \param attNb number of attributes of the command to send
- * \param descAttNb number of attributes in the descriptor array
  * \param pAttArray pointer to the attribute array to send
  * \param pCmdDesc pointer to the command descriptor
  * \param pRawAttArray pointer to contain the raw attributes array
  * \return bool: true if operation was a success
  */
-static bool LCSF_FillAttributeArray(uint_fast16_t attNb, uint_fast16_t descAttNb, const lcsf_valid_att_t *pAttArray, const lcsf_command_desc_t *pCmdDesc, lcsf_raw_att_t **pRawAttArray) {
+static bool LCSF_FillAttributeArray(uint_fast16_t attNb, const lcsf_valid_att_t *pAttArray, const lcsf_command_desc_t *pCmdDesc, lcsf_raw_att_t **pRawAttArray) {
 
     // Try to allocate the attribute list
     if (!LCSF_AllocateSenderAttArray(attNb, pRawAttArray)) {
@@ -573,9 +585,14 @@ static bool LCSF_FillAttributeArray(uint_fast16_t attNb, uint_fast16_t descAttNb
  *
  * \param errorLoc location of the error encountered
  * \param errorType type of the error encountered
- * \return bool: true if operation was a success
+ * \return bool: true if operation successful
  */
 static bool LCSF_ValidatorSendError(uint_fast8_t errorLoc, uint_fast8_t errorType) {
+    // Check if we can send it
+    if (LcsfValidatorInfo.pFnSendErrCb == NULL) {
+        DEBUG_PRINT("[LCSF_Validator]: Sending error but missing callback\n");
+        return false;
+    }
     lcsf_raw_msg_t errorMsg;
     lcsf_raw_att_t msgAttArray[LCSF_EP_CMD_ERROR_ATT_NB];
     uint8_t errorLocVal = errorLoc;
@@ -595,12 +612,16 @@ static bool LCSF_ValidatorSendError(uint_fast8_t errorLoc, uint_fast8_t errorTyp
     msgAttArray[1].PayloadSize = LCSF_EP_CMD_ERROR_ATT_ERR_TYPE_SIZE;
     msgAttArray[1].HasSubAtt = false;
     msgAttArray[1].Payload.pData = &errorTypeVal;
-    // Log error message
-#ifdef LCSF_LOG_ERROR
-    LOG_ERROR("[LCSF] Sending error, location: %d, type: %d\n", errorLoc, errorType);
-#endif
-    // Send the message to transcoder
-    return LCSF_TranscoderSend(&errorMsg);
+    // Encode the message with transcoder
+    int msgSize = LCSF_TranscoderEncode(&errorMsg, LcsfValidatorInfo.Err_buff, ERR_BUFF_SIZE);
+    if (msgSize < 0) {
+        DEBUG_PRINT("[LCSF_Validator]: Encoding lcsf error messages failed.\n");
+        return false;
+    }
+    // Send error message
+    DEBUG_PRINT("[LCSF_Validator]: Sending error, location: %d, type: %d\n", errorLoc, errorType);
+    LcsfValidatorInfo.pFnSendErrCb(LcsfValidatorInfo.Err_buff, msgSize);
+    return true;
 }
 
 /**
@@ -611,6 +632,11 @@ static bool LCSF_ValidatorSendError(uint_fast8_t errorLoc, uint_fast8_t errorTyp
  * \return bool: true if operation was a success
  */
 static bool LCSF_ProcessReceivedError(const lcsf_raw_msg_t *pErrorMsg) {
+    // Check if we can notify the error
+    if (LcsfValidatorInfo.pFnRecErrCb == NULL) {
+        DEBUG_PRINT("[LCSF_Validator]: Received error but missing callback\n");
+        return false;
+    }
     // Validate message attribute number
     if (pErrorMsg->AttNb != LCSF_EP_CMD_ERROR_ATT_NB) {
         return false;
@@ -620,13 +646,11 @@ static bool LCSF_ProcessReceivedError(const lcsf_raw_msg_t *pErrorMsg) {
         return false;
     }
     // Save error message information
-    LcsfValidatorInfo.ReceivedErr.HasError = true;
-    LcsfValidatorInfo.ReceivedErr.ErrorLoc = *(pErrorMsg->pAttArray[0].Payload.pData);
-    LcsfValidatorInfo.ReceivedErr.ErrorType = *(pErrorMsg->pAttArray[1].Payload.pData);
-    // Log error message
-#ifdef LCSF_LOG_ERROR
-    LOG_ERROR("[LCSF] Received error, location: %d, type: %d\n", LcsfValidatorInfo.ReceivedErr.ErrorLoc, LcsfValidatorInfo.ReceivedErr.ErrorType);
-#endif
+    uint_fast8_t errorLoc = *(pErrorMsg->pAttArray[0].Payload.pData);
+    uint_fast8_t errorType = *(pErrorMsg->pAttArray[1].Payload.pData);
+    // Notify the error
+    DEBUG_PRINT("[LCSF_Validator]: Received error, location: %d, type: %d\n", errorLoc, errorType);
+    LcsfValidatorInfo.pFnRecErrCb(errorLoc, errorType);
     return true;
 }
 
@@ -635,7 +659,7 @@ static bool LCSF_ProcessReceivedError(const lcsf_raw_msg_t *pErrorMsg) {
  * \brief Send an LCSF transcoder error message, should only be used by LCSF_Transcoder.
  *
  * \param errorType error code to send
- * \return bool: true if operation was a success
+ * \return bool: true if operation successful
  */
 bool LCSF_ValidatorSendTranscoderError(uint_fast8_t errorType) {
     return LCSF_ValidatorSendError(LCSF_EP_ERROR_LOC_DECODE_ERROR, errorType);
@@ -643,15 +667,19 @@ bool LCSF_ValidatorSendTranscoderError(uint_fast8_t errorType) {
 
 // *** Public Functions ***
 
-bool LCSF_ValidatorInit(uint_fast16_t protNb) {
-    // Note protocol number
-    LcsfValidatorInfo.ProtNb = protNb;
-    // Allocate structures
-    LcsfValidatorInfo.pProtArray = MEM_ALLOC((uint32_t)(protNb * sizeof(lcsf_validator_protocol_desc_t *)));
-    FiloInit(&LcsfValidatorInfo.SenderFilo, LCSF_VALIDATOR_TX_FILO_SIZE, sizeof(lcsf_valid_att_t));
-    FiloInit(&LcsfValidatorInfo.ReceiverFilo, LCSF_VALIDATOR_RX_FILO_SIZE, sizeof(lcsf_raw_att_t));
+bool LCSF_ValidatorInit(LCSFSendErrCallback_t *pFnSendErrCb, LCSFReceiveErrCallback_t *pFnRecErrCb) {
+    // Note callbacks
+    if (pFnSendErrCb != NULL) {
+        LcsfValidatorInfo.pFnSendErrCb = pFnSendErrCb;
+    }
+    if (pFnRecErrCb != NULL) {
+        LcsfValidatorInfo.pFnRecErrCb = pFnRecErrCb;
+    }
+    // Initialize structures
+    FiloInit(&LcsfValidatorInfo.SenderFilo, LcsfValidatorInfo.SenderFiloData, LCSF_VALIDATOR_TX_FILO_SIZE, sizeof(lcsf_valid_att_t));
+    FiloInit(&LcsfValidatorInfo.ReceiverFilo, LcsfValidatorInfo.ReceiverFiloData, LCSF_VALIDATOR_RX_FILO_SIZE, sizeof(lcsf_raw_att_t));
     // Initialize variables
-    LcsfValidatorInfo.ReceivedErr.HasError = false;
+    LcsfValidatorInfo.ProtNb = LCSF_VALIDATOR_PROTOCOL_NB;
     return true;
 }
 
@@ -664,18 +692,6 @@ bool LCSF_ValidatorAddProtocol(uint_fast16_t protIdx, const lcsf_validator_proto
     }
 }
 
-bool LCSF_ValidatorTakeReceivedError(uint8_t *pErrLoc, uint8_t *pErrType) {
-    if ((pErrLoc == NULL) || (pErrType == NULL) || (!LcsfValidatorInfo.ReceivedErr.HasError)) {
-        return false;
-    }
-    // Note values
-    *pErrLoc = LcsfValidatorInfo.ReceivedErr.ErrorLoc;
-    *pErrType = LcsfValidatorInfo.ReceivedErr.ErrorType;
-    // Clear error status
-    LcsfValidatorInfo.ReceivedErr.HasError = false;
-    return true;
-}
-
 bool LCSF_ValidatorReceive(const lcsf_raw_msg_t *pMessage) {
 
     if (pMessage == NULL) {
@@ -686,11 +702,12 @@ bool LCSF_ValidatorReceive(const lcsf_raw_msg_t *pMessage) {
         return LCSF_ProcessReceivedError(pMessage);
     }
     // Retrieve protocol descriptor and callback
-    LCSFInterpretCallback *pFnInterpreter = LCSF_GetCallback(pMessage->ProtId);
+    LCSFInterpretCallback_t *pFnInterpreter = LCSF_GetCallback(pMessage->ProtId);
     const lcsf_protocol_desc_t *pProtDesc = LCSF_GetDescriptor(pMessage->ProtId);
     // Check if protocol id is valid
     if ((pProtDesc == NULL) || (pFnInterpreter == NULL)) {
-        return LCSF_ValidatorSendError(LCSF_EP_ERROR_LOC_VALIDATION_ERROR, LCSF_EP_ERROR_CODE_UNKNOWN_PROT_ID);
+        LCSF_ValidatorSendError(LCSF_EP_ERROR_LOC_VALIDATION_ERROR, LCSF_EP_ERROR_CODE_UNKNOWN_PROT_ID);
+        return false;
     }
     // Variables initialization
     uint16_t descCmdIdx = 0;
@@ -699,27 +716,29 @@ bool LCSF_ValidatorReceive(const lcsf_raw_msg_t *pMessage) {
     memset(&validMsg, 0, sizeof(lcsf_valid_cmd_t));
     // Check if command id is valid
     if (!LCSF_ValidateCmdId(pMessage->CmdId, pProtDesc->CmdNb, &descCmdIdx, pProtDesc->pCmdDescArray)) {
-        return LCSF_ValidatorSendError(LCSF_EP_ERROR_LOC_VALIDATION_ERROR, LCSF_EP_ERROR_CODE_UNKNOWN_CMD_ID);
+        LCSF_ValidatorSendError(LCSF_EP_ERROR_LOC_VALIDATION_ERROR, LCSF_EP_ERROR_CODE_UNKNOWN_CMD_ID);
+        return false;
     }
     // Validate the command id
     validMsg.CmdId = pMessage->CmdId;
     // Check if command attributes are valid
     if (!LCSF_ValidateAttribute(pMessage, &(pProtDesc->pCmdDescArray[descCmdIdx]), &(validMsg.pAttArray))) {
-        return LCSF_ValidatorSendError(LCSF_EP_ERROR_LOC_VALIDATION_ERROR, LcsfValidatorInfo.LastErrorType);
+        LCSF_ValidatorSendError(LCSF_EP_ERROR_LOC_VALIDATION_ERROR, LcsfValidatorInfo.LastErrorType);
+        return false;
     }
     // Send validated message to interpreter function
     return pFnInterpreter(&validMsg);
 }
 
-bool LCSF_ValidatorSend(uint_fast16_t protId, const lcsf_valid_cmd_t *pCommand) {
+int LCSF_ValidatorEncode(uint_fast16_t protId, const lcsf_valid_cmd_t *pCommand, uint8_t *pBuffer, size_t buffSize) {
 
     if (pCommand == NULL) {
-        return false;
+        return -1;
     }
     // Retrieve protocol description
     const lcsf_protocol_desc_t *pProtDesc = LCSF_GetDescriptor(protId);
     if (pProtDesc == NULL) {
-        return false;
+        return -1;
     }
     // Variables initialization
     uint16_t cmdIdx = 0;
@@ -730,7 +749,7 @@ bool LCSF_ValidatorSend(uint_fast16_t protId, const lcsf_valid_cmd_t *pCommand) 
     sendMsg.ProtId = protId;
     // Validate command id
     if (!LCSF_ValidateCmdId(pCommand->CmdId, pProtDesc->CmdNb, &cmdIdx, pProtDesc->pCmdDescArray)) {
-        return false;
+        return -1;
     }
     // Intermediary variable
     const lcsf_command_desc_t *pCurrCmdDesc = &(pProtDesc->pCmdDescArray[cmdIdx]);
@@ -742,18 +761,18 @@ bool LCSF_ValidatorSend(uint_fast16_t protId, const lcsf_valid_cmd_t *pCommand) 
     if (sendMsg.AttNb == 0) {
         if (LCSF_HasNonOptionalAttribute(pCurrCmdDesc->AttNb, pCurrCmdDesc->pAttDescArray)) {
             // Attributes are missing
-            return false;
+            return -1;
         }
         // No attributes needed, send the message
-        return LCSF_TranscoderSend(&sendMsg);
+        return LCSF_TranscoderEncode(&sendMsg, pBuffer, buffSize);
     } else if (sendMsg.AttNb > pCurrCmdDesc->AttNb) {
         // Too many attributes
-        return false;
+        return -1;
     }
     // Fill message attributes array
-    if (!LCSF_FillAttributeArray(sendMsg.AttNb, pCurrCmdDesc->AttNb, pCommand->pAttArray, pCurrCmdDesc, &(sendMsg.pAttArray))) {
-        return false;
+    if (!LCSF_FillAttributeArray(sendMsg.AttNb, pCommand->pAttArray, pCurrCmdDesc, &(sendMsg.pAttArray))) {
+        return -1;
     }
-    // Send message
-    return LCSF_TranscoderSend(&sendMsg);
+    // Pass message to transcoder
+    return LCSF_TranscoderEncode(&sendMsg, pBuffer, buffSize);
 }

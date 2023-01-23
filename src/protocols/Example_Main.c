@@ -28,23 +28,26 @@
 #include "Example_Main.h"
 
 // *** Definitions ***
+// --- Private Macros ---
+#define SEND_BUFF_SIZE 255
+
 // --- Private Types ---
 
 enum _example_error_code_enum {
-    EXAMPLE_ERROR_INVALID_JMP_ADDR,
+    EXAMPLE_ERROR_INVALID_JMP_ADDR = 0,
     EXAMPLE_ERROR_INVALID_COLOR,
     EXAMPLE_ERROR_WRONG_CMD,
 };
 
 typedef struct _example_info {
+    uint8_t sendBuffer[SEND_BUFF_SIZE];
     const example_init_desc_t *pInitDesc;
-    example_cmd_payload_t *pSendCmdPayload;
+    example_cmd_payload_t SendCmdPayload;
 } example_info_t;
 
-// --- Private Constants ---
 // --- Private Function Prototypes ---
 static bool Example_MainCheckAddrValidity(uintptr_t addr);
-static bool Example_MainSendError(int_fast8_t errorCode);
+static bool Example_MainSendError(uint_fast8_t errorCode);
 static bool Example_MainSendAck(void);
 static bool Example_MainSendCommand(uint_fast16_t cmdName, bool hasPayload);
 static bool Example_MainExecutePING(void);
@@ -77,14 +80,14 @@ static bool Example_MainCheckAddrValidity(uintptr_t addr) {
 }
 
 /**
- * \fn static bool Example_MainSendError(int_fast8_t errorCode)
+ * \fn static bool Example_MainSendError(uint_fast8_t errorCode)
  * \brief Send an example error command
  *
  * \param errorCode error code to send
  * \return bool: true if operation was a success
  */
-static bool Example_MainSendError(int_fast8_t errorCode) {
-    ExampleInfo.pSendCmdPayload->error_payload.error_code = errorCode;
+static bool Example_MainSendError(uint_fast8_t errorCode) {
+    ExampleInfo.SendCmdPayload.error_payload.error_code = errorCode;
     return Example_MainSendCommand(EXAMPLE_CMD_ERROR, true);
 }
 
@@ -111,12 +114,18 @@ static bool Example_MainSendCommand(uint_fast16_t cmdName, bool hasPayload) {
     if (cmdName >= EXAMPLE_CMD_COUNT) {
         return false;
     }
+    int msgSize = 0;
     if (hasPayload) {
-        example_cmd_payload_t *pCmdPayload = ExampleInfo.pSendCmdPayload;
-        return LCSF_Bridge_ExampleSend(cmdName, pCmdPayload);
+        example_cmd_payload_t *pCmdPayload = &ExampleInfo.SendCmdPayload;
+        msgSize = LCSF_Bridge_ExampleEncode(cmdName, pCmdPayload, ExampleInfo.sendBuffer, SEND_BUFF_SIZE);
     } else {
-        return LCSF_Bridge_ExampleSend(cmdName, NULL);
+        msgSize = LCSF_Bridge_ExampleEncode(cmdName, NULL, ExampleInfo.sendBuffer, SEND_BUFF_SIZE);
     }
+    if (msgSize <= 0) {
+        return false;
+    }
+    // TODO Pass buffer to send function e.g: return DummySend(ExampleInfo.sendBuffer, (size_t)msgSize);
+    return true;
 }
 
 /**
@@ -172,7 +181,7 @@ static bool Example_MainExecuteCOLOR_SPACE(example_cmd_payload_t *pCmdPayload) {
         return false;
     }
     // Initialize payload
-    memset(ExampleInfo.pSendCmdPayload, 0, sizeof(example_cmd_payload_t));
+    memset(&ExampleInfo.SendCmdPayload, 0, sizeof(example_cmd_payload_t));
 
     if ((pCmdPayload->color_space_payload.optAttFlagsBitfield & EXAMPLE_COLOR_SPACE_ATT_YUV_FLAG) != 0) {
         uint16_t m_y = pCmdPayload->color_space_payload.yuv_payload.y;
@@ -180,10 +189,10 @@ static bool Example_MainExecuteCOLOR_SPACE(example_cmd_payload_t *pCmdPayload) {
         uint16_t m_v = pCmdPayload->color_space_payload.yuv_payload.v;
 
         if ((m_y + m_u + m_v) <= 1023) {
-            ExampleInfo.pSendCmdPayload->color_space_payload.optAttFlagsBitfield |= EXAMPLE_COLOR_SPACE_ATT_YUV_FLAG;
-            ExampleInfo.pSendCmdPayload->color_space_payload.yuv_payload.y = m_y;
-            ExampleInfo.pSendCmdPayload->color_space_payload.yuv_payload.u = m_u;
-            ExampleInfo.pSendCmdPayload->color_space_payload.yuv_payload.v = m_v;
+            ExampleInfo.SendCmdPayload.color_space_payload.optAttFlagsBitfield |= EXAMPLE_COLOR_SPACE_ATT_YUV_FLAG;
+            ExampleInfo.SendCmdPayload.color_space_payload.yuv_payload.y = m_y;
+            ExampleInfo.SendCmdPayload.color_space_payload.yuv_payload.u = m_u;
+            ExampleInfo.SendCmdPayload.color_space_payload.yuv_payload.v = m_v;
             return Example_MainSendCommand(EXAMPLE_CMD_COLOR_SPACE, true);
         } else {
             return Example_MainSendError(EXAMPLE_ERROR_INVALID_COLOR);
@@ -195,10 +204,10 @@ static bool Example_MainExecuteCOLOR_SPACE(example_cmd_payload_t *pCmdPayload) {
         uint16_t m_b = pCmdPayload->color_space_payload.rgb_payload.b;
 
         if ((m_r + m_g + m_b) <= 1023) {
-            ExampleInfo.pSendCmdPayload->color_space_payload.optAttFlagsBitfield |= EXAMPLE_COLOR_SPACE_ATT_RGB_FLAG;
-            ExampleInfo.pSendCmdPayload->color_space_payload.rgb_payload.r = m_r;
-            ExampleInfo.pSendCmdPayload->color_space_payload.rgb_payload.g = m_g;
-            ExampleInfo.pSendCmdPayload->color_space_payload.rgb_payload.b = m_b;
+            ExampleInfo.SendCmdPayload.color_space_payload.optAttFlagsBitfield |= EXAMPLE_COLOR_SPACE_ATT_RGB_FLAG;
+            ExampleInfo.SendCmdPayload.color_space_payload.rgb_payload.r = m_r;
+            ExampleInfo.SendCmdPayload.color_space_payload.rgb_payload.g = m_g;
+            ExampleInfo.SendCmdPayload.color_space_payload.rgb_payload.b = m_b;
             return Example_MainSendCommand(EXAMPLE_CMD_COLOR_SPACE, true);
         } else {
             return Example_MainSendError(EXAMPLE_ERROR_INVALID_COLOR);
@@ -211,7 +220,6 @@ static bool Example_MainExecuteCOLOR_SPACE(example_cmd_payload_t *pCmdPayload) {
 
 bool Example_MainInit(const example_init_desc_t * pInitDesc) {
     ExampleInfo.pInitDesc = pInitDesc;
-    ExampleInfo.pSendCmdPayload = (example_cmd_payload_t *)MEM_ALLOC(sizeof(example_cmd_payload_t));
     return true;
 }
 

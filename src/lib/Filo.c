@@ -39,13 +39,15 @@
 
 // *** Public Functions ***
 
-bool FiloInit(filo_desc_t *pFilo, size_t itemNb, size_t itemSize) {
+bool FiloInit(filo_desc_t *pFilo, void *pData, size_t itemNb, size_t itemSize) {
     if (pFilo == NULL) {
         return false;
     }
-    // Filo data array allocation
-    pFilo->pDataArray = MEM_ALLOC(itemNb * itemSize);
+    if (pData == NULL) {
+        return false;
+    }
     // Filo Initialization
+    pFilo->pDataArray = pData;
     pFilo->ItemSize = itemSize;
     pFilo->ItemNb = itemNb;
     pFilo->FreeItemNb = itemNb;
