@@ -444,9 +444,9 @@ TEST_GROUP(B_Test_Fullstack) {
  */
 TEST(B_Test_Fullstack, valid) {
 #ifdef LCSF_SMALL
-    printf("Smaller LCSF representation is in use.\n");
+    DEBUG_PRINT("Smaller LCSF representation is in use.\n");
 #else
-    printf("Regular LCSF representation is in use.\n");
+    DEBUG_PRINT("Regular LCSF representation is in use.\n");
 #endif
     // Test function bad command cases
     CHECK(LCSF_TranscoderReceive(sc2_msg, sizeof(sc2_msg)));

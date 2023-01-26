@@ -157,84 +157,84 @@ static uint8_t pattern[ARRAY_SIZE] = {0x12,0x34,0x56,0x78,0x89};
  */
 static bool compare_payload_cc2(const test_cc2_att_payload_t *p1, const test_cc2_att_payload_t *p2) {
     if ((p1 == NULL) || (p2 == NULL)) {
-        printf("Received a null pointer !\n");
+        DEBUG_PRINT("Received a null pointer !\n");
         return false;
     }
     if (p1->optAttFlagsBitfield != p2->optAttFlagsBitfield) {
-        printf("CC2: Different flag bitfield: %d, %d\n", p1->optAttFlagsBitfield, p2->optAttFlagsBitfield);
+        DEBUG_PRINT("CC2: Different flag bitfield: %d, %d\n", p1->optAttFlagsBitfield, p2->optAttFlagsBitfield);
         return false;
     }
     if (p1->sa1 != p2->sa1) {
-        printf("CC2: Different SA1: %d, %d\n", p1->sa1, p2->sa1);
+        DEBUG_PRINT("CC2: Different SA1: %d, %d\n", p1->sa1, p2->sa1);
         return false;
     }
     if (p1->sa2 != p2->sa2) {
-        printf("CC2: Different SA2: %d, %d\n", p1->sa2, p2->sa2);
+        DEBUG_PRINT("CC2: Different SA2: %d, %d\n", p1->sa2, p2->sa2);
         return false;
     }
     if (p1->sa3 != p2->sa3) {
-        printf("CC2: Different SA3: %d, %d\n", p1->sa3, p2->sa3);
+        DEBUG_PRINT("CC2: Different SA3: %d, %d\n", p1->sa3, p2->sa3);
         return false;
     }
     if (p1->sa4Size != p2->sa4Size) {
-        printf("CC2: Different SA4 size: %d, %d\n", p1->sa4Size, p2->sa4Size);
+        DEBUG_PRINT("CC2: Different SA4 size: %d, %d\n", p1->sa4Size, p2->sa4Size);
         return false;
     }
     if ((p1->p_sa4 == NULL) || (p2->p_sa4 == NULL)) {
-        printf("CC2: Missing SA4\n");
+        DEBUG_PRINT("CC2: Missing SA4\n");
         return false;
     }
     if (memcmp(p1->p_sa4, p2->p_sa4, p1->sa4Size) != 0) {
-        printf("CC2: Different SA4\n");
+        DEBUG_PRINT("CC2: Different SA4\n");
         return false;
     }
     if ((p1->p_sa5 == NULL) || (p2->p_sa5 == NULL)) {
-        printf("CC2: Missing SA5\n");
+        DEBUG_PRINT("CC2: Missing SA5\n");
         return false;
     }
     if (strcmp(p1->p_sa5, p2->p_sa5) != 0) {
-        printf("CC2: Different SA5\n");
+        DEBUG_PRINT("CC2: Different SA5\n");
         return false;
     }
     if ((p1->optAttFlagsBitfield & TEST_CC2_ATT_SA6_FLAG) != 0) {
         if (p1->sa6 != p2->sa6) {
-            printf("CC2: Different SA6: %d, %d\n", p1->sa6, p2->sa6);
+            DEBUG_PRINT("CC2: Different SA6: %d, %d\n", p1->sa6, p2->sa6);
             return false;
         }
     }
     if ((p1->optAttFlagsBitfield & TEST_CC2_ATT_SA7_FLAG) != 0) {
         if (p1->sa7 != p2->sa7) {
-            printf("CC2: Different SA7: %d, %d\n", p1->sa7, p2->sa7);
+            DEBUG_PRINT("CC2: Different SA7: %d, %d\n", p1->sa7, p2->sa7);
             return false;
         }
     }
     if ((p1->optAttFlagsBitfield & TEST_CC2_ATT_SA8_FLAG) != 0) {
         if (p1->sa8 != p2->sa8) {
-            printf("CC2: Different SA8: %d, %d\n", p1->sa8, p2->sa8);
+            DEBUG_PRINT("CC2: Different SA8: %d, %d\n", p1->sa8, p2->sa8);
             return false;
         }
     }
     if ((p1->optAttFlagsBitfield & TEST_CC2_ATT_SA9_FLAG) != 0) {
         if (p1->sa9Size != p2->sa9Size) {
-            printf("CC2: Different SA9 size: %d, %d\n", p1->sa9Size, p2->sa9Size);
+            DEBUG_PRINT("CC2: Different SA9 size: %d, %d\n", p1->sa9Size, p2->sa9Size);
             return false;
         }
         if ((p1->p_sa9 == NULL) || (p2->p_sa9 == NULL)) {
-            printf("CC2: Missing SA9\n");
+            DEBUG_PRINT("CC2: Missing SA9\n");
             return false;
         }
         if (memcmp(p1->p_sa9, p2->p_sa9, p1->sa9Size) != 0) {
-            printf("CC2: Different SA9\n");
+            DEBUG_PRINT("CC2: Different SA9\n");
             return false;
         }
     }
     if ((p1->optAttFlagsBitfield & TEST_CC2_ATT_SA10_FLAG) != 0) {
         if ((p1->p_sa10 == NULL) || (p2->p_sa10 == NULL)) {
-            printf("CC2: Missing SA10\n");
+            DEBUG_PRINT("CC2: Missing SA10\n");
             return false;
         }
         if (strcmp(p1->p_sa10, p2->p_sa10) != 0) {
-            printf("CC2: Different SA10\n");
+            DEBUG_PRINT("CC2: Different SA10\n");
             return false;
         }
     }
@@ -251,31 +251,31 @@ static bool compare_payload_cc2(const test_cc2_att_payload_t *p1, const test_cc2
  */
 static bool compare_payload_cc5(const test_cc5_att_payload_t *p1, const test_cc5_att_payload_t *p2) {
     if ((p1 == NULL) || (p2 == NULL)) {
-        printf("Received a null pointer !\n");
+        DEBUG_PRINT("Received a null pointer !\n");
         return false;
     }
     if (p1->optAttFlagsBitfield != p2->optAttFlagsBitfield) {
-        printf("CC5: Different flag bitfield: %d, %d\n", p1->optAttFlagsBitfield, p2->optAttFlagsBitfield);
+        DEBUG_PRINT("CC5: Different flag bitfield: %d, %d\n", p1->optAttFlagsBitfield, p2->optAttFlagsBitfield);
         return false;
     }
     if (p1->sa2 != p2->sa2) {
-        printf("CC5: Different SA2: %d, %d\n", p1->sa2, p2->sa2);
+        DEBUG_PRINT("CC5: Different SA2: %d, %d\n", p1->sa2, p2->sa2);
         return false;
     }
     // CA5
     const test_cc5_att_ca5_att_payload_t *pca5_a = &p1->ca5_payload;
     const test_cc5_att_ca5_att_payload_t *pca5_b = &p2->ca5_payload;
     if (pca5_a->sa1 != pca5_b->sa1) {
-        printf("CC5_CA5: Different SA1: %d, %d\n", pca5_a->sa1, pca5_b->sa1);
+        DEBUG_PRINT("CC5_CA5: Different SA1: %d, %d\n", pca5_a->sa1, pca5_b->sa1);
         return false;
     }
     if (pca5_a->sa2 != pca5_b->sa2) {
-        printf("CC5_CA5: Different SA2: %d, %d\n", pca5_a->sa2, pca5_b->sa2);
+        DEBUG_PRINT("CC5_CA5: Different SA2: %d, %d\n", pca5_a->sa2, pca5_b->sa2);
         return false;
     }
     if ((pca5_a->optAttFlagsBitfield & TEST_CA5_ATT_SA3_FLAG) != 0) {
         if (pca5_a->sa3 != pca5_b->sa3) {
-            printf("CC5_CA5: Different SA3: %d, %d\n", pca5_a->sa3, pca5_b->sa3);
+            DEBUG_PRINT("CC5_CA5: Different SA3: %d, %d\n", pca5_a->sa3, pca5_b->sa3);
             return false;
         }
     }
@@ -286,7 +286,7 @@ static bool compare_payload_cc5(const test_cc5_att_payload_t *p1, const test_cc5
 
         if ((pca6_a->optAttFlagsBitfield & TEST_CA6_ATT_SA1_FLAG) != 0) {
             if (pca6_a->sa1 != pca6_b->sa1) {
-                printf("CC5_CA6: Different SA1: %d, %d\n", pca6_a->sa1, pca6_b->sa1);
+                DEBUG_PRINT("CC5_CA6: Different SA1: %d, %d\n", pca6_a->sa1, pca6_b->sa1);
                 return false;
             }
         }
@@ -296,7 +296,7 @@ static bool compare_payload_cc5(const test_cc5_att_payload_t *p1, const test_cc5
 
         if ((pca7_a->optAttFlagsBitfield & TEST_CA7_ATT_SA1_FLAG) != 0) {
             if (pca7_a->sa1 != pca7_b->sa1) {
-                printf("CC5_CA7: Different SA1: %d, %d\n", pca7_a->sa1, pca7_b->sa1);
+                DEBUG_PRINT("CC5_CA7: Different SA1: %d, %d\n", pca7_a->sa1, pca7_b->sa1);
                 return false;
             }
         }
@@ -305,15 +305,15 @@ static bool compare_payload_cc5(const test_cc5_att_payload_t *p1, const test_cc5
         const test_ca7_att_ca8_att_payload_t *pca8_b = &pca7_b->ca8_payload;
 
         if (pca8_a->sa4Size != pca8_b->sa4Size) {
-            printf("CC5_CA8: Different SA4 size: %d, %d\n", pca8_a->sa4Size, pca8_b->sa4Size);
+            DEBUG_PRINT("CC5_CA8: Different SA4 size: %d, %d\n", pca8_a->sa4Size, pca8_b->sa4Size);
             return false;
         }
         if ((pca8_a->p_sa4 == NULL) || (pca8_b->p_sa4 == NULL)) {
-            printf("CC5_CA8: Missing SA4\n");
+            DEBUG_PRINT("CC5_CA8: Missing SA4\n");
             return false;
         }
         if (memcmp(pca8_a->p_sa4, pca8_b->p_sa4, pca8_a->sa4Size) != 0) {
-            printf("CC5_CA8: Different SA4\n");
+            DEBUG_PRINT("CC5_CA8: Different SA4\n");
             return false;
         }
     }
@@ -406,7 +406,6 @@ TEST(B_Test_Main, execute) {
     ExpectEncode(TEST_CMD_SC2, false);
     CHECK(Test_MainExecute(TEST_CMD_COUNT, NULL));
     // Test valid cases
-    printf("Pouet2\n");
     ExpectEncode(TEST_CMD_SC2, false);
     CHECK(Test_MainExecute(TEST_CMD_SC1, NULL));
     ExpectEncode(TEST_CMD_CC2, false);
