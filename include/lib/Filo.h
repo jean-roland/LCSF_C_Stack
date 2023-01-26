@@ -30,12 +30,14 @@
 
 // *** Definitions ***
 // --- Public Types ---
+
+/** Filo descriptor structure */
 typedef struct _filo_desc {
-    void *pDataArray; // Pointer to the filo data array
-    uint32_t ItemSize; // Size of the filo item
-    uint32_t ItemNb; // Number of filo items
-    uint32_t FreeItemNb; // Number of free filo space (item number)
-} filo_desc_t;
+    void *pDataArray; /**< Pointer to the filo data array */
+    uint32_t ItemSize; /**< Size of the filo item */
+    uint32_t ItemNb; /**< Number of filo items */
+    uint32_t FreeItemNb; /**< Number of free filo space (item number) */
+} filo_desc_t; // total: 16 bytes, 0 padding
 
 // --- Public Constants ---
 // --- Public Variables ---

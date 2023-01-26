@@ -33,23 +33,26 @@
 // Forward declaration to resolve cross referencing
 typedef struct _lcsf_raw_att lcsf_raw_att_t;
 
+/** Lcsf raw attribute payload union */
 typedef union _lcsf_raw_att_payload {
-    uint8_t *pData; // Pointer to data
-    lcsf_raw_att_t *pSubAttArray; // Pointer to lcsf sub attribute header list
+    uint8_t *pData; /**< Pointer to data */
+    lcsf_raw_att_t *pSubAttArray; /**< Pointer to lcsf sub attribute header list */
 } lcsf_raw_att_payload_t; // total : 4 bytes, 0 padding
 
+/** Lcsf raw attribute structure */
 struct _lcsf_raw_att {
-    uint16_t AttId:15; // Lcsf attribute id
-    uint16_t HasSubAtt:1; // Indicates if the attribute has sub attributes or data
-    uint16_t PayloadSize; // Data size (bytes) or lcsf sub attribute number
+    uint16_t AttId:15; /**< Lcsf attribute id */
+    uint16_t HasSubAtt:1; /**< Indicates if the attribute has sub attributes or data */
+    uint16_t PayloadSize; /**< Data size (bytes) or lcsf sub attribute number */
     lcsf_raw_att_payload_t Payload; // See lcsf_att_field_t
 }; // total : 8 bytes, 0 padding
 
+/** Lcsf raw message structure */
 typedef struct _lcsf_raw_msg {
-    uint16_t ProtId; // Protocol id
-    uint16_t CmdId; // Command id
-    uint16_t AttNb; // Number of attributes
-    lcsf_raw_att_t *pAttArray; // Pointer to the lcsf attribute header list
+    uint16_t ProtId; /**< Protocol id */
+    uint16_t CmdId; /**< Command id */
+    uint16_t AttNb; /**< Number of attributes */
+    lcsf_raw_att_t *pAttArray; /**< Pointer to the lcsf attribute header list */
 } lcsf_raw_msg_t; // total : 12 bytes, 2 padding
 
 // --- Public Constants ---
