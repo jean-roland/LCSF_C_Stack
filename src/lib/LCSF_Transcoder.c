@@ -23,7 +23,7 @@
 // Standard lib
 #include <string.h>
 // Custom lib
-#include <LCSF_config.h>
+#include <LCSF_Config.h>
 #include <Filo.h>
 #include <LCSF_Transcoder.h>
 #include <LCSF_Validator.h>
@@ -390,15 +390,14 @@ static bool LCSF_FillAttHeader(uint16_t *pBuffIdx, uint8_t *pBuffer, size_t buff
  */
 static bool LCSF_FillAttData(uint16_t *pBuffIdx, uint8_t *pBuffer, size_t buffSize, const lcsf_raw_att_t *pAtt) {
     // Guard against buffer overflow
-    if (pAtt->PayloadSize < (buffSize - *pBuffIdx)) {
-        // Copy data into the buffer
-        memcpy(&(pBuffer[*pBuffIdx]), pAtt->Payload.pData, pAtt->PayloadSize);
-        // Increment buffer index
-        *pBuffIdx += pAtt->PayloadSize;
-        return true;
-    } else {
+    if (pAtt->PayloadSize > (buffSize - *pBuffIdx)) {
         return false;
     }
+    // Copy data into the buffer
+    memcpy(&(pBuffer[*pBuffIdx]), pAtt->Payload.pData, pAtt->PayloadSize);
+    // Increment buffer index
+    *pBuffIdx += pAtt->PayloadSize;
+    return true;
 }
 
 /**
@@ -421,13 +420,13 @@ static bool LCSF_EncodeAtt_Rec(uint16_t *pBuffIdx, uint8_t *pBuffer, size_t buff
         }
         // Fill attribute header
         if (!LCSF_FillAttHeader(pBuffIdx, pBuffer, buffSize, &(pAttArray[attIdx]))) {
-             return false;
+            return false;
         }
         // Test if attribute has sub-attributes
         if (pAttArray[attIdx].HasSubAtt) {
             // Encode current attribute sub-attribute array
             if (!LCSF_EncodeAtt_Rec(pBuffIdx, pBuffer, buffSize, pAttArray[attIdx].PayloadSize, pAttArray[attIdx].Payload.pSubAttArray)) {
-	             return false;
+                return false;
 	         }
         } else {
             // Copy data into the buffer
@@ -467,8 +466,7 @@ static bool LCSF_EncodeBuffer(uint16_t *pBuffIdx, uint8_t *pBuffer, size_t buffS
 
 bool LCSF_TranscoderInit(void) {
     // Filo creation
-    FiloInit(&LcsfTranscoderInfo.DecoderFilo, LcsfTranscoderInfo.DecoderFiloData, LCSF_TRANSCODER_RX_FILO_SIZE, sizeof(lcsf_raw_att_t));
-    return true;
+    return FiloInit(&LcsfTranscoderInfo.DecoderFilo, LcsfTranscoderInfo.DecoderFiloData, LCSF_TRANSCODER_RX_FILO_SIZE, sizeof(lcsf_raw_att_t));
 }
 
 bool LCSF_TranscoderReceive(const uint8_t *pBuffer, size_t buffSize) {
@@ -479,9 +477,7 @@ bool LCSF_TranscoderReceive(const uint8_t *pBuffer, size_t buffSize) {
     // Decode buffer into lcsf object
     if (!LCSF_DecodeBuffer(pBuffer, buffSize, pMsg)) {
         // Encode error buffer
-        if (!LCSF_ValidatorSendTranscoderError(LcsfTranscoderInfo.LastErrCode)) {
-            DEBUG_PRINT("[LCSF_Transcoder]: Send lcsf error message failed.\n");
-        }
+        LCSF_ValidatorSendTranscoderError(LcsfTranscoderInfo.LastErrCode);
         return false;
     }
     // Send lcsf object to receiver

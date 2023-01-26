@@ -19,7 +19,8 @@
 // *** Definitions ***
 // --- Public Types ---
 
-#define LCSF_TEST_BRIDGE_FILO_SIZE 11 // Max number of attributes
+// Bridge decoder filo size (biggest command size)
+#define LCSF_BRIDGE_TEST_FILO_SIZE 11
 
 // Lcsf protocol identifier
 #define LCSF_TEST_PROTOCOL_ID 0x55
@@ -183,7 +184,7 @@ enum _lcsf_test_cc6_att_id {
 // --- Public Function Prototypes ---
 
 /**
- * \fn bool LCSF_Bridge_TestInit(size_t filoSize)
+ * \fn bool LCSF_Bridge_TestInit(void)
  * \brief Initialize the module
  *
  * \return bool: true if operation was a success

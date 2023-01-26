@@ -333,12 +333,14 @@ typedef union _test_cmd_payload {
 // --- Public Function Prototypes ---
 
 /**
- * \fn bool Test_MainInit(void)
+ * \fn bool Test_MainInit(uint8_t *pBuffer, size_t buffSize)
  * \brief Initialize the module
  *
+ * \param pBuffer pointer to send buffer
+ * \param buffSize buffer size
  * \return bool: true if operation was a success
  */
-bool Test_MainInit(void);
+bool Test_MainInit(uint8_t *pBuffer, size_t buffSize);
 
 /**
  * \fn void Test_MainClearPattern(const uint8_t *pattern)

@@ -9,7 +9,7 @@
 // Standard lib
 #include <string.h>
 // Custom lib
-#include <LCSF_config.h>
+#include <LCSF_Config.h>
 #include <Filo.h>
 #include <LCSF_Transcoder.h>
 #include <LCSF_Validator.h>
@@ -20,7 +20,7 @@
 
 // Module information structure
 typedef struct _lcsf_bridge_test_info {
-    uint8_t FiloData[LCSF_TEST_BRIDGE_FILO_SIZE * sizeof(lcsf_valid_att_t)];
+    uint8_t FiloData[LCSF_BRIDGE_TEST_FILO_SIZE * sizeof(lcsf_valid_att_t)];
     filo_desc_t Filo;
     test_cmd_payload_t CmdPayload;
 } lcsf_bridge_test_info_t;
@@ -632,7 +632,7 @@ static bool LCSF_Bridge_TestFillCmdAtt(uint_fast16_t cmdName, lcsf_valid_att_t *
 // *** Public Functions ***
 
 bool LCSF_Bridge_TestInit(void) {
-     return FiloInit(&LcsfBridgeTestInfo.Filo, LcsfBridgeTestInfo.FiloData, LCSF_TEST_BRIDGE_FILO_SIZE, sizeof(lcsf_valid_att_t));
+     return FiloInit(&LcsfBridgeTestInfo.Filo, LcsfBridgeTestInfo.FiloData, LCSF_BRIDGE_TEST_FILO_SIZE, sizeof(lcsf_valid_att_t));
 }
 
 bool LCSF_Bridge_TestReceive(lcsf_valid_cmd_t *pValidCmd) {

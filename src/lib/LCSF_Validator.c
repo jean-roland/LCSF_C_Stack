@@ -23,7 +23,7 @@
 // Standard lib
 #include <string.h>
 // Custom lib
-#include <LCSF_config.h>
+#include <LCSF_Config.h>
 #include <Filo.h>
 #include <LCSF_Transcoder.h>
 #include <LCSF_Validator.h>
@@ -620,7 +620,10 @@ static bool LCSF_ValidatorSendError(uint_fast8_t errorLoc, uint_fast8_t errorTyp
     }
     // Send error message
     DEBUG_PRINT("[LCSF_Validator]: Sending error, location: %d, type: %d\n", errorLoc, errorType);
-    LcsfValidatorInfo.pFnSendErrCb(LcsfValidatorInfo.Err_buff, msgSize);
+    if (!LcsfValidatorInfo.pFnSendErrCb(LcsfValidatorInfo.Err_buff, msgSize)) {
+        DEBUG_PRINT("[LCSF_Validator]: Send lcsf error message failed!\n");
+        return false;
+    }
     return true;
 }
 
@@ -676,8 +679,12 @@ bool LCSF_ValidatorInit(LCSFSendErrCallback_t *pFnSendErrCb, LCSFReceiveErrCallb
         LcsfValidatorInfo.pFnRecErrCb = pFnRecErrCb;
     }
     // Initialize structures
-    FiloInit(&LcsfValidatorInfo.SenderFilo, LcsfValidatorInfo.SenderFiloData, LCSF_VALIDATOR_TX_FILO_SIZE, sizeof(lcsf_valid_att_t));
-    FiloInit(&LcsfValidatorInfo.ReceiverFilo, LcsfValidatorInfo.ReceiverFiloData, LCSF_VALIDATOR_RX_FILO_SIZE, sizeof(lcsf_raw_att_t));
+    if (!FiloInit(&LcsfValidatorInfo.SenderFilo, LcsfValidatorInfo.SenderFiloData, LCSF_VALIDATOR_TX_FILO_SIZE, sizeof(lcsf_valid_att_t))) {
+        return false;
+    }
+    if (!FiloInit(&LcsfValidatorInfo.ReceiverFilo, LcsfValidatorInfo.ReceiverFiloData, LCSF_VALIDATOR_RX_FILO_SIZE, sizeof(lcsf_raw_att_t))) {
+        return false;
+    }
     // Initialize variables
     LcsfValidatorInfo.ProtNb = LCSF_VALIDATOR_PROTOCOL_NB;
     return true;

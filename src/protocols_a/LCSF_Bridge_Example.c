@@ -23,7 +23,7 @@
 // Standard lib
 #include <string.h>
 // Custom lib
-#include <LCSF_config.h>
+#include <LCSF_Config.h>
 #include <Filo.h>
 #include <LCSF_Transcoder.h>
 #include <LCSF_Validator.h>

@@ -10,18 +10,18 @@
 #include <stdlib.h>
 #include <string.h>
 // Custom lib
-#include <LCSF_config.h>
+#include <LCSF_Config.h>
 #include "LCSF_Bridge_Test.h"
 #include "Test_Main.h"
 
 // *** Definitions ***
 // --- Private Macros ---
-#define SEND_BUFF_SIZE 255
 #define TEST_ARRAY_SIZE 5
 
 // --- Private Types ---
 typedef struct _test_info {
-    uint8_t sendBuffer[SEND_BUFF_SIZE];
+    uint8_t *pSendBuffer;
+    uint16_t buffSize;
     test_cmd_payload_t SendCmdPayload;
     bool hasPattern;
     const uint8_t *pattern;
@@ -83,9 +83,9 @@ static bool TestSendCommand(uint_fast16_t cmdName, bool hasPayload) {
     int msgSize = 0;
     if (hasPayload) {
         test_cmd_payload_t *pCmdPayload = &TestInfo.SendCmdPayload;
-        msgSize = LCSF_Bridge_TestEncode(cmdName, pCmdPayload, TestInfo.sendBuffer, SEND_BUFF_SIZE);
+        msgSize = LCSF_Bridge_TestEncode(cmdName, pCmdPayload, TestInfo.pSendBuffer, TestInfo.buffSize);
     } else {
-        msgSize = LCSF_Bridge_TestEncode(cmdName, NULL, TestInfo.sendBuffer, SEND_BUFF_SIZE);
+        msgSize = LCSF_Bridge_TestEncode(cmdName, NULL, TestInfo.pSendBuffer, TestInfo.buffSize);
     }
     if (msgSize <= 0) {
         return false;
@@ -436,12 +436,20 @@ static bool TestExecuteCC6(test_cmd_payload_t *pCmdPayload) {
 // *** Public Functions ***
 
 /**
- * \fn bool Test_MainInit(void)
+ * \fn bool Test_MainInit(uint8_t *pBuffer, size_t buffSize)
  * \brief Initialize the module
  *
+ * \param pBuffer pointer to send buffer
+ * \param buffSize buffer size
  * \return bool: true if operation was a success
  */
-bool Test_MainInit(void) {
+bool Test_MainInit(uint8_t *pBuffer, size_t buffSize) {
+    if (pBuffer == NULL) {
+        return false;
+    }
+    // Note infos
+    TestInfo.pSendBuffer = pBuffer;
+    TestInfo.buffSize = buffSize;
     return true;
 }
 

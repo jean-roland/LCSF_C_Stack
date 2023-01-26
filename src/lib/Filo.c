@@ -25,7 +25,7 @@
 #include <stdlib.h>
 #include <string.h>
 // Custom lib
-#include <LCSF_config.h>
+#include <LCSF_Config.h>
 #include <Filo.h>
 
 // *** Definitions ***
