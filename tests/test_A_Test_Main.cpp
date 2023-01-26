@@ -1,22 +1,46 @@
-#include <stdlib.h>
-#include <stdbool.h>
-#include <string.h>
-#include "unity.h"
+/**
+ * @file       test_A_Test_Main.cpp
+ * @brief      Unit test of the Test_Main (A) module
+ * @author     Jean-Roland Gosse
+ *
+ *             This file is part of LCSF C Stack.
+ *
+ *             LCSF C Stack is free software: you can redistribute it and/or
+ *             modify it under the terms of the GNU General Public License as
+ *             published by the Free Software Foundation, either version 3 of
+ *             the License, or (at your option) any later version.
+ *
+ *             LCSF C Stack is distributed in the hope that it will be useful,
+ *             but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *             MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *             General Public License for more details.
+ *
+ *             You should have received a copy of the GNU General Public License
+ *             along with this project. If not, see
+ *             <https://www.gnu.org/licenses/>
+ */
 
+// *** Private include ***
+#include "CppUTest/TestHarness.h"
+#include "CppUTestExt/MockSupport.h"
+
+extern "C" {
+#include "LCSF_Config.h"
+#include "LCSF_Bridge_Test.h"
 #include "Test_Main.h"
-#include "mock_LCSF_Bridge_Test.h"
+#include <string.h>
+}
 
-// *** Constants ***
+// *** Private macros ***
 #define ARRAY_SIZE 5
+#define TX_BUFF_SIZE 8
 
 // *** Private functions prototypes ***
-static void *malloc_Callback(size_t size, int num_calls);
 
-// *** Private global vars ***
-static void *memPtr[64];
-static int memIdx;
+// *** Private variables ***
+static uint8_t txbuffer[TX_BUFF_SIZE];
 
-// *** Model data ***
+// Test data
 static uint8_t cc1_sa4_array[ARRAY_SIZE] = {6,5,4,3,2};
 static uint8_t cc1_sa9_array[ARRAY_SIZE] = {2,3,4,5,6};
 static char cc1_sa5_str[] = "Cpc";
@@ -120,119 +144,136 @@ static test_cmd_payload_t cc5_cmd_payload = {
 static uint8_t pattern[ARRAY_SIZE] = {0x12,0x34,0x56,0x78,0x89};
 
 // *** Private Functions ***
+
+/**
+ * @brief      Compare two test_cc1_att_payload_t
+ *
+ * @param[in]  pMsg1  Pointer to first payload
+ * @param[in]  pMsg2  POinter to second payload
+ *
+ * @return     bool: true if successful
+ */
 static bool compare_payload_cc1(const test_cc1_att_payload_t *p1, const test_cc1_att_payload_t *p2) {
     if ((p1 == NULL) || (p2 == NULL)) {
-        printf("Received a null pointer !\n");
+        DEBUG_PRINT("[tests]: Received a null pointer !\n");
         return false;
     }
     if (p1->optAttFlagsBitfield != p2->optAttFlagsBitfield) {
-        printf("CC1: Different flag bitfield: %d, %d\n", p1->optAttFlagsBitfield, p2->optAttFlagsBitfield);
+        DEBUG_PRINT("[tests]: CC1: Different flag bitfield: %d, %d\n", p1->optAttFlagsBitfield, p2->optAttFlagsBitfield);
         return false;
     }
     if (p1->sa1 != p2->sa1) {
-        printf("CC1: Different SA1: %d, %d\n", p1->sa1, p2->sa1);
+        DEBUG_PRINT("[tests]: CC1: Different SA1: %d, %d\n", p1->sa1, p2->sa1);
         return false;
     }
     if (p1->sa2 != p2->sa2) {
-        printf("CC1: Different SA2: %d, %d\n", p1->sa2, p2->sa2);
+        DEBUG_PRINT("[tests]: CC1: Different SA2: %d, %d\n", p1->sa2, p2->sa2);
         return false;
     }
     if (p1->sa3 != p2->sa3) {
-        printf("CC1: Different SA3: %d, %d\n", p1->sa3, p2->sa3);
+        DEBUG_PRINT("[tests]: CC1: Different SA3: %d, %d\n", p1->sa3, p2->sa3);
         return false;
     }
     if (p1->sa4Size != p2->sa4Size) {
-        printf("CC1: Different SA4 size: %d, %d\n", p1->sa4Size, p2->sa4Size);
+        DEBUG_PRINT("[tests]: CC1: Different SA4 size: %d, %d\n", p1->sa4Size, p2->sa4Size);
         return false;
     }
     if ((p1->p_sa4 == NULL) || (p2->p_sa4 == NULL)) {
-        printf("CC1: Missing SA4\n");
+        DEBUG_PRINT("[tests]: CC1: Missing SA4\n");
         return false;
     }
     if (memcmp(p1->p_sa4, p2->p_sa4, p1->sa4Size) != 0) {
-        printf("CC1: Different SA4\n");
+        DEBUG_PRINT("[tests]: CC1: Different SA4\n");
         return false;
     }
     if ((p1->p_sa5 == NULL) || (p2->p_sa5 == NULL)) {
-        printf("CC1: Missing SA5\n");
+        DEBUG_PRINT("[tests]: CC1: Missing SA5\n");
         return false;
     }
     if (strcmp(p1->p_sa5, p2->p_sa5) != 0) {
-        printf("CC1: Different SA5\n");
+        DEBUG_PRINT("[tests]: CC1: Different SA5\n");
         return false;
     }
     if ((p1->optAttFlagsBitfield & TEST_CC1_ATT_SA6_FLAG) != 0) {
         if (p1->sa6 != p2->sa6) {
-            printf("CC1: Different SA6: %d, %d\n", p1->sa6, p2->sa6);
+            DEBUG_PRINT("[tests]: CC1: Different SA6: %d, %d\n", p1->sa6, p2->sa6);
             return false;
         }
     }
     if ((p1->optAttFlagsBitfield & TEST_CC1_ATT_SA7_FLAG) != 0) {
         if (p1->sa7 != p2->sa7) {
-            printf("CC1: Different SA7: %d, %d\n", p1->sa7, p2->sa7);
+            DEBUG_PRINT("[tests]: CC1: Different SA7: %d, %d\n", p1->sa7, p2->sa7);
             return false;
         }
     }
     if ((p1->optAttFlagsBitfield & TEST_CC1_ATT_SA8_FLAG) != 0) {
         if (p1->sa8 != p2->sa8) {
-            printf("CC1: Different SA8: %d, %d\n", p1->sa8, p2->sa8);
+            DEBUG_PRINT("[tests]: CC1: Different SA8: %d, %d\n", p1->sa8, p2->sa8);
             return false;
         }
     }
     if ((p1->optAttFlagsBitfield & TEST_CC1_ATT_SA9_FLAG) != 0) {
         if (p1->sa9Size != p2->sa9Size) {
-            printf("CC1: Different SA9 size: %d, %d\n", p1->sa9Size, p2->sa9Size);
+            DEBUG_PRINT("[tests]: CC1: Different SA9 size: %d, %d\n", p1->sa9Size, p2->sa9Size);
             return false;
         }
         if ((p1->p_sa9 == NULL) || (p2->p_sa9 == NULL)) {
-            printf("CC1: Missing SA9\n");
+            DEBUG_PRINT("[tests]: CC1: Missing SA9\n");
             return false;
         }
         if (memcmp(p1->p_sa9, p2->p_sa9, p1->sa9Size) != 0) {
-            printf("CC1: Different SA9\n");
+            DEBUG_PRINT("[tests]: CC1: Different SA9\n");
             return false;
         }
     }
     if ((p1->optAttFlagsBitfield & TEST_CC1_ATT_SA10_FLAG) != 0) {
         if ((p1->p_sa10 == NULL) || (p2->p_sa10 == NULL)) {
-            printf("CC1: Missing SA10\n");
+            DEBUG_PRINT("[tests]: CC1: Missing SA10\n");
             return false;
         }
         if (strcmp(p1->p_sa10, p2->p_sa10) != 0) {
-            printf("CC1: Different SA10\n");
+            DEBUG_PRINT("[tests]: CC1: Different SA10\n");
             return false;
         }
     }
     return true;
 }
 
+/**
+ * @brief      Compare two test_cc4_att_payload_t
+ *
+ * @param[in]  pMsg1  Pointer to first payload
+ * @param[in]  pMsg2  POinter to second payload
+ *
+ * @return     bool: true if successful
+ */
 static bool compare_payload_cc4(const test_cc4_att_payload_t *p1, const test_cc4_att_payload_t *p2) {
     if ((p1 == NULL) || (p2 == NULL)) {
-        printf("Received a null pointer !\n");
+        DEBUG_PRINT("[tests]: Received a null pointer !\n");
         return false;
     }
     if (p1->optAttFlagsBitfield != p2->optAttFlagsBitfield) {
-        printf("CC4: Different flag bitfield: %d, %d\n", p1->optAttFlagsBitfield, p2->optAttFlagsBitfield);
+        DEBUG_PRINT("[tests]: CC4: Different flag bitfield: %d, %d\n", p1->optAttFlagsBitfield, p2->optAttFlagsBitfield);
         return false;
     }
     if (p1->sa1 != p2->sa1) {
-        printf("CC4: Different SA1: %d, %d\n", p1->sa1, p2->sa1);
+        DEBUG_PRINT("[tests]: CC4: Different SA1: %d, %d\n", p1->sa1, p2->sa1);
         return false;
     }
     // CA1
     const test_cc4_att_ca1_att_payload_t *pca1_a = &p1->ca1_payload;
     const test_cc4_att_ca1_att_payload_t *pca1_b = &p2->ca1_payload;
     if (pca1_a->sa1 != pca1_b->sa1) {
-        printf("CC4_CA1: Different SA1: %d, %d\n", pca1_a->sa1, pca1_b->sa1);
+        DEBUG_PRINT("[tests]: CC4_CA1: Different SA1: %d, %d\n", pca1_a->sa1, pca1_b->sa1);
         return false;
     }
     if (pca1_a->sa2 != pca1_b->sa2) {
-        printf("CC4_CA1: Different SA2: %d, %d\n", pca1_a->sa2, pca1_b->sa2);
+        DEBUG_PRINT("[tests]: CC4_CA1: Different SA2: %d, %d\n", pca1_a->sa2, pca1_b->sa2);
         return false;
     }
     if ((pca1_a->optAttFlagsBitfield & TEST_CA1_ATT_SA3_FLAG) != 0) {
         if (pca1_a->sa3 != pca1_b->sa3) {
-            printf("CC4_CA1: Different SA3: %d, %d\n", pca1_a->sa3, pca1_b->sa3);
+            DEBUG_PRINT("[tests]: CC4_CA1: Different SA3: %d, %d\n", pca1_a->sa3, pca1_b->sa3);
             return false;
         }
     }
@@ -243,7 +284,7 @@ static bool compare_payload_cc4(const test_cc4_att_payload_t *p1, const test_cc4
 
         if ((pca2_a->optAttFlagsBitfield & TEST_CA2_ATT_SA1_FLAG) != 0) {
             if (pca2_a->sa1 != pca2_b->sa1) {
-                printf("CC4_CA2: Different SA1: %d, %d\n", pca2_a->sa1, pca2_b->sa1);
+                DEBUG_PRINT("[tests]: CC4_CA2: Different SA1: %d, %d\n", pca2_a->sa1, pca2_b->sa1);
                 return false;
             }
         }
@@ -253,7 +294,7 @@ static bool compare_payload_cc4(const test_cc4_att_payload_t *p1, const test_cc4
 
         if ((pca3_a->optAttFlagsBitfield & TEST_CA3_ATT_SA1_FLAG) != 0) {
             if (pca3_a->sa1 != pca3_b->sa1) {
-                printf("CC4_CA3: Different SA1: %d, %d\n", pca3_a->sa1, pca3_b->sa1);
+                DEBUG_PRINT("[tests]: CC4_CA3: Different SA1: %d, %d\n", pca3_a->sa1, pca3_b->sa1);
                 return false;
             }
         }
@@ -262,80 +303,113 @@ static bool compare_payload_cc4(const test_cc4_att_payload_t *p1, const test_cc4
         const test_ca3_att_ca4_att_payload_t *pca4_b = &pca3_b->ca4_payload;
 
         if (pca4_a->sa4Size != pca4_b->sa4Size) {
-            printf("CC4_CA4: Different SA4 size: %d, %d\n", pca4_a->sa4Size, pca4_b->sa4Size);
+            DEBUG_PRINT("[tests]: CC4_CA4: Different SA4 size: %d, %d\n", pca4_a->sa4Size, pca4_b->sa4Size);
             return false;
         }
         if ((pca4_a->p_sa4 == NULL) || (pca4_b->p_sa4 == NULL)) {
-            printf("CC4_CA4: Missing SA4\n");
+            DEBUG_PRINT("[tests]: CC4_CA4: Missing SA4\n");
             return false;
         }
         if (memcmp(pca4_a->p_sa4, pca4_b->p_sa4, pca4_a->sa4Size) != 0) {
-            printf("CC4_CA4: Different SA4\n");
+            DEBUG_PRINT("[tests]: CC4_CA4: Different SA4\n");
             return false;
         }
     }
     return true;
 }
 
-// *** Callback Functions ***
-static void *malloc_Callback(size_t size, int num_calls) {
-    memPtr[memIdx] = malloc(size);
-    return memPtr[memIdx++];
-}
-
-static bool process_Callback(uint_fast16_t cmdName, test_cmd_payload_t *pCmdPayload, int num_calls) {
-    printf("Received send cmd: %ld\n", cmdName);
-
-    switch (num_calls) {
-        case 0:
-            return (cmdName == TEST_CMD_SC1);
-        break;
-
-        case 1:
-            return compare_payload_cc1(&cc1_cmd_payload.cc1_payload, &pCmdPayload->cc1_payload);
-        break;
-
-        case 2:
-            return compare_payload_cc4(&cc4_cmd_payload.cc4_payload, &pCmdPayload->cc4_payload);
-        break;
-
-        case 3: {
-            test_cc1_att_payload_t *p = &pCmdPayload->cc1_payload;
-            return ((memcmp(p->p_sa4, pattern, ARRAY_SIZE) == 0) && (memcmp(p->p_sa9, pattern, ARRAY_SIZE) == 0));
-        break; }
-
-        default:
-            return false;
-        break;
-    }
+/**
+ * @brief      Expect a LCSF_Bridge_TestEncode call helper function
+ *
+ * @param[in]  cmdName     Expected command name
+ * @param[in]  hasPattern  Indicates if pattern
+ */
+static void ExpectEncode(uint_fast16_t cmdName, bool hasPattern) {
+    mock().setData("hasPattern", hasPattern);
+    mock().expectOneCall("LCSF_Bridge_TestEncode").withParameter("cmdName", cmdName);
 }
 
 // *** Public Functions ***
-void setUp(void) {
-    // Declare callback
-    MemAllocMalloc_StubWithCallback(malloc_Callback);
-    LCSF_Bridge_TestSend_StubWithCallback(process_Callback);
-    // Test init module
-    TEST_ASSERT_TRUE(Test_MainInit());
-}
 
-void tearDown(void) {
-    // Free allocated memory
-    for (int idx = 0; idx < memIdx; idx++) {
-        free(memPtr[idx]);
+/**
+ * @brief      mock LCSF_Bridge_TestEncode function
+ *
+ * @param[in]  cmdName      The command name
+ * @param      pCmdPayload  The command payload
+ * @param      pBuffer      The buffer
+ * @param[in]  buffSize     The buffer size
+ *
+ * @return     int: -1 if operation fail, encoded message size if success
+ */
+int LCSF_Bridge_TestEncode(uint_fast16_t cmdName, test_cmd_payload_t *pCmdPayload, uint8_t *pBuffer, size_t buffSize) {
+    DEBUG_PRINT("[tests]: Received send cmd: %ld\n", cmdName);
+    bool hasPattern = mock().getData("hasPattern").getBoolValue();
+    mock().actualCall("LCSF_Bridge_TestEncode").withParameter("cmdName", cmdName);
+    // Process cmdName for return
+    switch (cmdName) {
+        case TEST_CMD_SC1:
+            return TX_BUFF_SIZE;
+        case TEST_CMD_CC1: {
+            if (hasPattern) {
+                test_cc1_att_payload_t *p = &pCmdPayload->cc1_payload;
+                MEMCMP_EQUAL(p->p_sa4, pattern, ARRAY_SIZE);
+                MEMCMP_EQUAL(p->p_sa9, pattern, ARRAY_SIZE);
+                return TX_BUFF_SIZE;
+            }
+            if (!compare_payload_cc1(&pCmdPayload->cc1_payload, &cc1_cmd_payload.cc1_payload)) {
+                return -1;
+            }
+            return TX_BUFF_SIZE;
+        }
+        case TEST_CMD_CC4:
+            if (!compare_payload_cc4(&pCmdPayload->cc4_payload, &cc4_cmd_payload.cc4_payload)) {
+                return -1;
+            }
+            return TX_BUFF_SIZE;
+        default:
+            return -1;
     }
-    memIdx = 0;
 }
 
-void test_Test_Main_Execute(void) {
+// *** Tests ***
+
+/**
+ * testgroup: A_Test_Main
+ *
+ * This group tests all the Test_Main (A) features
+ */
+TEST_GROUP(A_Test_Main) {
+    void setup() {
+        mock().strictOrder();
+        // Init module
+        CHECK_FALSE(Test_MainInit(NULL, 0))
+        CHECK(Test_MainInit(txbuffer, TX_BUFF_SIZE));
+    }
+    void teardown() {
+        mock().checkExpectations();
+        mock().clear();
+    }
+};
+
+/**
+ * testgroup: A_Test_Main
+ * testname: execute
+ *
+ * Test the send/encode features
+ */
+TEST(A_Test_Main, execute)  {
     // Test error cases
-    TEST_ASSERT_FALSE(Test_MainExecute(TEST_CMD_COUNT, NULL));
-    TEST_ASSERT_FALSE(Test_MainExecute(TEST_CMD_CC2, NULL));
+    CHECK_FALSE(Test_MainExecute(TEST_CMD_COUNT, NULL));
+    CHECK_FALSE(Test_MainExecute(TEST_CMD_CC2, NULL));
     // Test valid cases
-    TEST_ASSERT_TRUE(Test_MainExecute(TEST_CMD_SC2, NULL));
-    TEST_ASSERT_TRUE(Test_MainExecute(TEST_CMD_CC2, &cc2_cmd_payload));
-    TEST_ASSERT_TRUE(Test_MainExecute(TEST_CMD_CC5, &cc5_cmd_payload));
+    ExpectEncode(TEST_CMD_SC1, false);
+    CHECK(Test_MainExecute(TEST_CMD_SC2, NULL));
+    ExpectEncode(TEST_CMD_CC1, false);
+    CHECK(Test_MainExecute(TEST_CMD_CC2, &cc2_cmd_payload));
+    ExpectEncode(TEST_CMD_CC4, false);
+    CHECK(Test_MainExecute(TEST_CMD_CC5, &cc5_cmd_payload));
     // Test pattern
     Test_MainSetPattern(pattern);
-    TEST_ASSERT_TRUE(Test_MainExecute(TEST_CMD_CC2, &cc2_cmd_payload));
+    ExpectEncode(TEST_CMD_CC1, true);
+    CHECK(Test_MainExecute(TEST_CMD_CC2, &cc2_cmd_payload));
 }

@@ -1,38 +1,75 @@
-#include <stdlib.h>
-#include <stdbool.h>
-#include <string.h>
-#include "unity.h"
+/**
+ * @file       test_A_FullStack.cpp
+ * @brief      Unit test of the whole LCSF stack + Test protocol (B)
+ * @author     Jean-Roland Gosse
+ *
+ *             This file is part of LCSF C Stack.
+ *
+ *             LCSF C Stack is free software: you can redistribute it and/or
+ *             modify it under the terms of the GNU General Public License as
+ *             published by the Free Software Foundation, either version 3 of
+ *             the License, or (at your option) any later version.
+ *
+ *             LCSF C Stack is distributed in the hope that it will be useful,
+ *             but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *             MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *             General Public License for more details.
+ *
+ *             You should have received a copy of the GNU General Public License
+ *             along with this project. If not, see
+ *             <https://www.gnu.org/licenses/>
+ */
 
-#include "LCSF_config.h"
+// *** Private include ***
+#include "CppUTest/TestHarness.h"
+#include "CppUTestExt/MockSupport.h"
+
+extern "C" {
+#include <string.h>
 #include "Filo.h"
+#include "LCSF_Config.h"
 #include "LCSF_Transcoder.h"
 #include "LCSF_Validator.h"
 #include "LCSF_Bridge_Test.h"
 #include "LCSF_Desc_Test.h"
 #include "Test_Main.h"
-#include "mock_MemAlloc.h"
+}
 
-// *** Constants ***
-#define FILO_SIZE 20
+// *** Private macros ***
 #define ARRAY_SIZE 5
-#define PROTOCOL_NB 1
+#define TX_BUFF_SIZE 255
+
+// *** Private types ***
+enum test_id_e {
+    TEST_ID_SC2 = 0, // SC2 command test ID
+    TEST_ID_SC3, // SC3 command test ID
+    TEST_ID_CC2, // CC2 command test id
+    TEST_ID_CC3, // CC3 command test id
+    TEST_ID_CC5, // CC5 command test id
+    TEST_ID_CC6, // CC6 command test id
+    TEST_ID_UNKN_PROT, // Unknown protocol test id
+    TEST_ID_UNKN_CMD, // Unknown command test id
+    TEST_ID_UNKN_ATT, // Unknown attribute test id
+    TEST_ID_TM_ATT, // Too many attributes test id
+    TEST_ID_MISS_ATT, // Missing attribute test id
+    TEST_ID_WR_DATA_TYPE, // Wrong data type test id
+    TEST_ID_COUNT, // Test id number
+};
 
 // *** Private functions prototypes ***
-static void *calloc_Callback(size_t size, int num_calls);
-static void *malloc_Callback(size_t size, int num_calls);
-static bool send_Callback(const uint8_t *pBuffer, size_t buffSize);
+static void test_buffer(int testid, const uint8_t *pBuffer, size_t buffSize);
+static bool senderr_callback(const uint8_t *pBuffer, size_t buffSize);
+static void recerr_callback(uint_fast8_t errorLoc, uint_fast8_t errorType);
 
-// *** Descriptors ***
+// *** Private global vars ***
+static uint8_t txbuffer[TX_BUFF_SIZE];
+
+// Protocol descriptor
 static const lcsf_validator_protocol_desc_t test_prot_desc = {
     LCSF_TEST_PROTOCOL_ID,
     &LCSF_Test_ProtDesc,
     LCSF_Bridge_TestReceive,
 };
-
-// *** Private global vars ***
-static void *memPtr[64];
-static int memIdx;
-static int send_num_calls;
 
 // *** Model data ***
 #ifdef LCSF_SMALL
@@ -295,201 +332,162 @@ static uint8_t cc6_msg_tx[] = {
 #endif
 
 // *** Private Functions ***
-static void print_buffer(const uint8_t *p1, const uint8_t *p2, uint16_t buffSize) {
-    printf(" Diff at: \n");
-    for (int idx = 0; idx < buffSize; idx++) {
-        if (p1[idx] != p2[idx]) {
-            printf("idx: %d, val: %d %d\n", idx, p1[idx], p2[idx]);
-        }
-    }
-}
 
-// *** Callback Functions ***
-static void *calloc_Callback(size_t size, int num_calls) {
-    memPtr[memIdx] = calloc(size,1);
-    return memPtr[memIdx++];
-}
-
-static void *malloc_Callback(size_t size, int num_calls) {
-    memPtr[memIdx] = malloc(size);
-    return memPtr[memIdx++];
-}
-
-static bool send_Callback(const uint8_t *pBuffer, size_t buffSize) {
-    bool res = false;
-    switch (send_num_calls) {
-        case 0 ... 2:
-            res = (memcmp(pBuffer, sc2_msg, buffSize) == 0);
-            if (!res) {
-                printf("Bad SC2 received.\n");
-                print_buffer(pBuffer, sc2_msg, buffSize);
-            } else {
-                printf("Correct SC2 received.\n");
-            }
+/**
+ * @brief      Check the encoded buffer
+ *
+ * @param[in]  testid    The testid
+ * @param[in]  pBuffer   The buffer
+ * @param[in]  buffSize  The buffer size
+ */
+static void test_buffer(int testid, const uint8_t *pBuffer) {
+    switch (testid) {
+        case TEST_ID_SC2:
+            DEBUG_PRINT("[tests]: SC2 test.\n");
+            MEMCMP_EQUAL(pBuffer, sc2_msg, sizeof(sc2_msg));
         break;
 
-        case 3:
-            res = (memcmp(pBuffer, sc3_msg, buffSize) == 0);
-            if (!res) {
-                printf("Bad SC3 received.\n");
-                print_buffer(pBuffer, sc3_msg, buffSize);
-            } else {
-                printf("Correct SC3 received.\n");
-            }
+        case TEST_ID_SC3:
+            DEBUG_PRINT("[tests]: SC3 test.\n");
+            MEMCMP_EQUAL(pBuffer, sc3_msg, sizeof(sc3_msg));
         break;
 
-        case 4:
-            res = (memcmp(pBuffer, cc2_msg, buffSize) == 0);
-            if (!res) {
-                printf("Bad CC2 received.\n");
-                print_buffer(pBuffer, cc2_msg, buffSize);
-            } else {
-                printf("Correct CC2 received.\n");
-            }
+        case TEST_ID_CC2:
+            DEBUG_PRINT("[tests]: CC2 test.\n");
+            MEMCMP_EQUAL(pBuffer, cc2_msg, sizeof(cc2_msg));
         break;
 
-        case 5:
-            res = (memcmp(pBuffer, cc3_msg_tx, buffSize) == 0);
-            if (!res) {
-                printf("Bad CC3 received.\n");
-                print_buffer(pBuffer, cc3_msg_tx, buffSize);
-            } else {
-                printf("Correct CC3 received.\n");
-            }
+        case TEST_ID_CC3:
+            DEBUG_PRINT("[tests]: CC3 test.\n");
+            MEMCMP_EQUAL(pBuffer, cc3_msg_tx, sizeof(cc3_msg_tx));
         break;
 
-        case 6:
-            res = (memcmp(pBuffer, cc5_msg, buffSize) == 0);
-            if (!res) {
-                printf("Bad CC5 received.\n");
-                print_buffer(pBuffer, cc5_msg, buffSize);
-            } else {
-                printf("Correct CC5 received.\n");
-            }
+        case TEST_ID_CC5:
+            DEBUG_PRINT("[tests]: CC5 test.\n");
+            MEMCMP_EQUAL(pBuffer, cc5_msg, sizeof(cc5_msg));
         break;
 
-        case 7:
-            res = (memcmp(pBuffer, cc6_msg_tx, buffSize) == 0);
-            if (!res) {
-                printf("Bad CC6 received.\n");
-                print_buffer(pBuffer, cc6_msg_tx, buffSize);
-            } else {
-                printf("Correct CC6 received.\n");
-            }
-        break;
-
-        case 8:
-            res = (memcmp(pBuffer, err_unknown_prot_msg, buffSize) == 0);
-            if (!res) {
-                printf("Bad unknown protocol error received.\n");
-                print_buffer(pBuffer, err_unknown_prot_msg, buffSize);
-            } else {
-                printf("Correct unknown protocol error received.\n");
-            }
-        break;
-
-        case 9:
-            res = (memcmp(pBuffer, err_unknown_cmd_msg, buffSize) == 0);
-            if (!res) {
-                printf("Bad unknown command error received.\n");
-                print_buffer(pBuffer, err_unknown_cmd_msg, buffSize);
-            } else {
-                printf("Correct unknown command error received.\n");
-            }
-        break;
-
-        case 10:
-            res = (memcmp(pBuffer, err_unknown_att_msg, buffSize) == 0);
-            if (!res) {
-                printf("Bad unknown attribute error received.\n");
-                print_buffer(pBuffer, err_unknown_att_msg, buffSize);
-            } else {
-                printf("Correct unknown attribute error received.\n");
-            }
-        break;
-
-        case 11:
-            res = (memcmp(pBuffer, err_too_many_att_msg, buffSize) == 0);
-            if (!res) {
-                printf("Bad too many attribute error received.\n");
-                print_buffer(pBuffer, err_too_many_att_msg, buffSize);
-            } else {
-                printf("Correct too many attribute error received.\n");
-            }
-        break;
-
-        case 12:
-            res = (memcmp(pBuffer, err_missing_att_msg, buffSize) == 0);
-            if (!res) {
-                printf("Bad missing attribute error received.\n");
-                print_buffer(pBuffer, err_missing_att_msg, buffSize);
-            } else {
-                printf("Correct missing attribute error received.\n");
-            }
-        break;
-
-        case 13:
-            res = (memcmp(pBuffer, err_wrong_data_type_msg, buffSize) == 0);
-            if (!res) {
-                printf("Bad wrong data type error received.\n");
-                print_buffer(pBuffer, err_wrong_data_type_msg, buffSize);
-            } else {
-                printf("Correct wrong data type error received.\n");
-            }
+        case TEST_ID_CC6:
+            DEBUG_PRINT("[tests]: CC6 test.\n");
+            MEMCMP_EQUAL(pBuffer, cc6_msg_tx, sizeof(cc6_msg_tx));
         break;
 
         default:
+            DEBUG_PRINT("[tests]: Unknown test!\n");
+            CHECK(false);
         break;
     }
-    send_num_calls++;
-    return res;
+}
+
+/**
+ * @brief      Function called by LCSF_Validator to send error messages
+ *
+ * @param[in]  pBuffer   The buffer
+ * @param[in]  buffSize  The buffer size
+ *
+ * @return     bool: true if operation successful
+ */
+static bool senderr_callback(const uint8_t *pBuffer, size_t buffSize) {
+    const uint8_t *pRefBuff = (const uint8_t *) mock().getData("pRefBuff").getPointerValue();
+    size_t refBuffSize = mock().getData("refBuffSize").getUnsignedIntValue();
+    mock().actualCall("senderr_callback");
+    if (buffSize != refBuffSize) {
+        DEBUG_PRINT("[tests]: buffer size mismatch %ld %ld\n", buffSize, refBuffSize);
+        return false;
+    }
+    MEMCMP_EQUAL(pBuffer, pRefBuff, refBuffSize);
+    return true;
+}
+
+/**
+ * @brief      Expect a senderr_callback call helper function
+ *
+ * @param[in]  pRefBuff     The reference buffer
+ * @param[in]  refBuffSize  The reference buffer size
+ */
+static void expect_senderr_cb(const uint8_t *pRefBuff, size_t refBuffSize) {
+    mock().setData("pRefBuff", (void *)pRefBuff);
+    mock().setData("refBuffSize", (unsigned int) refBuffSize);
+    mock().expectOneCall("senderr_callback");
 }
 
 // *** Public Functions ***
-void setUp(void) {
-    // Declare callback
-    MemAllocCalloc_StubWithCallback(calloc_Callback);
-    MemAllocMalloc_StubWithCallback(malloc_Callback);
-    // Test init modules error
-    TEST_ASSERT_FALSE(LCSF_TranscoderInit(NULL));
-    TEST_ASSERT_FALSE(LCSF_ValidatorAddProtocol(0, NULL));
-    // Test init modules valid
-    TEST_ASSERT_TRUE(LCSF_TranscoderInit(send_Callback));
-    TEST_ASSERT_TRUE(LCSF_ValidatorInit(PROTOCOL_NB));
-    TEST_ASSERT_TRUE(LCSF_ValidatorAddProtocol(0, &test_prot_desc));
-    TEST_ASSERT_TRUE(LCSF_Bridge_TestInit(FILO_SIZE));
-    TEST_ASSERT_TRUE(Test_MainInit());
-}
 
-void tearDown(void) {
-    // Free allocated memory
-    for (int idx = 0; idx < memIdx; idx++) {
-        free(memPtr[idx]);
+// *** Tests ***
+
+/**
+ * testgroup: B_Test_Fullstack
+ *
+ * This group tests encoding/decoding of the whole LCSF stack + Test protocol (B)
+ */
+TEST_GROUP(B_Test_Fullstack) {
+    void setup() {
+        mock().strictOrder();
+        // Init modules
+        CHECK(LCSF_TranscoderInit());
+        CHECK(LCSF_ValidatorInit(&senderr_callback, NULL));
+        CHECK(LCSF_ValidatorAddProtocol(0, &test_prot_desc));
+        CHECK(LCSF_Bridge_TestInit());
+        CHECK(Test_MainInit(txbuffer, TX_BUFF_SIZE));
     }
-    memIdx = 0;
-}
+    void teardown() {
+        mock().checkExpectations();
+        mock().clear();
+    }
+};
 
-void test_Test_Main_Execute(void) {
+/**
+ * testgroup: B_Test_Fullstack
+ * testname: receive
+ *
+ * Test the encode/decode of valid messages
+ */
+TEST(B_Test_Fullstack, valid) {
 #ifdef LCSF_SMALL
     printf("Smaller LCSF representation is in use.\n");
 #else
     printf("Regular LCSF representation is in use.\n");
 #endif
-    // Test function error cases
-    TEST_ASSERT_TRUE(LCSF_TranscoderReceive(sc2_msg, sizeof(sc2_msg)));
-    TEST_ASSERT_TRUE(LCSF_TranscoderReceive(cc2_msg, sizeof(cc2_msg)));
+    // Test function bad command cases
+    CHECK(LCSF_TranscoderReceive(sc2_msg, sizeof(sc2_msg)));
+    test_buffer(TEST_ID_SC2, txbuffer);
+    memset(txbuffer, 0, TX_BUFF_SIZE);
+    CHECK(LCSF_TranscoderReceive(cc2_msg, sizeof(cc2_msg)));
+    test_buffer(TEST_ID_SC2, txbuffer);
+    memset(txbuffer, 0, TX_BUFF_SIZE);
     // Test valid cases
-    TEST_ASSERT_TRUE(LCSF_TranscoderReceive(sc1_msg, sizeof(sc1_msg)));
-    TEST_ASSERT_TRUE(LCSF_TranscoderReceive(sc3_msg, sizeof(sc3_msg)));
-    TEST_ASSERT_TRUE(LCSF_TranscoderReceive(cc1_msg, sizeof(cc1_msg)));
-    TEST_ASSERT_TRUE(LCSF_TranscoderReceive(cc3_msg_rx, sizeof(cc3_msg_rx)));
-    TEST_ASSERT_TRUE(LCSF_TranscoderReceive(cc4_msg, sizeof(cc4_msg)));
-    TEST_ASSERT_TRUE(LCSF_TranscoderReceive(cc6_msg_rx, sizeof(cc6_msg_rx)));
+    CHECK(LCSF_TranscoderReceive(sc1_msg, sizeof(sc1_msg)));
+    test_buffer(TEST_ID_SC2, txbuffer);
+    CHECK(LCSF_TranscoderReceive(sc3_msg, sizeof(sc3_msg)));
+    test_buffer(TEST_ID_SC3, txbuffer);
+    CHECK(LCSF_TranscoderReceive(cc1_msg, sizeof(cc1_msg)));
+    test_buffer(TEST_ID_CC2, txbuffer);
+    CHECK(LCSF_TranscoderReceive(cc3_msg_rx, sizeof(cc3_msg_rx)));
+    test_buffer(TEST_ID_CC3, txbuffer);
+    CHECK(LCSF_TranscoderReceive(cc4_msg, sizeof(cc4_msg)));
+    test_buffer(TEST_ID_CC5, txbuffer);
+    CHECK(LCSF_TranscoderReceive(cc6_msg_rx, sizeof(cc6_msg_rx)));
+    test_buffer(TEST_ID_CC6, txbuffer);
+}
+
+/**
+ * testgroup: B_Test_Fullstack
+ * testname: errors
+ *
+ * Test the error processing
+ */
+TEST(B_Test_Fullstack, errors) {
     // Test bad message cases
-    TEST_ASSERT_TRUE(LCSF_TranscoderReceive(bad_prot_id_msg, sizeof(bad_prot_id_msg)));
-    TEST_ASSERT_TRUE(LCSF_TranscoderReceive(bad_cmd_id_msg, sizeof(bad_cmd_id_msg)));
-    TEST_ASSERT_TRUE(LCSF_TranscoderReceive(bad_att_id_msg, sizeof(bad_att_id_msg)));
-    TEST_ASSERT_TRUE(LCSF_TranscoderReceive(extra_att_msg, sizeof(extra_att_msg)));
-    TEST_ASSERT_TRUE(LCSF_TranscoderReceive(missing_att_msg, sizeof(missing_att_msg)));
-    TEST_ASSERT_TRUE(LCSF_TranscoderReceive(bad_data_type_msg, sizeof(bad_data_type_msg)));
+    expect_senderr_cb(err_unknown_prot_msg, sizeof(err_unknown_prot_msg));
+    CHECK_FALSE(LCSF_TranscoderReceive(bad_prot_id_msg, sizeof(bad_prot_id_msg)));
+    expect_senderr_cb(err_unknown_cmd_msg, sizeof(err_unknown_cmd_msg));
+    CHECK_FALSE(LCSF_TranscoderReceive(bad_cmd_id_msg, sizeof(bad_cmd_id_msg)));
+    expect_senderr_cb(err_unknown_att_msg, sizeof(err_unknown_att_msg));
+    CHECK_FALSE(LCSF_TranscoderReceive(bad_att_id_msg, sizeof(bad_att_id_msg)));
+    expect_senderr_cb(err_too_many_att_msg, sizeof(err_too_many_att_msg));
+    CHECK_FALSE(LCSF_TranscoderReceive(extra_att_msg, sizeof(extra_att_msg)));
+    expect_senderr_cb(err_missing_att_msg, sizeof(err_missing_att_msg));
+    CHECK_FALSE(LCSF_TranscoderReceive(missing_att_msg, sizeof(missing_att_msg)));
+    expect_senderr_cb(err_wrong_data_type_msg, sizeof(err_wrong_data_type_msg));
+    CHECK_FALSE(LCSF_TranscoderReceive(bad_data_type_msg, sizeof(bad_data_type_msg)));
 }
