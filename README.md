@@ -19,7 +19,7 @@ Then, to interface with your project:
 * Call the function `LCSF_TranscoderReceive` with your module receiving data in lcsf format (eg: data coming from a network port, an UART or a CAN bus...)
 * Give a callback to the function that will send the transcoder data.
 
-Finally, to fit your application's needs, create a custom protocol either by modifying the example protocol files or by using the [LCSF Generator](https://github.com/jean-roland/LCSF_Generator) (recommanded).
+Finally, to fit your application's needs, create a custom protocol either by modifying the example protocol files or by using the [LCSF Generator](https://github.com/jean-roland/LCSF_Generator) (recommended).
 
 You can change the memory allocation function used by the stack to use your own or change other parameters (buffer sizes, filo sizes) in `LCSF_config.h`.
 
@@ -61,17 +61,19 @@ Recursivity is generally frowned upon in embedded applications, which is why the
 
 ## Build & tests
 
-If you want to build the project as is, or run the test suite, you'll first need to install [Ceedling](https://github.com/ThrowTheSwitch/Ceedling). Then, use the following commands:
+If you want to build the project as is you need to install [CMake](https://cmake.org/) 3.14 or above, and a buildsystem ([Ninja](https://ninja-build.org/) is recommended).
 
-Build command:
- `ceedling release`
+Build commands, if using Ninja, at project root:
+ ```
+ cmake -B build/ -G Ninja -DCMAKE_BUILD_TYPE="Release"
+ cmake --build build/
+ ```
 
-A Tests command:
-`ceedling test`
+To run the test suite, you need to install [Cpputest](http://cpputest.github.io/). Then, use the following commands still at project root:
 
-B Tests commands:
-`cd b-tests/`
-`./b-tests.sh`
+`cmake --build build/ --target run_tests`
+
+If you have library errors, you might need to modify the root `CMakeLists.txt` to specify the Cpputest location.
 
 ## Resource usage
 
