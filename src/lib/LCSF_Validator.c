@@ -162,6 +162,7 @@ static bool LCSF_AllocateSenderAttArray(uint_fast16_t attNb, lcsf_raw_att_t **pA
  * \return LCSFInterpretCallback_t *: Pointer to the interpretor callback (NULL if unknown protocol)
  */
 static LCSFInterpretCallback_t *LCSF_GetCallback(uint_fast16_t protId) {
+    // Parse protocol array
     for (uint8_t idx = 0; idx < LcsfValidatorInfo.ProtNb; idx++) {
         const lcsf_validator_protocol_desc_t *pProtocol = LcsfValidatorInfo.pProtArray[idx];
 
@@ -180,6 +181,7 @@ static LCSFInterpretCallback_t *LCSF_GetCallback(uint_fast16_t protId) {
  * \return lcsf_protocol_desc_t *: Pointer to the descriptor (NULL if unknown protocol)
  */
 static const lcsf_protocol_desc_t *LCSF_GetDescriptor(uint_fast16_t protId) {
+    // Parse protocol array
     for (uint8_t idx = 0; idx < LcsfValidatorInfo.ProtNb; idx++) {
         const lcsf_validator_protocol_desc_t *pProtocol = LcsfValidatorInfo.pProtArray[idx];
 
@@ -201,10 +203,11 @@ static const lcsf_protocol_desc_t *LCSF_GetDescriptor(uint_fast16_t protId) {
  * \return bool: true if operation was a success
  */
 static bool LCSF_ValidateCmdId(uint_fast16_t cmdId, uint_fast16_t cmdNb, uint16_t *pCmdIdx, const lcsf_command_desc_t *pCmdDescArray) {
-
+    // Bad parameters guard
     if(pCmdDescArray == NULL) {
         return false;
     }
+    // Parse commands
     for (uint16_t idx = 0; idx < cmdNb; idx++) {
         if (pCmdDescArray[idx].CmdId == cmdId) {
             *pCmdIdx = idx;
@@ -223,10 +226,11 @@ static bool LCSF_ValidateCmdId(uint_fast16_t cmdId, uint_fast16_t cmdNb, uint16_
  * \return bool: true if there is a non-optional attribute
  */
 static bool LCSF_HasNonOptionalAttribute(uint_fast16_t attNb, const lcsf_attribute_desc_t *pAttDescArray) {
-
+    // Bad parameters guard
     if (pAttDescArray == NULL) {
         return false;
     }
+    // Parse attributes
     for (uint16_t idx = 0; idx < attNb; idx++) {
         if (!pAttDescArray[idx].IsOptional) {
             return true;
@@ -246,10 +250,11 @@ static bool LCSF_HasNonOptionalAttribute(uint_fast16_t attNb, const lcsf_attribu
  * \return bool: true if operation was a success
  */
 static bool LCSF_RecogniseAttributeId(uint_fast16_t attId, uint_fast16_t attNb, uint16_t *pAttIdx, const lcsf_raw_att_t *pAttArray) {
-
+    // Bad parameters guard
     if(pAttArray == NULL) {
         return false;
     }
+    // Parse attributes
     for (uint16_t idx = 0; idx < attNb ; idx++) {
         if (pAttArray[idx].AttId == attId) {
             *pAttIdx = idx;
@@ -268,11 +273,12 @@ static bool LCSF_RecogniseAttributeId(uint_fast16_t attId, uint_fast16_t attNb, 
  * \return uint16_t: number of attributes
  */
 static uint16_t LCSF_CountAttributes(uint_fast16_t descAttNb, lcsf_valid_att_t *pAttArray) {
-    uint16_t count = 0;
-
+    // Bad parameters guard
     if (pAttArray == NULL) {
         return 0;
     }
+    uint16_t count = 0;
+    // Parse attributes
     for (uint16_t idx = 0; idx < descAttNb; idx++) {
         if (pAttArray[idx].Payload.pData != NULL) {
             count++;
@@ -290,7 +296,7 @@ static uint16_t LCSF_CountAttributes(uint_fast16_t descAttNb, lcsf_valid_att_t *
  * \return bool: true if operation was a success
  */
 static bool LCSF_ValidateDataType(size_t dataSize, uint_fast8_t descDataType) {
-
+    // Check data type
     switch (descDataType) {
         case LCSF_UINT8:
             return (dataSize == sizeof(uint8_t));
@@ -306,7 +312,7 @@ static bool LCSF_ValidateDataType(size_t dataSize, uint_fast8_t descDataType) {
 
         case LCSF_BYTE_ARRAY:
         case LCSF_STRING:
-            return (dataSize != 0); // We can only check that there is data
+            return (dataSize != 0); // Check data presence only
         break;
 
         default: // Unknown data type
@@ -327,13 +333,13 @@ static bool LCSF_ValidateDataType(size_t dataSize, uint_fast8_t descDataType) {
  * \return bool: true if operation was a success
  */
 static bool LCSF_ValidateAttribute_Rec(uint_fast16_t attNb, const lcsf_raw_att_t *pAttArray, uint_fast16_t descAttNb, const lcsf_attribute_desc_t *pAttDescArray, lcsf_valid_att_t **pValidAttArray) {
-
+    // Bad parameters guard
     if (pAttDescArray == NULL) {
         LcsfValidatorInfo.LastErrorType = LCSF_EP_ERROR_CODE_UNKNOWN_ERROR;
         return false;
     }
     if (pAttArray == NULL) {
-        // No received attributes, we check if this is normal
+        // No attributes received, check if expected
         if(LCSF_HasNonOptionalAttribute(descAttNb, pAttDescArray)) {
             LcsfValidatorInfo.LastErrorType = LCSF_EP_ERROR_CODE_MISS_NONOPT_ATT;
             return false;
@@ -348,9 +354,9 @@ static bool LCSF_ValidateAttribute_Rec(uint_fast16_t attNb, const lcsf_raw_att_t
         LcsfValidatorInfo.LastErrorType = LCSF_EP_ERROR_CODE_UNKNOWN_ERROR;
         return false;
     }
-    // We note the base number of received attributes
+    // Note the base number of received attributes
     uint16_t rxAttNb = attNb;
-    // We go through the descriptor list
+    // Parse through the descriptor list
     for (uint16_t idx = 0; idx < descAttNb; idx++) {
         // Intermediary variables
         lcsf_valid_att_t *pCurrValidAtt = &((*pValidAttArray)[idx]);
@@ -365,7 +371,7 @@ static bool LCSF_ValidateAttribute_Rec(uint_fast16_t attNb, const lcsf_raw_att_t
             // Check the payload type
             if (pCurrDescAtt->DataType == LCSF_SUB_ATTRIBUTES) {
                 if (pCurrRxAtt->HasSubAtt) {
-                    // We process the sub-attributes
+                    // Process the sub-attributes
                     if (!LCSF_ValidateAttribute_Rec(pCurrRxAtt->PayloadSize, pCurrRxAtt->Payload.pSubAttArray, pCurrDescAtt->SubAttNb, pCurrDescAtt->pSubAttDescArray, &(pCurrValidAtt->Payload.pSubAttArray))) {
                         return false;
                     }
@@ -393,7 +399,7 @@ static bool LCSF_ValidateAttribute_Rec(uint_fast16_t attNb, const lcsf_raw_att_t
             pCurrValidAtt->Payload.pData = NULL;
         }
     }
-    // Check if we processed everything
+    // Check everything is processed
     if (rxAttNb > 0) {
         LcsfValidatorInfo.LastErrorType = LCSF_EP_ERROR_CODE_UNKNOWN_ATT_ID;
         return false;
@@ -413,17 +419,17 @@ static bool LCSF_ValidateAttribute_Rec(uint_fast16_t attNb, const lcsf_raw_att_t
 static bool LCSF_ValidateAttribute(const lcsf_raw_msg_t *pMessage, const lcsf_command_desc_t *pCmdDesc, lcsf_valid_att_t **pValidAttArray) {
 
     if ((pCmdDesc->AttNb == 0) && (pMessage->AttNb > 0)) {
-        // We received attributes while the descriptor says we expect none
+        // Attributes received while the descriptor expected none
         LcsfValidatorInfo.LastErrorType = LCSF_EP_ERROR_CODE_TOO_MANY_ATT;
         return false;
     } else if ((pCmdDesc->AttNb != 0) && (pMessage->AttNb == 0)) {
-        // We received no attributes, we check if this is normal or if there is missing attributes
+        // No attributes received, check if missing attributes
         if (LCSF_HasNonOptionalAttribute(pCmdDesc->AttNb, pCmdDesc->pAttDescArray)) {
             LcsfValidatorInfo.LastErrorType = LCSF_EP_ERROR_CODE_MISS_NONOPT_ATT;
             return false;
         }
     } else if ((pCmdDesc->AttNb != 0) && (pCmdDesc->pAttDescArray != NULL)) {
-        // We validate the attribute array
+        // Validate the attribute array
         return LCSF_ValidateAttribute_Rec(pMessage->AttNb, pMessage->pAttArray, pCmdDesc->AttNb, pCmdDesc->pAttDescArray, pValidAttArray);
     }
     return true;
@@ -442,57 +448,48 @@ static bool LCSF_ValidateAttribute(const lcsf_raw_msg_t *pMessage, const lcsf_co
 static bool LCSF_FillAttributeInfo(lcsf_raw_att_t *pRawAtt, uint_fast8_t descDataType, uint_fast16_t subAttNb, const lcsf_valid_att_t *pValidAtt) {
     uint16_t stringSize = 0;
 
+    // Check data type
     switch (descDataType) {
         case LCSF_UINT8:
-              pRawAtt->PayloadSize = sizeof(uint8_t);
-              pRawAtt->HasSubAtt = false;
-              return true;
-        break;
+            pRawAtt->PayloadSize = sizeof(uint8_t);
+            pRawAtt->HasSubAtt = false;
+        return true;
 
         case LCSF_UINT16:
-              pRawAtt->PayloadSize = sizeof(uint16_t);
-              pRawAtt->HasSubAtt = false;
-              return true;
-        break;
+            pRawAtt->PayloadSize = sizeof(uint16_t);
+            pRawAtt->HasSubAtt = false;
+        return true;
 
         case LCSF_UINT32:
-              pRawAtt->PayloadSize = sizeof(uint32_t);
-              pRawAtt->HasSubAtt = false;
-              return true;
-        break;
+            pRawAtt->PayloadSize = sizeof(uint32_t);
+            pRawAtt->HasSubAtt = false;
+        return true;
 
         case LCSF_BYTE_ARRAY:
-              if (pValidAtt->PayloadSize > 0) {
-                  pRawAtt->PayloadSize = (uint16_t)pValidAtt->PayloadSize;
-                  pRawAtt->HasSubAtt = false;
-              return true;
-              } else {
-                  return false;
-              }
-        break;
+            if (pValidAtt->PayloadSize <= 0) {
+              return false;
+            }
+            pRawAtt->PayloadSize = (uint16_t)pValidAtt->PayloadSize;
+            pRawAtt->HasSubAtt = false;
+        return true;
 
         case LCSF_STRING:
-              stringSize = (uint16_t)strlen((char *)pValidAtt->Payload.pData);
-              if (stringSize > 0) {
-                  pRawAtt->PayloadSize = stringSize + 1;
-                  pRawAtt->HasSubAtt = false;
-                  return true;
-              } else {
-                  return false;
-              }
-        break;
+            stringSize = (uint16_t)strlen((char *)pValidAtt->Payload.pData);
+            if (stringSize <= 0) {
+              return false;
+            }
+            pRawAtt->PayloadSize = stringSize + 1;
+            pRawAtt->HasSubAtt = false;
+        return true;
 
         case LCSF_SUB_ATTRIBUTES:
-              pRawAtt->PayloadSize = subAttNb;
-              pRawAtt->HasSubAtt = true;
-              return true;
-        break;
+            pRawAtt->PayloadSize = subAttNb;
+            pRawAtt->HasSubAtt = true;
+        return true;
 
-          default:
-              return false;
-        break;
+        default:
+        return false;
     }
-    return false;
 }
 
 /**
@@ -505,12 +502,12 @@ static bool LCSF_FillAttributeInfo(lcsf_raw_att_t *pRawAtt, uint_fast8_t descDat
  * \return bool: true if operation was a success
  */
 static bool LCSF_FillAttribute_Rec(uint_fast16_t descAttNb, const lcsf_attribute_desc_t *pAttDescArray, const lcsf_valid_att_t *pValidAttArray, lcsf_raw_att_t *pRawAttArray) {
-    // Raw attribute array index
-    uint16_t fillIdx = 0;
-
+    // Bad parameters guard
     if ((pAttDescArray == NULL) || (pValidAttArray == NULL)) {
         return false;
     }
+    // Raw attribute array index
+    uint16_t fillIdx = 0;
     // Go through the valid attribute array
     for (uint16_t idx = 0; idx < descAttNb; idx++) {
         // Intermediary variables
@@ -570,7 +567,6 @@ static bool LCSF_FillAttribute_Rec(uint_fast16_t descAttNb, const lcsf_attribute
  * \return bool: true if operation was a success
  */
 static bool LCSF_FillAttributeArray(uint_fast16_t attNb, const lcsf_valid_att_t *pAttArray, const lcsf_command_desc_t *pCmdDesc, lcsf_raw_att_t **pRawAttArray) {
-
     // Try to allocate the attribute list
     if (!LCSF_AllocateSenderAttArray(attNb, pRawAttArray)) {
         return false;
@@ -588,7 +584,7 @@ static bool LCSF_FillAttributeArray(uint_fast16_t attNb, const lcsf_valid_att_t 
  * \return bool: true if operation successful
  */
 static bool LCSF_ValidatorSendError(uint_fast8_t errorLoc, uint_fast8_t errorType) {
-    // Check if we can send it
+    // Check error send callback
     if (LcsfValidatorInfo.pFnSendErrCb == NULL) {
         DEBUG_PRINT("[LCSF_Validator]: Sending error but missing callback\n");
         return false;
@@ -635,7 +631,7 @@ static bool LCSF_ValidatorSendError(uint_fast8_t errorLoc, uint_fast8_t errorTyp
  * \return bool: true if operation was a success
  */
 static bool LCSF_ProcessReceivedError(const lcsf_raw_msg_t *pErrorMsg) {
-    // Check if we can notify the error
+    // Check receive error callback
     if (LcsfValidatorInfo.pFnRecErrCb == NULL) {
         DEBUG_PRINT("[LCSF_Validator]: Received error but missing callback\n");
         return false;
@@ -691,16 +687,17 @@ bool LCSF_ValidatorInit(LCSFSendErrCallback_t *pFnSendErrCb, LCSFReceiveErrCallb
 }
 
 bool LCSF_ValidatorAddProtocol(uint_fast16_t protIdx, const lcsf_validator_protocol_desc_t *pProtDesc) {
-    if ((pProtDesc != NULL) && (protIdx < LcsfValidatorInfo.ProtNb)) {
-        LcsfValidatorInfo.pProtArray[protIdx] = pProtDesc;
-        return true;
-    } else {
+    // Bad parameters guard
+    if ((pProtDesc == NULL) || (protIdx >= LcsfValidatorInfo.ProtNb)) {
         return false;
     }
+    // Add protocol descriptor
+    LcsfValidatorInfo.pProtArray[protIdx] = pProtDesc;
+    return true;
 }
 
 bool LCSF_ValidatorReceive(const lcsf_raw_msg_t *pMessage) {
-
+    // Bad parameters guard
     if (pMessage == NULL) {
         return false;
     }
@@ -738,13 +735,14 @@ bool LCSF_ValidatorReceive(const lcsf_raw_msg_t *pMessage) {
 }
 
 int LCSF_ValidatorEncode(uint_fast16_t protId, const lcsf_valid_cmd_t *pCommand, uint8_t *pBuffer, size_t buffSize) {
-
+    // Bad parameters guard
     if (pCommand == NULL) {
         return -1;
     }
     // Retrieve protocol description
     const lcsf_protocol_desc_t *pProtDesc = LCSF_GetDescriptor(protId);
     if (pProtDesc == NULL) {
+        // Unknown protocol
         return -1;
     }
     // Variables initialization
@@ -756,6 +754,7 @@ int LCSF_ValidatorEncode(uint_fast16_t protId, const lcsf_valid_cmd_t *pCommand,
     sendMsg.ProtId = protId;
     // Validate command id
     if (!LCSF_ValidateCmdId(pCommand->CmdId, pProtDesc->CmdNb, &cmdIdx, pProtDesc->pCmdDescArray)) {
+        // Unknown command
         return -1;
     }
     // Intermediary variable
@@ -778,6 +777,7 @@ int LCSF_ValidatorEncode(uint_fast16_t protId, const lcsf_valid_cmd_t *pCommand,
     }
     // Fill message attributes array
     if (!LCSF_FillAttributeArray(sendMsg.AttNb, pCommand->pAttArray, pCurrCmdDesc, &(sendMsg.pAttArray))) {
+        // Attribute error
         return -1;
     }
     // Pass message to transcoder

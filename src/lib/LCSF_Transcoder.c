@@ -95,35 +95,36 @@ static bool LCSF_AllocateAttArray(uint_fast16_t attNb, lcsf_raw_att_t **pAttArra
  * \return bool: true if operation was a success
  */
 static bool LCSF_FetchMsgHeader(uint16_t *pBuffIdx, size_t buffSize, const uint8_t *pBuffer, lcsf_raw_msg_t *pMsg) {
-    // Guard against buffer overflow
 #ifdef LCSF_SMALL
-    if ((size_t)(*pBuffIdx + 2) < buffSize) {
-        // Byte 1: Protocol id
-        pMsg->ProtId = pBuffer[(*pBuffIdx)++];
-        // Byte 2: Command id
-        pMsg->CmdId = pBuffer[(*pBuffIdx)++];
-        // Byte 3: Attribute number
-        pMsg->AttNb = pBuffer[(*pBuffIdx)++];
-        return true;
+    // Buffer overflow guard
+    if ((size_t)(*pBuffIdx + 2) >= buffSize) {
+        return false;
     }
+    // Byte 1: Protocol id
+    pMsg->ProtId = pBuffer[(*pBuffIdx)++];
+    // Byte 2: Command id
+    pMsg->CmdId = pBuffer[(*pBuffIdx)++];
+    // Byte 3: Attribute number
+    pMsg->AttNb = pBuffer[(*pBuffIdx)++];
 #else
-    if ((size_t)(*pBuffIdx + 5) < buffSize) {
-        // Byte 1: Protocol ID LSB
-        pMsg->ProtId = pBuffer[(*pBuffIdx)++];
-        // Byte 2: Protocol ID MSB
-        pMsg->ProtId += pBuffer[(*pBuffIdx)++] << 8;
-        // Byte 3: Command ID LSB
-        pMsg->CmdId = pBuffer[(*pBuffIdx)++];
-        // Byte 4: Command ID MSB
-        pMsg->CmdId += pBuffer[(*pBuffIdx)++] << 8;
-        // Byte 5: Attribute Number LSB
-        pMsg->AttNb = pBuffer[(*pBuffIdx)++];
-        // Byte 6: Attribute Number MSB
-        pMsg->AttNb += pBuffer[(*pBuffIdx)++] << 8;
-        return true;
+    // Buffer overflow guard
+    if ((size_t)(*pBuffIdx + 5) >= buffSize) {
+        return false;
     }
+    // Byte 1: Protocol ID LSB
+    pMsg->ProtId = pBuffer[(*pBuffIdx)++];
+    // Byte 2: Protocol ID MSB
+    pMsg->ProtId += pBuffer[(*pBuffIdx)++] << 8;
+    // Byte 3: Command ID LSB
+    pMsg->CmdId = pBuffer[(*pBuffIdx)++];
+    // Byte 4: Command ID MSB
+    pMsg->CmdId += pBuffer[(*pBuffIdx)++] << 8;
+    // Byte 5: Attribute Number LSB
+    pMsg->AttNb = pBuffer[(*pBuffIdx)++];
+    // Byte 6: Attribute Number MSB
+    pMsg->AttNb += pBuffer[(*pBuffIdx)++] << 8;
 #endif
-    return false;
+    return true;
 }
 
 /**
@@ -137,40 +138,34 @@ static bool LCSF_FetchMsgHeader(uint16_t *pBuffIdx, size_t buffSize, const uint8
  * \return bool: true if operation was a success
  */
 static bool LCSF_FetchAttHeader(uint16_t *pBuffIdx, size_t buffSize, const uint8_t *pBuffer, lcsf_raw_att_t *pAtt) {
-    // Guard against buffer overflow
 #ifdef LCSF_SMALL
-    if ((size_t)(*pBuffIdx + 1) < buffSize) {
-        // Byte 1 (MSbit): Complexity flag (the attribute have sub-attributes if set)
-        pAtt->HasSubAtt = ((pBuffer[*pBuffIdx] & (1 << 7)) != 0);
-        // Byte 1: Attribute id
-        pAtt->AttId = pBuffer[(*pBuffIdx)++];
-        // Mask the complexity flag from attribute id
-        pAtt->AttId &= ~(1 << 7);
-    } else {
+    // Buffer overflow guard
+    if ((size_t)(*pBuffIdx + 1) >= buffSize) {
         return false;
     }
+    // Byte 1 (MSbit): Complexity flag (the attribute have sub-attributes if set)
+    pAtt->HasSubAtt = ((pBuffer[*pBuffIdx] & (1 << 7)) != 0);
+    // Byte 1: Attribute id
+    pAtt->AttId = pBuffer[(*pBuffIdx)++];
+    // Mask the complexity flag from attribute id
+    pAtt->AttId &= ~(1 << 7);
     // Byte 2: Payload size
     pAtt->PayloadSize = pBuffer[(*pBuffIdx)++];
 #else
-    if ((size_t)(*pBuffIdx + 1) < buffSize) {
-        // Byte 1: Attribute id LSB
-        pAtt->AttId = pBuffer[(*pBuffIdx)++];
-        // Byte 2 (MSbit): Complexity flag (the attribute have sub-attributes if set)
-        pAtt->HasSubAtt = ((pBuffer[*pBuffIdx] & (1 << 7)) != 0);
-        // Byte 2: Attribute id MSB
-        pAtt->AttId += pBuffer[(*pBuffIdx)++] << 8;
-    } else {
+    // Buffer overflow guard
+    if ((size_t)(*pBuffIdx + 3) >= buffSize) {
         return false;
     }
-    // Guard against buffer overflow
-    if((size_t)(*pBuffIdx + 1) < buffSize) {
-        // Byte 3: Data size or Sub-attribute number LSB
-        pAtt->PayloadSize = pBuffer[(*pBuffIdx)++];
-        // Byte 4: Data size or Sub-attribute number MSB
-        pAtt->PayloadSize += pBuffer[(*pBuffIdx)++] << 8;
-    } else {
-        return false;
-    }
+    // Byte 1: Attribute id LSB
+    pAtt->AttId = pBuffer[(*pBuffIdx)++];
+    // Byte 2 (MSbit): Complexity flag (the attribute have sub-attributes if set)
+    pAtt->HasSubAtt = ((pBuffer[*pBuffIdx] & (1 << 7)) != 0);
+    // Byte 2: Attribute id MSB
+    pAtt->AttId += pBuffer[(*pBuffIdx)++] << 8;
+    // Byte 3: Data size or Sub-attribute number LSB
+    pAtt->PayloadSize = pBuffer[(*pBuffIdx)++];
+    // Byte 4: Data size or Sub-attribute number MSB
+    pAtt->PayloadSize += pBuffer[(*pBuffIdx)++] << 8;
 #endif
     return true;
 }
@@ -187,16 +182,15 @@ static bool LCSF_FetchAttHeader(uint16_t *pBuffIdx, size_t buffSize, const uint8
  * \return bool: true if operation was a success
  */
 static bool LCSF_FetchAttData(uint16_t *pBuffIdx, size_t buffSize, const uint8_t *pBuffer, size_t attDataSize, uint8_t **pAttData) {
-    // Guard against buffer overflow
-    if ((size_t)(*pBuffIdx + attDataSize - 1) < buffSize) {
-        // We only recopy the pointer, the buffer must not to be re-written before being processed !
-        *pAttData = (uint8_t *)&(pBuffer[*pBuffIdx]);
-        // We increase the buffer index as we processed the data
-        *pBuffIdx += attDataSize;
-        return true;
-    } else {
+    // Buffer overflow guard
+    if ((size_t)(*pBuffIdx + attDataSize) > buffSize) {
         return false;
     }
+    // Recopy the pointer, the buffer must not to be re-written before being processed!
+    *pAttData = (uint8_t *)&(pBuffer[*pBuffIdx]);
+    // Increase the buffer index as data is processed
+    *pBuffIdx += attDataSize;
+    return true;
 }
 
 /**
@@ -211,7 +205,7 @@ static bool LCSF_FetchAttData(uint16_t *pBuffIdx, size_t buffSize, const uint8_t
  * \return bool: true if operation was a success
  */
 static bool LCSF_DecodeAtt_Rec(uint16_t *pBuffIdx, const uint8_t *pBuffer, size_t buffSize, uint_fast16_t attNb, lcsf_raw_att_t *pAttArray) {
-    // We go through the attribute array
+    // Parse through the attribute array
     for (uint16_t attIdx = 0; attIdx < attNb; attIdx++) {
         // Guard against buffer overflow
         if ((size_t)(*pBuffIdx) < buffSize) {
@@ -299,35 +293,36 @@ static bool LCSF_DecodeBuffer(const uint8_t *pBuffer, size_t buffSize, lcsf_raw_
  * \return bool: true if operation was a success
  */
 static bool LCSF_FillMsgHeader(uint16_t *pBuffIdx, uint8_t *pBuffer, size_t buffSize, const lcsf_raw_msg_t *pMsg) {
-    // Guard against buffer overflow
 #ifdef LCSF_SMALL
-    if ((size_t)(*pBuffIdx + 2) < buffSize) {
-        // Byte 1: Protocol id
-        pBuffer[(*pBuffIdx)++] = (uint8_t)pMsg->ProtId;
-        // Byte 2: Command id
-        pBuffer[(*pBuffIdx)++] = (uint8_t)pMsg->CmdId;
-        // Byte 3: Attribute number
-        pBuffer[(*pBuffIdx)++] = (uint8_t)pMsg->AttNb;
-        return true;
+    // Buffer overflow guard
+    if ((size_t)(*pBuffIdx + 2) >= buffSize) {
+        return false;
     }
+    // Byte 1: Protocol id
+    pBuffer[(*pBuffIdx)++] = (uint8_t)pMsg->ProtId;
+    // Byte 2: Command id
+    pBuffer[(*pBuffIdx)++] = (uint8_t)pMsg->CmdId;
+    // Byte 3: Attribute number
+    pBuffer[(*pBuffIdx)++] = (uint8_t)pMsg->AttNb;
 #else
-    if ((size_t)(*pBuffIdx + 5) < buffSize) {
-        // Byte 1: Protocol id LSB
-        pBuffer[(*pBuffIdx)++] = (uint8_t)pMsg->ProtId;
-        // Byte 2: Protocol id MSB
-        pBuffer[(*pBuffIdx)++] = (uint8_t)(pMsg->ProtId >> 8);
-        // Byte 3: Command id LSB
-        pBuffer[(*pBuffIdx)++] = (uint8_t)pMsg->CmdId;
-        // Byte 4: Command id MSB
-        pBuffer[(*pBuffIdx)++] = (uint8_t)(pMsg->CmdId >> 8);
-        // Byte 5: Attribute number LSB
-        pBuffer[(*pBuffIdx)++] = (uint8_t)pMsg->AttNb;
-        // Byte 6: Attribute number MSB
-        pBuffer[(*pBuffIdx)++] = (uint8_t)(pMsg->AttNb >> 8);
-        return true;
+    // Buffer overflow guard
+    if ((size_t)(*pBuffIdx + 5) >= buffSize) {
+        return false;
     }
+    // Byte 1: Protocol id LSB
+    pBuffer[(*pBuffIdx)++] = (uint8_t)pMsg->ProtId;
+    // Byte 2: Protocol id MSB
+    pBuffer[(*pBuffIdx)++] = (uint8_t)(pMsg->ProtId >> 8);
+    // Byte 3: Command id LSB
+    pBuffer[(*pBuffIdx)++] = (uint8_t)pMsg->CmdId;
+    // Byte 4: Command id MSB
+    pBuffer[(*pBuffIdx)++] = (uint8_t)(pMsg->CmdId >> 8);
+    // Byte 5: Attribute number LSB
+    pBuffer[(*pBuffIdx)++] = (uint8_t)pMsg->AttNb;
+    // Byte 6: Attribute number MSB
+    pBuffer[(*pBuffIdx)++] = (uint8_t)(pMsg->AttNb >> 8);
 #endif
-    return false;
+    return true;
 }
 
 /**
@@ -341,41 +336,41 @@ static bool LCSF_FillMsgHeader(uint16_t *pBuffIdx, uint8_t *pBuffer, size_t buff
  * \return bool: true if operation was a success
  */
 static bool LCSF_FillAttHeader(uint16_t *pBuffIdx, uint8_t *pBuffer, size_t buffSize, const lcsf_raw_att_t *pAtt) {
-    // Guard against buffer overflow
 #ifdef LCSF_SMALL
-    if ((size_t)(*pBuffIdx + 1) < buffSize) {
-        // Check if attribute has sub attributes
-        if (pAtt->HasSubAtt) {
-            // Byte 1: Attribute id + MSb at 1
-            pBuffer[(*pBuffIdx)++] = (uint8_t)((pAtt->AttId) | 0x80);
-        } else {
-            // Byte 1: Attribute id + MSb at 0
-            pBuffer[(*pBuffIdx)++] = (uint8_t)((pAtt->AttId) & 0x7F);
-        }
-        // Byte 2: Attribute data size or sub-attribute number
-        pBuffer[(*pBuffIdx)++] = (uint8_t)pAtt->PayloadSize;
-        return true;
+    // Buffer overflow guard
+    if ((size_t)(*pBuffIdx + 1) >= buffSize) {
+        return false;
     }
+    // Check if attribute has sub attributes
+    if (pAtt->HasSubAtt) {
+        // Byte 1: Attribute id + MSb at 1
+        pBuffer[(*pBuffIdx)++] = (uint8_t)((pAtt->AttId) | 0x80);
+    } else {
+        // Byte 1: Attribute id + MSb at 0
+        pBuffer[(*pBuffIdx)++] = (uint8_t)((pAtt->AttId) & 0x7F);
+    }
+    // Byte 2: Attribute data size or sub-attribute number
+    pBuffer[(*pBuffIdx)++] = (uint8_t)pAtt->PayloadSize;
 #else
-    if ((size_t)(*pBuffIdx + 3) < buffSize) {
-        // Byte 1: Attribute id LSB
-        pBuffer[(*pBuffIdx)++] = (uint8_t)pAtt->AttId;
-        // Check if attribute has sub attributes
-        if (pAtt->HasSubAtt) {
-            // Byte 2: Attribute id MSB + MSb at 1
-            pBuffer[(*pBuffIdx)++] = (uint8_t)((pAtt->AttId >> 8) | 0x80);
-        } else {
-            // Byte 2: Attribute id MSB + MSb at 0
-            pBuffer[(*pBuffIdx)++] = (uint8_t)((pAtt->AttId >> 8) & 0x7F);
-        }
-        // Byte 3: Attribute data size or sub-attribute number LSB
-        pBuffer[(*pBuffIdx)++] = (uint8_t)pAtt->PayloadSize;
-        // Byte 4: Attribute data size or sub-attribute number MSB
-        pBuffer[(*pBuffIdx)++] = (uint8_t)(pAtt->PayloadSize >> 8);
-        return true;
+    if ((size_t)(*pBuffIdx + 3) >= buffSize) {
+        return false;
     }
+    // Byte 1: Attribute id LSB
+    pBuffer[(*pBuffIdx)++] = (uint8_t)pAtt->AttId;
+    // Check if attribute has sub attributes
+    if (pAtt->HasSubAtt) {
+        // Byte 2: Attribute id MSB + MSb at 1
+        pBuffer[(*pBuffIdx)++] = (uint8_t)((pAtt->AttId >> 8) | 0x80);
+    } else {
+        // Byte 2: Attribute id MSB + MSb at 0
+        pBuffer[(*pBuffIdx)++] = (uint8_t)((pAtt->AttId >> 8) & 0x7F);
+    }
+    // Byte 3: Attribute data size or sub-attribute number LSB
+    pBuffer[(*pBuffIdx)++] = (uint8_t)pAtt->PayloadSize;
+    // Byte 4: Attribute data size or sub-attribute number MSB
+    pBuffer[(*pBuffIdx)++] = (uint8_t)(pAtt->PayloadSize >> 8);
 #endif
-    return false;
+    return true;
 }
 
 /**
@@ -390,7 +385,7 @@ static bool LCSF_FillAttHeader(uint16_t *pBuffIdx, uint8_t *pBuffer, size_t buff
  */
 static bool LCSF_FillAttData(uint16_t *pBuffIdx, uint8_t *pBuffer, size_t buffSize, const lcsf_raw_att_t *pAtt) {
     // Guard against buffer overflow
-    if (pAtt->PayloadSize > (buffSize - *pBuffIdx)) {
+    if ((size_t)(*pBuffIdx + pAtt->PayloadSize) > buffSize) {
         return false;
     }
     // Copy data into the buffer
@@ -412,7 +407,7 @@ static bool LCSF_FillAttData(uint16_t *pBuffIdx, uint8_t *pBuffer, size_t buffSi
  * \return int32_t: Number of data bytes (sub-attributes included) of an attribute (-1 if error)
  */
 static bool LCSF_EncodeAtt_Rec(uint16_t *pBuffIdx, uint8_t *pBuffer, size_t buffSize, uint_fast16_t attNb, const lcsf_raw_att_t *pAttArray) {
-    // We go through the attribute array
+    // Parse the attribute array
     for (uint16_t attIdx = 0; attIdx < attNb; attIdx++) {
         // Guard against buffer overflow
         if (*pBuffIdx >= buffSize) {
@@ -449,8 +444,6 @@ static bool LCSF_EncodeAtt_Rec(uint16_t *pBuffIdx, uint8_t *pBuffer, size_t buff
  * \return bool: true if operation was a success
  */
 static bool LCSF_EncodeBuffer(uint16_t *pBuffIdx, uint8_t *pBuffer, size_t buffSize, const lcsf_raw_msg_t *pMsg) {
-    // Buffer initialization
-    memset(pBuffer, 0, buffSize * sizeof(uint8_t));
     // Encode the message header
     if (!LCSF_FillMsgHeader(pBuffIdx, pBuffer, buffSize, pMsg)) {
         return false;
@@ -470,6 +463,7 @@ bool LCSF_TranscoderInit(void) {
 }
 
 bool LCSF_TranscoderReceive(const uint8_t *pBuffer, size_t buffSize) {
+    // Invalid parameters guards
     if (pBuffer == NULL) {
         return false;
     }
@@ -485,6 +479,7 @@ bool LCSF_TranscoderReceive(const uint8_t *pBuffer, size_t buffSize) {
 }
 
 int LCSF_TranscoderEncode(const lcsf_raw_msg_t *pMessage, uint8_t *pBuffer, size_t buffSize) {
+    // Invalid parameters guards
     if (pMessage == NULL) {
         return -1;
     }
