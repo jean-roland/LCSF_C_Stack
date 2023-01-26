@@ -21,7 +21,7 @@ Then, to interface with your project:
 
 Finally, to fit your application's needs, create a custom protocol either by modifying the example protocol files or by using the [LCSF Generator](https://github.com/jean-roland/LCSF_Generator) (recommended).
 
-You can change the memory allocation function used by the stack to use your own or change other parameters (buffer sizes, filo sizes) in `LCSF_config.h`.
+You can change some stack parameters (protocol array size, filo size) in `include/LCSF_config.h`.
 
 ## How the stack works
 
@@ -59,7 +59,7 @@ Recursivity is generally frowned upon in embedded applications, which is why the
 * The stack is linear in its recursivity (one call will only lead to a maximum of one other call).
 * The stack is limited by the depth of its filo when making new calls, it is guaranteed to not infinitely loop.
 
-## Build & tests
+## Build, tests & docs
 
 If you want to build the project as is you need to install [CMake](https://cmake.org/) 3.14 or above, and a buildsystem ([Ninja](https://ninja-build.org/) is recommended).
 
@@ -69,11 +69,16 @@ Build commands, if using Ninja, at project root:
  cmake --build build/
  ```
 
-To run the test suite, you need to install [Cpputest](http://cpputest.github.io/). Then, use the following commands still at project root:
+To run the test suite, you need to install [Cpputest](http://cpputest.github.io/). If you have library errors, you might need to modify the root `CMakeLists.txt` to specify the Cpputest location.
+Then, use the following commands still at project root:
 
 `cmake --build build/ --target run_tests`
 
-If you have library errors, you might need to modify the root `CMakeLists.txt` to specify the Cpputest location.
+To generate the doc, you need to install [Doxygen](https://www.doxygen.nl/), then run at project root:
+
+`doxygen doc/cfg/Doxyfile`
+
+You can access the documentation with the adequate system link found in `doc/`.
 
 ## Resource usage
 
