@@ -21,6 +21,11 @@
 
 #pragma once
 
+// --- Common include ---
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+
 // --- LCSF Transcoder ---
 // #define LCSF_SMALL // Uncomment to use the smaller representation LCSF variant
 #define LCSF_TRANSCODER_RX_FILO_SIZE 20 // Number of items (8 bytes / item)

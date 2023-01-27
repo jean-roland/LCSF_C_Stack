@@ -10,9 +10,8 @@
 
 // *** Libraries include ***
 // Standard lib
-#include <stdbool.h>
-#include <stdint.h>
 // Custom lib
+#include <LCSF_Config.h>
 
 // *** Definitions ***
 // --- Public Types ---

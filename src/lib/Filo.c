@@ -21,8 +21,6 @@
 
 // *** Libraries include ***
 // Standard lib
-#include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 // Custom lib
 #include <LCSF_Config.h>

@@ -21,9 +21,6 @@
 
 // *** Libraries include ***
 // Standard lib
-#include <stddef.h>
-#include <stdbool.h>
-#include <stdint.h>
 #include <string.h>
 // Custom lib
 #include <Filo.h>

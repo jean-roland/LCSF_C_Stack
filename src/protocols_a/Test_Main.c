@@ -7,7 +7,6 @@
 
 // *** Libraries include ***
 // Standard lib
-#include <stdlib.h>
 #include <string.h>
 // Custom lib
 #include <LCSF_Config.h>

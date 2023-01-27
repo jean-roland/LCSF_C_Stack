@@ -25,14 +25,14 @@
 #include "CppUTestExt/MockSupport.h"
 
 extern "C" {
-#include "Example_Main.h"
+#include <string.h>
 #include "Filo.h"
 #include "LCSF_Config.h"
 #include "LCSF_Transcoder.h"
 #include "LCSF_Validator.h"
 #include "LCSF_Desc_Example.h"
 #include "LCSF_Bridge_Example.h"
-#include <string.h>
+#include "Example_Main.h"
 }
 
 // *** Private macros ***
