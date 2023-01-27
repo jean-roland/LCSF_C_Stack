@@ -13,13 +13,12 @@ For more information on the project, check the official LCSF documentation [here
 ## How to use
 First, include all the source files in your project. You can find example set-up code in `custom_main.c`.
 
-Modules must be initialized once in your application before you can use them. Further initialization will only waste memory and using before initializing will result in a bad address fault.
+Modules must be initialized once in your application before you can use them. Using before initializing might result in a bad address fault.
 
 Then, to interface with your project:
-* Call the function `LCSF_TranscoderReceive` with your module receiving data in lcsf format (eg: data coming from a network port, an UART or a CAN bus...)
-* Give a callback to the function that will send the transcoder data.
-
-Finally, to fit your application's needs, create a custom protocol either by modifying the example protocol files or by using the [LCSF Generator](https://github.com/jean-roland/LCSF_Generator) (recommended).
+* Create a custom protocol either by modifying the example protocol files or by using the [LCSF Generator](https://github.com/jean-roland/LCSF_Generator) (recommended).
+* Call the function `LCSF_TranscoderReceive` when you received a buffer containing an lcsf message, this will call the adequate function in your `<protocol>_Main.c`.
+* Call the function `LCSF_Bridge_Encode` to encode a buffer with an lcsf_message that you can then send. Example call can be found in your `<protocol>_Main.c`.
 
 You can change some stack parameters (protocol array size, filo size) in `include/LCSF_config.h`.
 
@@ -46,7 +45,7 @@ The default LCSF representation used by the transcoder is the standard one. You 
 ## Protocol files
 
 Each protocol used by the LCSF C stack is composed of 5 files:
-* `LCSF_protocol_Desc.h`: This file contains the tables describing the protocol commands and attributes.
+* `LCSF_protocol_Desc.c`: This file contains the tables describing the protocol commands and attributes.
 * `LCSF_Bridge_protocol.c/.h`: This files contain the LCSF abstraction layer.
 * `<protocol>_Main.c/.h`: This files contain the application code associated with the protocol.
 
