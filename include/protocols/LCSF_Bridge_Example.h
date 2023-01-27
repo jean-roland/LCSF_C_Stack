@@ -97,7 +97,7 @@ bool LCSF_Bridge_ExampleInit(void);
 bool LCSF_Bridge_ExampleReceive(lcsf_valid_cmd_t *pValidCmd);
 
 /**
- * \fn int LCSF_Bridge_ExampleEncode(uint_fast16_t cmdName, void *pCmdPayload)
+ * \fn int LCSF_Bridge_ExampleEncode(uint_fast16_t cmdName, void *pCmdPayload, uint8_t *pBuffer, size_t buffSize)
  * \brief Receive command from Example_Main and transmit to LCSF_Validator for encoding
  *
  * \param cmdName name of the command

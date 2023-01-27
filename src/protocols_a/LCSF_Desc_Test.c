@@ -1,7 +1,7 @@
 /**
  * \file LCSF_Desc_Test.c
  * \brief Test LCSF descriptor
- * \author LCSF Generator v1.1
+ * \author LCSF Generator v1.3
  *
  */
 
@@ -165,4 +165,4 @@ static const lcsf_command_desc_t LCSF_Test_CmdDescArray[LCSF_TEST_CMD_NB] = {
 // --- Public Constants ---
 
 // Protocol descriptor
-const lcsf_protocol_desc_t LCSF_Test_ProtDesc = { .CmdNb = LCSF_TEST_CMD_NB, .pCmdDescArray = LCSF_Test_CmdDescArray };
+const lcsf_protocol_desc_t LCSF_Test_ProtDesc = {.CmdNb = LCSF_TEST_CMD_NB, .pCmdDescArray = LCSF_Test_CmdDescArray};

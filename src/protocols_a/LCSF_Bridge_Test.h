@@ -1,7 +1,7 @@
 /**
  * \file LCSF_Bridge_Test.h
  * \brief Test LCSF bridge module
- * \author LCSF Generator v1.1
+ * \author LCSF Generator v1.3
  *
  */
 
@@ -17,12 +17,6 @@
 
 // *** Definitions ***
 // --- Public Types ---
-
-// Bridge decoder filo size (biggest command size)
-#define LCSF_BRIDGE_TEST_FILO_SIZE 11
-
-// Lcsf protocol identifier
-#define LCSF_TEST_PROTOCOL_ID 0x55
 
 // Command identifier enum
 enum _lcsf_test_cmd_id {
@@ -157,6 +151,10 @@ enum _lcsf_test_cc6_att_id {
 
 // --- Public Constants ---
 
+// Bridge decoder filo size
+#define LCSF_BRIDGE_TEST_FILO_SIZE 11
+// Lcsf protocol identifier
+#define LCSF_TEST_PROTOCOL_ID 0x55
 // Command number
 #define LCSF_TEST_CMD_NB TEST_CMD_COUNT
 // Command attribute number
@@ -203,7 +201,7 @@ bool LCSF_Bridge_TestInit(void);
 bool LCSF_Bridge_TestReceive(lcsf_valid_cmd_t *pValidCmd);
 
 /**
- * \fn int LCSF_Bridge_TestEncode(uint_fast16_t cmdName, test_cmd_payload_t *pCmdPayload)
+ * \fn int LCSF_Bridge_TestEncode(uint_fast16_t cmdName, test_cmd_payload_t *pCmdPayload, uint8_t *pBuffer, size_t buffSize)
  * \brief Receive command from Test_Main and transmit to LCSF_Validator for encoding
  *
  * \param cmdName name of the command

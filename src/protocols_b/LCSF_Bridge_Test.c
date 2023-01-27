@@ -1,7 +1,7 @@
 /**
  * \file LCSF_Bridge_Test.c
  * \brief Test LCSF bridge module (B)
- * \author LCSF Generator v1.1
+ * \author LCSF Generator v1.3
  *
  */
 
@@ -640,7 +640,6 @@ bool LCSF_Bridge_TestInit(void) {
 bool LCSF_Bridge_TestReceive(lcsf_valid_cmd_t *pValidCmd) {
     uint16_t cmdName = LCSF_Bridge_Test_CMDID2CMDNAME(pValidCmd->CmdId);
     test_cmd_payload_t *pCmdPayload = &LcsfBridgeTestInfo.CmdPayload;
-    //memset(pCmdPayload, 0, sizeof(test_cmd_payload_t));
 
     LCSF_Bridge_TestGetCmdData(cmdName, pValidCmd->pAttArray, pCmdPayload);
     return Test_MainExecute(cmdName, pCmdPayload);
