@@ -53,20 +53,20 @@ struct _lcsf_attribute_desc {
     uint16_t AttId; /**< Attribute identifier */
     uint16_t SubAttNb; /**< Number of possible sub attributes */
     const lcsf_attribute_desc_t *pSubAttDescArray; /**< Pointer to the sub attribute descriptor table */
-}; // total : 12 bytes, 2 padding
+}; // total: 12 bytes, 2 padding
 
 /** Lcsf command descriptor structure */
 typedef struct _lcsf_command_desc {
     uint16_t CmdId; /**< Command identifier */
     uint16_t AttNb; /**< Number of possible attributes */
     const lcsf_attribute_desc_t *pAttDescArray; /**< Pointer to the attribute descriptor table */
-} lcsf_command_desc_t; // total : 8 bytes, 0 padding
+} lcsf_command_desc_t; // total: 8 bytes, 0 padding
 
 /** Lcsf protocol descriptor structure */
 typedef struct _lcsf_protocol_desc {
     uint16_t CmdNb; /**< Number of possible commands */
     const lcsf_command_desc_t *pCmdDescArray; /**< Pointer to the command descriptor table */
-} lcsf_protocol_desc_t; // total : 8 bytes, 2 padding
+} lcsf_protocol_desc_t; // total: 8 bytes, 2 padding
 
 // Lcsf valid types
 
@@ -77,33 +77,33 @@ typedef struct _lcsf_valid_att lcsf_valid_att_t;
 typedef union _lcsf_valid_att_payload {
     void *pData; /**< Pointer to data */
     lcsf_valid_att_t *pSubAttArray; /**< Pointer to sub-attribute array */
-} lcsf_valid_att_payload_t; // total : 4 bytes, 0 padding
+} lcsf_valid_att_payload_t; // total: 4 bytes, 0 padding
 
 /** Lcsf valid attribute structure */
 struct _lcsf_valid_att {
     uint32_t PayloadSize; /**< Size of the payload */
     lcsf_valid_att_payload_t Payload; /**< Attribute payload */
-}; // total : 8 bytes, 0 padding
+}; // total: 8 bytes, 0 padding
 
 /** Lcsf valid command structure */
 typedef struct _lcsf_valid_cmd {
     uint16_t CmdId;  /**< Command identifier */
     lcsf_valid_att_t *pAttArray; /**< Pointer to attribute array */
-} lcsf_valid_cmd_t; // total : 8 bytes, 2 padding
+} lcsf_valid_cmd_t; // total: 8 bytes, 2 padding
 
 // Lcsf validator module types
 
 // Callback prototypes
-typedef bool (LCSFInterpretCallback_t)(lcsf_valid_cmd_t *pValidCmd);// total : 8 bytes, 2 padding
+typedef bool (LCSFInterpretCallback_t)(lcsf_valid_cmd_t *pValidCmd);
 typedef bool (LCSFSendErrCallback_t)(const uint8_t *pBuffer, size_t buffSize);
 typedef void (LCSFReceiveErrCallback_t)(uint_fast8_t errorLoc, uint_fast8_t errorType);
 
 /** Protocol description structure */
 typedef struct _lcsf_validator_protocol_desc {
-    uint8_t ProtId; /**< Protocol identifier */
+    uint16_t ProtId; /**< Protocol identifier */
     const lcsf_protocol_desc_t *pProtDesc; /**< Pointer to protocol descriptor */
     LCSFInterpretCallback_t *pFnInterpretMsg; /**< Pointer to the message interpretation function */
-} lcsf_validator_protocol_desc_t;
+} lcsf_validator_protocol_desc_t; // total: 12 bytes, 2 padding
 
 // Functions used by transcoder to send errors
 bool LCSF_ValidatorSendTranscoderError(uint_fast8_t errorType);

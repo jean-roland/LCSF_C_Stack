@@ -40,10 +40,10 @@ enum _lcsf_decode_error_enum {
 // Module information structure
 typedef struct _lcsf_trnscdr_info {
     uint8_t LastErrCode; // Last error code encountered during decoding
-    uint8_t *pEncoderBuffer; // Pointer to the transmission buffer
     uint8_t DecoderFiloData[LCSF_TRANSCODER_RX_FILO_SIZE * sizeof(lcsf_raw_att_t)]; // Decoder filo data buffer
     filo_desc_t DecoderFilo; // Structure of the decoder filo
     lcsf_raw_msg_t DecoderMsg; // Structure of the decoder message header
+    uint8_t *pEncoderBuffer; // Pointer to the transmission buffer
 } lcsf_trnscdr_info_t;
 
 // --- Private Constants ---

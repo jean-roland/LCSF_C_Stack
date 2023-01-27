@@ -28,11 +28,11 @@
 
 // --- LCSF Transcoder ---
 // #define LCSF_SMALL // Uncomment to use the smaller representation LCSF variant
-#define LCSF_TRANSCODER_RX_FILO_SIZE 20 // Number of items (8 bytes / item)
+#define LCSF_TRANSCODER_RX_FILO_SIZE 11 // Number of items (8 bytes / item)
 
 // --- LCSF Validator ---
-#define LCSF_VALIDATOR_TX_FILO_SIZE 20 // Number of items (8 bytes / item)
-#define LCSF_VALIDATOR_RX_FILO_SIZE 20 // Number of items (8 bytes / item)
+#define LCSF_VALIDATOR_TX_FILO_SIZE 11 // Number of items (8 bytes / item)
+#define LCSF_VALIDATOR_RX_FILO_SIZE 11 // Number of items (8 bytes / item)
 #define LCSF_VALIDATOR_PROTOCOL_NB  2
 
 #ifdef _APP_DEBUG
