@@ -31,7 +31,6 @@ extern "C" {
 #include "LCSF_Transcoder.h"
 #include "LCSF_Validator.h"
 #include "LCSF_Bridge_Test.h"
-#include "LCSF_Desc_Test.h"
 #include "Test_Main.h"
 }
 

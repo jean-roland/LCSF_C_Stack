@@ -75,6 +75,9 @@ enum _lcsf_example_att_id {
 #define LCSF_EXAMPLE_ATT_YUV_SUBATT_NB 3
 #define LCSF_EXAMPLE_ATT_RGB_SUBATT_NB 3
 
+// Protocol descriptor
+extern const lcsf_protocol_desc_t LCSF_Example_ProtDesc;
+
 // --- Public Function Prototypes ---
 /**
  * \fn bool LCSF_Bridge_ExampleInit(size_t filoSize)

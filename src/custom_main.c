@@ -26,7 +26,6 @@
 #include <Filo.h>
 #include <LCSF_Transcoder.h>
 #include <LCSF_Validator.h>
-#include <LCSF_Desc_Example.h>
 #include <LCSF_Bridge_Example.h>
 #include <Example_Main.h>
 

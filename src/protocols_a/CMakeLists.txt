@@ -16,13 +16,13 @@
 # Author: Jean-Roland Gosse
 
 # Test protocol library target
-add_library(${PROT_TEST_A_LIB_NAME} STATIC LCSF_Bridge_Test.c Test_Main.c)
+add_library(${PROT_TEST_A_LIB_NAME} STATIC LCSF_Bridge_Test.c LCSF_Desc_Test.c Test_Main.c)
 # Dependencies
 target_include_directories(${PROT_TEST_A_LIB_NAME} PUBLIC "../../include/" "../../include/lib/" "../../include/protocols_a/")
 target_link_libraries(${PROT_TEST_A_LIB_NAME} PRIVATE ${CORE_LIB_NAME})
 
 # Example protocol library target
-add_library(${PROT_EXAMPLE_LIB_NAME} STATIC LCSF_Bridge_Example.c Example_Main.c)
+add_library(${PROT_EXAMPLE_LIB_NAME} STATIC LCSF_Bridge_Example.c LCSF_Desc_Example.c Example_Main.c)
 # Dependencies
 target_include_directories(${PROT_EXAMPLE_LIB_NAME} PUBLIC "../../include/" "../../include/lib/" "../../include/protocols_a/")
 target_link_libraries(${PROT_EXAMPLE_LIB_NAME} PRIVATE ${CORE_LIB_NAME})

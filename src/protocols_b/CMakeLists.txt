@@ -16,7 +16,7 @@
 # Author: Jean-Roland Gosse
 
 # Test protocol library target
-add_library(${PROT_TEST_B_LIB_NAME} STATIC LCSF_Bridge_Test.c Test_Main.c)
+add_library(${PROT_TEST_B_LIB_NAME} STATIC LCSF_Bridge_Test.c LCSF_Desc_Test.c Test_Main.c)
 # Dependencies
 target_include_directories(${PROT_TEST_B_LIB_NAME} PUBLIC "../../include/" "../../include/lib/" "../../include/protocols_b/")
 target_link_libraries(${PROT_TEST_B_LIB_NAME} PRIVATE ${CORE_LIB_NAME})
