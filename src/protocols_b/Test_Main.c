@@ -1,7 +1,7 @@
 /**
  * \file Test_Main.c
  * \brief Test protocol module (B)
- * \author LCSF Generator v1.1
+ * \author LCSF Generator v1.3
  *
  */
 
@@ -13,7 +13,7 @@
 #include "LCSF_Bridge_Test.h"
 #include "Test_Main.h"
 
-// *** Definitions ****
+// *** Definitions ***
 // --- Private Macros ---
 #define TEST_ARRAY_SIZE 5
 

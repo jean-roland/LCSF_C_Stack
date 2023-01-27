@@ -1,7 +1,7 @@
 /**
  * \file Test_Main.c
  * \brief Test protocol module (A)
- * \author LCSF Generator v1.1
+ * \author LCSF Generator v1.3
  *
  */
 
@@ -44,7 +44,7 @@ static test_info_t TestInfo;
 // *** Private Functions ***
 
 /**
- * \fn static void Test_FillArray(uint8_t *pArray)
+ * \fn static void Test_FillArray(uint8_t *pArray, bool incr)
  * \brief Fill an array with data
  *
  * \param pArray pointer to array
