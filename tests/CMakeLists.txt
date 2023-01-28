@@ -19,8 +19,8 @@
 enable_language(CXX)
 
 # Retrieve CppUtest libs
-find_library(CPPUTEST_LIB NAMES libCppUTest.a PATHS {CPPUTEST_BIN_PATH})
-find_library(CPPUTEST_EXT_LIB NAMES libCppUTestExt.a PATHS {CPPUTEST_BIN_PATH})
+find_library(CPPUTEST_LIB NAMES libCppUTest.a PATHS ${CPPUTEST_BIN_PATH})
+find_library(CPPUTEST_EXT_LIB NAMES libCppUTestExt.a PATHS ${CPPUTEST_BIN_PATH})
 
 # Abort if libs not found
 if(NOT CPPUTEST_LIB OR NOT CPPUTEST_EXT_LIB)

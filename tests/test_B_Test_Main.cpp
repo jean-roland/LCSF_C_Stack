@@ -384,7 +384,7 @@ TEST_GROUP(B_Test_Main) {
     void setup() {
         mock().strictOrder();
         // Init module
-        CHECK_FALSE(Test_MainInit(NULL, 0))
+        CHECK_FALSE(Test_MainInit(NULL, 0));
         CHECK(Test_MainInit(txbuffer, TX_BUFF_SIZE));
     }
     void teardown() {
