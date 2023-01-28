@@ -205,5 +205,6 @@ var protocols__b_2_l_c_s_f___bridge___test_8h =
     ] ],
     [ "LCSF_Bridge_TestEncode", "protocols__b_2_l_c_s_f___bridge___test_8h.html#abac48a15e518f67cbf59d764d828bcc6", null ],
     [ "LCSF_Bridge_TestInit", "protocols__b_2_l_c_s_f___bridge___test_8h.html#a26c4ed5204924bef496894ddabad7e69", null ],
-    [ "LCSF_Bridge_TestReceive", "protocols__b_2_l_c_s_f___bridge___test_8h.html#a1a975df0296c750efd4d610be1fcb3c8", null ]
+    [ "LCSF_Bridge_TestReceive", "protocols__b_2_l_c_s_f___bridge___test_8h.html#a1a975df0296c750efd4d610be1fcb3c8", null ],
+    [ "LCSF_Test_ProtDesc", "protocols__b_2_l_c_s_f___bridge___test_8h.html#a3b8a2a7b56b4d90a21314871fcbe28c2", null ]
 ];

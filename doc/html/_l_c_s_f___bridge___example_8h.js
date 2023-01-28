@@ -31,5 +31,6 @@ var _l_c_s_f___bridge___example_8h =
     ] ],
     [ "LCSF_Bridge_ExampleEncode", "_l_c_s_f___bridge___example_8h.html#abc0accbe76b15e4a3b97145c607b7eac", null ],
     [ "LCSF_Bridge_ExampleInit", "_l_c_s_f___bridge___example_8h.html#a66c328d84ada174a0c24a0caf6e0c58b", null ],
-    [ "LCSF_Bridge_ExampleReceive", "_l_c_s_f___bridge___example_8h.html#a96dc7e8c07eaeb20173aa49237443444", null ]
+    [ "LCSF_Bridge_ExampleReceive", "_l_c_s_f___bridge___example_8h.html#a96dc7e8c07eaeb20173aa49237443444", null ],
+    [ "LCSF_Example_ProtDesc", "_l_c_s_f___bridge___example_8h.html#aa34c06a774fc2cb3a845eea705aa294f", null ]
 ];
