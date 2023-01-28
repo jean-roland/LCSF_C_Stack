@@ -99,7 +99,7 @@ typedef struct _lcsf_validator_info {
     LCSFSendErrCallback_t *pFnSendErrCb; // Optional function pointer to send lcsf error messages
     LCSFReceiveErrCallback_t *pFnRecErrCb; // Optional function pointer to receive lcsf error messages
     // Protocol array
-    const lcsf_validator_protocol_desc_t *pProtArray[LCSF_VALIDATOR_PROTOCOL_NB * sizeof(lcsf_validator_protocol_desc_t *)]; // Pointer to contain the module protocol array
+    const lcsf_validator_protocol_desc_t *pProtArray[LCSF_VALIDATOR_PROTOCOL_NB]; // Pointer to contain the module protocol array
 } lcsf_validator_info_t;
 
 // --- Private Constants ---
