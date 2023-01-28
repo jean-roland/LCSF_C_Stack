@@ -260,7 +260,6 @@ bool LCSF_Bridge_ExampleInit(void) {
 bool LCSF_Bridge_ExampleReceive(lcsf_valid_cmd_t *pValidCmd) {
     uint16_t cmdName = LCSF_Bridge_Example_CMDID2CMDNAME(pValidCmd->CmdId);
     example_cmd_payload_t *pCmdPayload = &LcsfBridgeExampleInfo.CmdPayload;
-    // memset(pCmdPayload, 0, sizeof(example_cmd_payload_t));
 
     LCSF_Bridge_ExampleGetCmdData(cmdName, pValidCmd->pAttArray, pCmdPayload);
     return Example_MainCommandExecute(cmdName, pCmdPayload);

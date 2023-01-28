@@ -85,21 +85,21 @@ typedef struct _lcsf_ep_cmd_error_desc {
 
 // Module information structure
 typedef struct _lcsf_validator_info {
-    // Error values
-    uint8_t LastErrorType; // Contains the last error the module encountered
-    uint8_t Err_buff[ERR_BUFF_SIZE]; // Buffer to contain encoded error message
-    // Filo values
-    uint8_t ReceiverFiloData[LCSF_VALIDATOR_RX_FILO_SIZE * sizeof(lcsf_raw_att_t)]; // Receiver filo data buffer
-    uint8_t SenderFiloData[LCSF_VALIDATOR_TX_FILO_SIZE * sizeof(lcsf_valid_att_t)]; // Sender filo data buffer
-    uint16_t ProtNb; // Number of protocol handled by the module
     // Filo desc
     filo_desc_t ReceiverFilo; // Structure ot the receiver filo
     filo_desc_t SenderFilo; // Structure of the sender filo
+    // Protocol array
+    const lcsf_validator_protocol_desc_t *pProtArray[LCSF_VALIDATOR_PROTOCOL_NB]; // Pointer to contain the module protocol array
     // Callbacks
     LCSFSendErrCallback_t *pFnSendErrCb; // Optional function pointer to send lcsf error messages
     LCSFReceiveErrCallback_t *pFnRecErrCb; // Optional function pointer to receive lcsf error messages
-    // Protocol array
-    const lcsf_validator_protocol_desc_t *pProtArray[LCSF_VALIDATOR_PROTOCOL_NB]; // Pointer to contain the module protocol array
+    uint16_t ProtNb; // Number of protocol handled by the module
+    // Filo values
+    uint8_t ReceiverFiloData[LCSF_VALIDATOR_RX_FILO_SIZE * sizeof(lcsf_raw_att_t)]; // Receiver filo data buffer
+    uint8_t SenderFiloData[LCSF_VALIDATOR_TX_FILO_SIZE * sizeof(lcsf_valid_att_t)]; // Sender filo data buffer
+    // Error values
+    uint8_t Err_buff[ERR_BUFF_SIZE]; // Buffer to contain encoded error message
+    uint8_t LastErrorType; // Contains the last error the module encountered
 } lcsf_validator_info_t;
 
 // --- Private Constants ---
