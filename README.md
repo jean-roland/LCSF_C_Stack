@@ -28,9 +28,8 @@ The stack itself is composed of two main files:
 * `LCSF_Transcoder.c`: This module is in charge of decoding and encoding message respecting the LCSF format.
 * `LCSF_Validator.c`: This module is in charge of verifying if messages correspond to a known command set protocol.
 
-They are accompanied by two support files:
+They are accompanied by a support file:
 * `Filo.c`: A module that creates memory pool that can be used as filo memory.
-* `MemAlloc.c`: An _optional_ module that handles the static memory allocation.
 
 Then the actual protocols are fed into the stack at initialization time.
 
