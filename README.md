@@ -36,7 +36,7 @@ Then the actual protocols are fed into the stack at initialization time.
 
 The following diagram helps understanding how it works:
 
-![LCSF C Stack](./Doc/img/Stack.png)
+![LCSF C Stack](./doc/img/Stack.png)
 
 ## Representations
 
@@ -60,7 +60,7 @@ Recursivity is generally frowned upon in embedded applications, which is why the
 
 ## Build, tests & docs
 
-If you want to build the project as is you need to install [CMake](https://cmake.org/) 3.14 or above, and a buildsystem ([Ninja](https://ninja-build.org/) is recommended).
+If you want to build the project as is, you need to install [CMake](https://cmake.org/) 3.14 or above, and a buildsystem ([Ninja](https://ninja-build.org/) is recommended).
 
 Build commands, if using Ninja, at project root:
  ```
