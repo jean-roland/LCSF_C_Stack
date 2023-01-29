@@ -23,9 +23,9 @@
 // Standard lib
 #include <string.h>
 // Custom lib
-#include <LCSF_Config.h>
-#include "LCSF_Bridge_Example.h"
 #include "Example_Main.h"
+#include "LCSF_Bridge_Example.h"
+#include <LCSF_Config.h>
 
 // *** Definitions ***
 // --- Private Macros ---
@@ -71,7 +71,6 @@ static example_info_t ExampleInfo;
  * \return bool: true if address is valid
  */
 static bool Example_MainCheckAddrValidity(uintptr_t addr) {
-
     if (((void *)addr != NULL) && (addr >= 0x20400000) && (addr <= 0x20410000)) {
         return true;
     } else {
@@ -110,7 +109,6 @@ static bool Example_MainSendAck(void) {
  * \return bool: true if operation was a success
  */
 static bool Example_MainSendCommand(uint_fast16_t cmdName, bool hasPayload) {
-
     if (cmdName >= EXAMPLE_CMD_COUNT) {
         return false;
     }
@@ -218,36 +216,29 @@ static bool Example_MainExecuteCOLOR_SPACE(example_cmd_payload_t *pCmdPayload) {
 
 // *** Public Functions ***
 
-bool Example_MainInit(const example_init_desc_t * pInitDesc) {
+bool Example_MainInit(const example_init_desc_t *pInitDesc) {
     ExampleInfo.pInitDesc = pInitDesc;
     return true;
 }
 
 bool Example_MainCommandExecute(uint_fast16_t cmdName, example_cmd_payload_t *pCmdPayload) {
-
     switch (cmdName) {
         case EXAMPLE_CMD_PING:
             return Example_MainExecutePING();
-        break;
 
         case EXAMPLE_CMD_RESET:
             return Example_MainExecuteRESET();
-        break;
 
         case EXAMPLE_CMD_ABORT:
             return Example_MainExecuteABORT();
-        break;
 
         case EXAMPLE_CMD_JUMP:
             return Example_MainExecuteJUMP(pCmdPayload);
-        break;
 
         case EXAMPLE_CMD_COLOR_SPACE:
             return Example_MainExecuteCOLOR_SPACE(pCmdPayload);
-        break;
 
         default:
             return Example_MainSendError(EXAMPLE_ERROR_WRONG_CMD);
-        break;
     }
 }

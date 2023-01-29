@@ -11,9 +11,9 @@
 // *** Libraries include ***
 // Standard lib
 // Custom lib
+#include "Test_Main.h"
 #include <LCSF_Config.h>
 #include <LCSF_Validator.h>
-#include "Test_Main.h"
 
 // *** Definitions ***
 // --- Public Types ---

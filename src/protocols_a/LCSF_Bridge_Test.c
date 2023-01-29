@@ -9,11 +9,11 @@
 // Standard lib
 #include <string.h>
 // Custom lib
+#include "LCSF_Bridge_Test.h"
 #include <Filo.h>
 #include <LCSF_Config.h>
 #include <LCSF_Transcoder.h>
 #include <LCSF_Validator.h>
-#include "LCSF_Bridge_Test.h"
 
 // *** Definitions ***
 // --- Private Types ---
@@ -312,23 +312,22 @@ static void LCSF_Bridge_TestGetCmdData(uint_fast16_t cmdName, lcsf_valid_att_t *
     switch (cmdName) {
         case TEST_CMD_CC2:
             LCSF_Bridge_TestCC2GetData(pAttArray, pCmdPayload);
-        break;
+            break;
 
         case TEST_CMD_CC3:
             LCSF_Bridge_TestCC3GetData(pAttArray, pCmdPayload);
-        break;
+            break;
 
         case TEST_CMD_CC5:
             LCSF_Bridge_TestCC5GetData(pAttArray, pCmdPayload);
-        break;
+            break;
 
         case TEST_CMD_CC6:
             LCSF_Bridge_TestCC6GetData(pAttArray, pCmdPayload);
-        break;
+            break;
 
         default: // Commands that don't have payload
             return;
-        break;
     }
 }
 
@@ -610,24 +609,19 @@ static bool LCSF_Bridge_TestFillCmdAtt(uint_fast16_t cmdName, lcsf_valid_att_t *
     switch (cmdName) {
         case TEST_CMD_CC1:
             return LCSF_Bridge_TestCC1FillAtt(pAttArrayAddr, pCmdPayload);
-        break;
 
         case TEST_CMD_CC3:
             return LCSF_Bridge_TestCC3FillAtt(pAttArrayAddr, pCmdPayload);
-        break;
 
         case TEST_CMD_CC4:
             return LCSF_Bridge_TestCC4FillAtt(pAttArrayAddr, pCmdPayload);
-        break;
 
         case TEST_CMD_CC6:
             return LCSF_Bridge_TestCC6FillAtt(pAttArrayAddr, pCmdPayload);
-        break;
 
         default: // Commands that don't have attributes
             *pAttArrayAddr = NULL;
             return true;
-        break;
     }
 }
 

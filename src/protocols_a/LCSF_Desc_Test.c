@@ -8,8 +8,8 @@
 // *** Libraries include ***
 // Standard lib
 // Custom lib
-#include <LCSF_Config.h>
 #include "LCSF_Bridge_Test.h"
+#include <LCSF_Config.h>
 
 // *** Definitions ***
 // --- Private Constants ---

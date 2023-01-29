@@ -23,11 +23,11 @@
 // Standard lib
 #include <string.h>
 // Custom lib
+#include <Example_Main.h>
 #include <Filo.h>
+#include <LCSF_Bridge_Example.h>
 #include <LCSF_Transcoder.h>
 #include <LCSF_Validator.h>
-#include <LCSF_Bridge_Example.h>
-#include <Example_Main.h>
 
 // *** Module definitions ***
 
@@ -80,9 +80,9 @@ static const example_init_desc_t ExampleMainInitDesc = {
  */
 static void app_init(void) {
     // Lcsf stack
- 	LCSF_TranscoderInit();
- 	LCSF_ValidatorInit(&dummyErrSend, NULL);
- 	LCSF_ValidatorAddProtocol(LCSF_PROTOCOL_EXAMPLE, &LcsfProtocolExampleDesc);
+    LCSF_TranscoderInit();
+    LCSF_ValidatorInit(&dummyErrSend, NULL);
+    LCSF_ValidatorAddProtocol(LCSF_PROTOCOL_EXAMPLE, &LcsfProtocolExampleDesc);
     // Lcsf example
     LCSF_Bridge_ExampleInit();
     Example_MainInit(&ExampleMainInitDesc);

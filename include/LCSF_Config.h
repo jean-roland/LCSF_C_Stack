@@ -33,11 +33,16 @@
 // --- LCSF Validator ---
 #define LCSF_VALIDATOR_TX_FILO_SIZE 11 // Number of items (8 bytes / item)
 #define LCSF_VALIDATOR_RX_FILO_SIZE 11 // Number of items (8 bytes / item)
-#define LCSF_VALIDATOR_PROTOCOL_NB  2
+#define LCSF_VALIDATOR_PROTOCOL_NB 2
 
 #ifdef _APP_DEBUG
-   #include <stdio.h>
-   #define DEBUG_PRINT(...) do { printf(__VA_ARGS__); } while(false)
+#include <stdio.h>
+#define DEBUG_PRINT(...) \
+    do { \
+        printf(__VA_ARGS__); \
+    } while (false)
 #else
-   #define DEBUG_PRINT(...) do { } while(false)
+#define DEBUG_PRINT(...) \
+    do { \
+    } while (false)
 #endif

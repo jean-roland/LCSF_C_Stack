@@ -87,16 +87,16 @@ struct _lcsf_valid_att {
 
 /** Lcsf valid command structure */
 typedef struct _lcsf_valid_cmd {
-    uint16_t CmdId;  /**< Command identifier */
+    uint16_t CmdId; /**< Command identifier */
     lcsf_valid_att_t *pAttArray; /**< Pointer to attribute array */
 } lcsf_valid_cmd_t; // total: 8 bytes, 2 padding
 
 // Lcsf validator module types
 
 // Callback prototypes
-typedef bool (LCSFInterpretCallback_t)(lcsf_valid_cmd_t *pValidCmd);
-typedef bool (LCSFSendErrCallback_t)(const uint8_t *pBuffer, size_t buffSize);
-typedef void (LCSFReceiveErrCallback_t)(uint_fast8_t errorLoc, uint_fast8_t errorType);
+typedef bool(LCSFInterpretCallback_t)(lcsf_valid_cmd_t *pValidCmd);
+typedef bool(LCSFSendErrCallback_t)(const uint8_t *pBuffer, size_t buffSize);
+typedef void(LCSFReceiveErrCallback_t)(uint_fast8_t errorLoc, uint_fast8_t errorType);
 
 /** Protocol description structure */
 typedef struct _lcsf_validator_protocol_desc {

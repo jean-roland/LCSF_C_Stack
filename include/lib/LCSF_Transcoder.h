@@ -85,7 +85,7 @@ bool LCSF_TranscoderReceive(const uint8_t *pBuffer, size_t buffSize);
  * \param buffSize buffer size
  * \return int: -1 if operation fail, encoded message size if success
  */
-int LCSF_TranscoderEncode(const lcsf_raw_msg_t *pMessage, uint8_t* pBuffer, size_t buffSize);
+int LCSF_TranscoderEncode(const lcsf_raw_msg_t *pMessage, uint8_t *pBuffer, size_t buffSize);
 
 // *** End Definitions ***
 #endif // _LCSF_Transcoder_h

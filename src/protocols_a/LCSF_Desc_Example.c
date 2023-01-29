@@ -22,8 +22,8 @@
 // *** Libraries include ***
 // Standard lib
 // Custom lib
-#include <LCSF_Config.h>
 #include "LCSF_Bridge_Example.h"
+#include <LCSF_Config.h>
 
 // *** Definitions ***
 // --- Private Constants ---
@@ -58,7 +58,6 @@ static const lcsf_attribute_desc_t LCSF_Example_COLOR_SPACE_AttDescArray[LCSF_EX
     {true, LCSF_SUB_ATTRIBUTES, LCSF_EXAMPLE_ATT_RGB, LCSF_EXAMPLE_ATT_RGB_SUBATT_NB, LCSF_Example_RGB_AttDescArray},
 };
 
-
 // Command array descriptor
 static const lcsf_command_desc_t LCSF_Example_CmdDescArray[LCSF_EXAMPLE_CMD_NB] = {
     {LCSF_EXAMPLE_CMD_ID_PING, 0, NULL},
@@ -73,4 +72,5 @@ static const lcsf_command_desc_t LCSF_Example_CmdDescArray[LCSF_EXAMPLE_CMD_NB] 
 // --- Public Constants ---
 
 // Protocol descriptor
-const lcsf_protocol_desc_t LCSF_Example_ProtDesc = {.CmdNb = LCSF_EXAMPLE_CMD_NB, .pCmdDescArray = LCSF_Example_CmdDescArray};
+const lcsf_protocol_desc_t LCSF_Example_ProtDesc = {
+    .CmdNb = LCSF_EXAMPLE_CMD_NB, .pCmdDescArray = LCSF_Example_CmdDescArray};

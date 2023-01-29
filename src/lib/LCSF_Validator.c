@@ -89,7 +89,8 @@ typedef struct _lcsf_validator_info {
     filo_desc_t ReceiverFilo; // Structure ot the receiver filo
     filo_desc_t SenderFilo; // Structure of the sender filo
     // Protocol array
-    const lcsf_validator_protocol_desc_t *pProtArray[LCSF_VALIDATOR_PROTOCOL_NB]; // Pointer to contain the module protocol array
+    const lcsf_validator_protocol_desc_t
+        *pProtArray[LCSF_VALIDATOR_PROTOCOL_NB]; // Pointer to contain the module protocol array
     // Callbacks
     LCSFSendErrCallback_t *pFnSendErrCb; // Optional function pointer to send lcsf error messages
     LCSFReceiveErrCallback_t *pFnRecErrCb; // Optional function pointer to receive lcsf error messages
@@ -110,18 +111,25 @@ static bool LCSF_AllocateSenderAttArray(uint_fast16_t attNb, lcsf_raw_att_t **pA
 static LCSFInterpretCallback_t *LCSF_GetCallback(uint_fast16_t protId);
 static const lcsf_protocol_desc_t *LCSF_GetDescriptor(uint_fast16_t protId);
 // Table look up functions
-static bool LCSF_ValidateCmdId(uint_fast16_t cmdId, uint_fast16_t cmdNb, uint16_t *pCmdIdx, const lcsf_command_desc_t *pCmdDescArray);
+static bool LCSF_ValidateCmdId(
+    uint_fast16_t cmdId, uint_fast16_t cmdNb, uint16_t *pCmdIdx, const lcsf_command_desc_t *pCmdDescArray);
 static bool LCSF_HasNonOptionalAttribute(uint_fast16_t attNb, const lcsf_attribute_desc_t *pAttDescArray);
-static bool LCSF_RecogniseAttributeId(uint_fast16_t attId, uint_fast16_t attNb, uint16_t *pAttIdx, const lcsf_raw_att_t *pAttArray);
+static bool LCSF_RecogniseAttributeId(
+    uint_fast16_t attId, uint_fast16_t attNb, uint16_t *pAttIdx, const lcsf_raw_att_t *pAttArray);
 static uint16_t LCSF_CountAttributes(uint_fast16_t descAttNb, lcsf_valid_att_t *pAttArray);
 // Receiver functions
 static bool LCSF_ValidateDataType(size_t dataSize, uint_fast8_t descDataType);
-static bool LCSF_ValidateAttribute_Rec(uint_fast16_t attNb, const lcsf_raw_att_t *pAttArray, uint_fast16_t descAttNb, const lcsf_attribute_desc_t *pAttDescArray, lcsf_valid_att_t **pValidAttArray);
-static bool LCSF_ValidateAttribute(const lcsf_raw_msg_t *pMessage, const lcsf_command_desc_t *pCmdDesc, lcsf_valid_att_t **pValidAttArray);
+static bool LCSF_ValidateAttribute_Rec(uint_fast16_t attNb, const lcsf_raw_att_t *pAttArray, uint_fast16_t descAttNb,
+    const lcsf_attribute_desc_t *pAttDescArray, lcsf_valid_att_t **pValidAttArray);
+static bool LCSF_ValidateAttribute(
+    const lcsf_raw_msg_t *pMessage, const lcsf_command_desc_t *pCmdDesc, lcsf_valid_att_t **pValidAttArray);
 // Sender functions
-static bool LCSF_FillAttributeInfo(lcsf_raw_att_t *pRawAtt, uint_fast8_t descDataType, uint_fast16_t subAttNb, const lcsf_valid_att_t *pValidAtt);
-static bool LCSF_FillAttribute_Rec(uint_fast16_t descAttNb, const lcsf_attribute_desc_t *pAttDescArray, const lcsf_valid_att_t *pValidAttArray, lcsf_raw_att_t *pRawAttArray);
-static bool LCSF_FillAttributeArray(uint_fast16_t attNb, const lcsf_valid_att_t *pAttArray, const lcsf_command_desc_t *pCmdDesc, lcsf_raw_att_t **pRawAttArray);
+static bool LCSF_FillAttributeInfo(
+    lcsf_raw_att_t *pRawAtt, uint_fast8_t descDataType, uint_fast16_t subAttNb, const lcsf_valid_att_t *pValidAtt);
+static bool LCSF_FillAttribute_Rec(uint_fast16_t descAttNb, const lcsf_attribute_desc_t *pAttDescArray,
+    const lcsf_valid_att_t *pValidAttArray, lcsf_raw_att_t *pRawAttArray);
+static bool LCSF_FillAttributeArray(uint_fast16_t attNb, const lcsf_valid_att_t *pAttArray,
+    const lcsf_command_desc_t *pCmdDesc, lcsf_raw_att_t **pRawAttArray);
 // Lcsf error processing functions
 static bool LCSF_ValidatorSendError(uint_fast8_t errorLoc, uint_fast8_t errorType);
 static bool LCSF_ProcessReceivedError(const lcsf_raw_msg_t *pErrorMsg);
@@ -205,9 +213,10 @@ static const lcsf_protocol_desc_t *LCSF_GetDescriptor(uint_fast16_t protId) {
  * \param pCmdDescArray pointer to the command descriptor array
  * \return bool: true if operation was a success
  */
-static bool LCSF_ValidateCmdId(uint_fast16_t cmdId, uint_fast16_t cmdNb, uint16_t *pCmdIdx, const lcsf_command_desc_t *pCmdDescArray) {
+static bool LCSF_ValidateCmdId(
+    uint_fast16_t cmdId, uint_fast16_t cmdNb, uint16_t *pCmdIdx, const lcsf_command_desc_t *pCmdDescArray) {
     // Bad parameters guard
-    if(pCmdDescArray == NULL) {
+    if (pCmdDescArray == NULL) {
         return false;
     }
     // Parse commands
@@ -252,13 +261,14 @@ static bool LCSF_HasNonOptionalAttribute(uint_fast16_t attNb, const lcsf_attribu
  * \param pAttArray pointer to the attribute array
  * \return bool: true if operation was a success
  */
-static bool LCSF_RecogniseAttributeId(uint_fast16_t attId, uint_fast16_t attNb, uint16_t *pAttIdx, const lcsf_raw_att_t *pAttArray) {
+static bool LCSF_RecogniseAttributeId(
+    uint_fast16_t attId, uint_fast16_t attNb, uint16_t *pAttIdx, const lcsf_raw_att_t *pAttArray) {
     // Bad parameters guard
-    if(pAttArray == NULL) {
+    if (pAttArray == NULL) {
         return false;
     }
     // Parse attributes
-    for (uint16_t idx = 0; idx < attNb ; idx++) {
+    for (uint16_t idx = 0; idx < attNb; idx++) {
         if (pAttArray[idx].AttId == attId) {
             *pAttIdx = idx;
             return true;
@@ -303,24 +313,19 @@ static bool LCSF_ValidateDataType(size_t dataSize, uint_fast8_t descDataType) {
     switch (descDataType) {
         case LCSF_UINT8:
             return (dataSize == sizeof(uint8_t));
-        break;
 
         case LCSF_UINT16:
             return (dataSize == sizeof(uint16_t));
-        break;
 
         case LCSF_UINT32:
             return (dataSize == sizeof(uint32_t));
-        break;
 
         case LCSF_BYTE_ARRAY:
         case LCSF_STRING:
             return (dataSize != 0); // Check data presence only
-        break;
 
         default: // Unknown data type
             return false;
-        break;
     }
 }
 
@@ -335,7 +340,8 @@ static bool LCSF_ValidateDataType(size_t dataSize, uint_fast8_t descDataType) {
  * \param pValidAttArray pointer to contain the validated attributes array
  * \return bool: true if operation was a success
  */
-static bool LCSF_ValidateAttribute_Rec(uint_fast16_t attNb, const lcsf_raw_att_t *pAttArray, uint_fast16_t descAttNb, const lcsf_attribute_desc_t *pAttDescArray, lcsf_valid_att_t **pValidAttArray) {
+static bool LCSF_ValidateAttribute_Rec(uint_fast16_t attNb, const lcsf_raw_att_t *pAttArray, uint_fast16_t descAttNb,
+    const lcsf_attribute_desc_t *pAttDescArray, lcsf_valid_att_t **pValidAttArray) {
     // Bad parameters guard
     if (pAttDescArray == NULL) {
         LcsfValidatorInfo.LastErrorType = LCSF_EP_ERROR_CODE_UNKNOWN_ERROR;
@@ -343,7 +349,7 @@ static bool LCSF_ValidateAttribute_Rec(uint_fast16_t attNb, const lcsf_raw_att_t
     }
     if (pAttArray == NULL) {
         // No attributes received, check if expected
-        if(LCSF_HasNonOptionalAttribute(descAttNb, pAttDescArray)) {
+        if (LCSF_HasNonOptionalAttribute(descAttNb, pAttDescArray)) {
             LcsfValidatorInfo.LastErrorType = LCSF_EP_ERROR_CODE_MISS_NONOPT_ATT;
             return false;
         }
@@ -353,7 +359,7 @@ static bool LCSF_ValidateAttribute_Rec(uint_fast16_t attNb, const lcsf_raw_att_t
         return false;
     }
     // Allocate the valid attribute array
-    if (!LCSF_AllocateReceiverAttArray(descAttNb, pValidAttArray)){
+    if (!LCSF_AllocateReceiverAttArray(descAttNb, pValidAttArray)) {
         LcsfValidatorInfo.LastErrorType = LCSF_EP_ERROR_CODE_UNKNOWN_ERROR;
         return false;
     }
@@ -363,7 +369,8 @@ static bool LCSF_ValidateAttribute_Rec(uint_fast16_t attNb, const lcsf_raw_att_t
     for (uint16_t idx = 0; idx < descAttNb; idx++) {
         // Intermediary variables
         lcsf_valid_att_t *pCurrValidAtt = &((*pValidAttArray)[idx]);
-        const lcsf_attribute_desc_t *pCurrDescAtt = &(pAttDescArray[idx]); // Same index because both arrays should have same size
+        const lcsf_attribute_desc_t *pCurrDescAtt =
+            &(pAttDescArray[idx]); // Same index because both arrays should have same size
         uint16_t attIdx = 0;
         // Check if there is unprocessed received attributes and if one corresponds to current descriptor attribute
         if ((rxAttNb > 0) && (LCSF_RecogniseAttributeId(pCurrDescAtt->AttId, attNb, &attIdx, pAttArray))) {
@@ -375,7 +382,9 @@ static bool LCSF_ValidateAttribute_Rec(uint_fast16_t attNb, const lcsf_raw_att_t
             if (pCurrDescAtt->DataType == LCSF_SUB_ATTRIBUTES) {
                 if (pCurrRxAtt->HasSubAtt) {
                     // Process the sub-attributes
-                    if (!LCSF_ValidateAttribute_Rec(pCurrRxAtt->PayloadSize, pCurrRxAtt->Payload.pSubAttArray, pCurrDescAtt->SubAttNb, pCurrDescAtt->pSubAttDescArray, &(pCurrValidAtt->Payload.pSubAttArray))) {
+                    if (!LCSF_ValidateAttribute_Rec(pCurrRxAtt->PayloadSize, pCurrRxAtt->Payload.pSubAttArray,
+                            pCurrDescAtt->SubAttNb, pCurrDescAtt->pSubAttDescArray,
+                            &(pCurrValidAtt->Payload.pSubAttArray))) {
                         return false;
                     }
                 } else if (LCSF_HasNonOptionalAttribute(pCurrDescAtt->SubAttNb, pCurrDescAtt->pSubAttDescArray)) {
@@ -419,8 +428,8 @@ static bool LCSF_ValidateAttribute_Rec(uint_fast16_t attNb, const lcsf_raw_att_t
  * \param pValidAttArray pointer to contain the validated attributes array
  * \return bool: true if operation was a success
  */
-static bool LCSF_ValidateAttribute(const lcsf_raw_msg_t *pMessage, const lcsf_command_desc_t *pCmdDesc, lcsf_valid_att_t **pValidAttArray) {
-
+static bool LCSF_ValidateAttribute(
+    const lcsf_raw_msg_t *pMessage, const lcsf_command_desc_t *pCmdDesc, lcsf_valid_att_t **pValidAttArray) {
     if ((pCmdDesc->AttNb == 0) && (pMessage->AttNb > 0)) {
         // Attributes received while the descriptor expected none
         LcsfValidatorInfo.LastErrorType = LCSF_EP_ERROR_CODE_TOO_MANY_ATT;
@@ -433,7 +442,8 @@ static bool LCSF_ValidateAttribute(const lcsf_raw_msg_t *pMessage, const lcsf_co
         }
     } else if ((pCmdDesc->AttNb != 0) && (pCmdDesc->pAttDescArray != NULL)) {
         // Validate the attribute array
-        return LCSF_ValidateAttribute_Rec(pMessage->AttNb, pMessage->pAttArray, pCmdDesc->AttNb, pCmdDesc->pAttDescArray, pValidAttArray);
+        return LCSF_ValidateAttribute_Rec(
+            pMessage->AttNb, pMessage->pAttArray, pCmdDesc->AttNb, pCmdDesc->pAttDescArray, pValidAttArray);
     }
     return true;
 }
@@ -448,7 +458,8 @@ static bool LCSF_ValidateAttribute(const lcsf_raw_msg_t *pMessage, const lcsf_co
  * \param pValidAtt pointer to the valid attribute containing the info
  * \return bool: true if operation was a success
  */
-static bool LCSF_FillAttributeInfo(lcsf_raw_att_t *pRawAtt, uint_fast8_t descDataType, uint_fast16_t subAttNb, const lcsf_valid_att_t *pValidAtt) {
+static bool LCSF_FillAttributeInfo(
+    lcsf_raw_att_t *pRawAtt, uint_fast8_t descDataType, uint_fast16_t subAttNb, const lcsf_valid_att_t *pValidAtt) {
     uint16_t stringSize = 0;
 
     // Check data type
@@ -456,42 +467,42 @@ static bool LCSF_FillAttributeInfo(lcsf_raw_att_t *pRawAtt, uint_fast8_t descDat
         case LCSF_UINT8:
             pRawAtt->PayloadSize = sizeof(uint8_t);
             pRawAtt->HasSubAtt = false;
-        return true;
+            return true;
 
         case LCSF_UINT16:
             pRawAtt->PayloadSize = sizeof(uint16_t);
             pRawAtt->HasSubAtt = false;
-        return true;
+            return true;
 
         case LCSF_UINT32:
             pRawAtt->PayloadSize = sizeof(uint32_t);
             pRawAtt->HasSubAtt = false;
-        return true;
+            return true;
 
         case LCSF_BYTE_ARRAY:
             if (pValidAtt->PayloadSize <= 0) {
-              return false;
+                return false;
             }
             pRawAtt->PayloadSize = (uint16_t)pValidAtt->PayloadSize;
             pRawAtt->HasSubAtt = false;
-        return true;
+            return true;
 
         case LCSF_STRING:
             stringSize = (uint16_t)strlen((char *)pValidAtt->Payload.pData);
             if (stringSize <= 0) {
-              return false;
+                return false;
             }
             pRawAtt->PayloadSize = stringSize + 1;
             pRawAtt->HasSubAtt = false;
-        return true;
+            return true;
 
         case LCSF_SUB_ATTRIBUTES:
             pRawAtt->PayloadSize = subAttNb;
             pRawAtt->HasSubAtt = true;
-        return true;
+            return true;
 
         default:
-        return false;
+            return false;
     }
 }
 
@@ -504,7 +515,8 @@ static bool LCSF_FillAttributeInfo(lcsf_raw_att_t *pRawAtt, uint_fast8_t descDat
  * \param pRawAttArray pointer to the raw attributes array to fill
  * \return bool: true if operation was a success
  */
-static bool LCSF_FillAttribute_Rec(uint_fast16_t descAttNb, const lcsf_attribute_desc_t *pAttDescArray, const lcsf_valid_att_t *pValidAttArray, lcsf_raw_att_t *pRawAttArray) {
+static bool LCSF_FillAttribute_Rec(uint_fast16_t descAttNb, const lcsf_attribute_desc_t *pAttDescArray,
+    const lcsf_valid_att_t *pValidAttArray, lcsf_raw_att_t *pRawAttArray) {
     // Bad parameters guard
     if ((pAttDescArray == NULL) || (pValidAttArray == NULL)) {
         return false;
@@ -515,7 +527,8 @@ static bool LCSF_FillAttribute_Rec(uint_fast16_t descAttNb, const lcsf_attribute
     for (uint16_t idx = 0; idx < descAttNb; idx++) {
         // Intermediary variables
         const lcsf_valid_att_t *pCurrValidAtt = &(pValidAttArray[idx]);
-        const lcsf_attribute_desc_t *pCurrAttDesc = &(pAttDescArray[idx]); // Same index because both arrays should have same size
+        const lcsf_attribute_desc_t *pCurrAttDesc =
+            &(pAttDescArray[idx]); // Same index because both arrays should have same size
         lcsf_raw_att_t *pCurrRawAtt = &(pRawAttArray[fillIdx]);
         // Check if attribute is here or not
         if (pCurrValidAtt->Payload.pData == NULL) { // Same as (pCurrValidAtt->Payload.pSubAttArray == NULL) as it's an union
@@ -545,7 +558,8 @@ static bool LCSF_FillAttribute_Rec(uint_fast16_t descAttNb, const lcsf_attribute
                     return false;
                 }
                 // Fill sub-attribute array
-                if (!LCSF_FillAttribute_Rec(pCurrAttDesc->SubAttNb, pCurrAttDesc->pSubAttDescArray, pCurrValidAtt->Payload.pSubAttArray, pCurrRawAtt->Payload.pSubAttArray)) {
+                if (!LCSF_FillAttribute_Rec(pCurrAttDesc->SubAttNb, pCurrAttDesc->pSubAttDescArray,
+                        pCurrValidAtt->Payload.pSubAttArray, pCurrRawAtt->Payload.pSubAttArray)) {
                     return false;
                 }
             } else { // Attribute has data
@@ -569,7 +583,8 @@ static bool LCSF_FillAttribute_Rec(uint_fast16_t descAttNb, const lcsf_attribute
  * \param pRawAttArray pointer to contain the raw attributes array
  * \return bool: true if operation was a success
  */
-static bool LCSF_FillAttributeArray(uint_fast16_t attNb, const lcsf_valid_att_t *pAttArray, const lcsf_command_desc_t *pCmdDesc, lcsf_raw_att_t **pRawAttArray) {
+static bool LCSF_FillAttributeArray(uint_fast16_t attNb, const lcsf_valid_att_t *pAttArray,
+    const lcsf_command_desc_t *pCmdDesc, lcsf_raw_att_t **pRawAttArray) {
     // Try to allocate the attribute list
     if (!LCSF_AllocateSenderAttArray(attNb, pRawAttArray)) {
         return false;
@@ -644,7 +659,8 @@ static bool LCSF_ProcessReceivedError(const lcsf_raw_msg_t *pErrorMsg) {
         return false;
     }
     // Validate attributes data size
-    if ((pErrorMsg->pAttArray[0].PayloadSize != sizeof(uint8_t)) || (pErrorMsg->pAttArray[1].PayloadSize != sizeof(uint8_t))) {
+    if ((pErrorMsg->pAttArray[0].PayloadSize != sizeof(uint8_t)) ||
+        (pErrorMsg->pAttArray[1].PayloadSize != sizeof(uint8_t))) {
         return false;
     }
     // Save error message information
@@ -678,10 +694,12 @@ bool LCSF_ValidatorInit(LCSFSendErrCallback_t *pFnSendErrCb, LCSFReceiveErrCallb
         LcsfValidatorInfo.pFnRecErrCb = pFnRecErrCb;
     }
     // Initialize structures
-    if (!FiloInit(&LcsfValidatorInfo.SenderFilo, LcsfValidatorInfo.SenderFiloData, LCSF_VALIDATOR_TX_FILO_SIZE, sizeof(lcsf_valid_att_t))) {
+    if (!FiloInit(&LcsfValidatorInfo.SenderFilo, LcsfValidatorInfo.SenderFiloData, LCSF_VALIDATOR_TX_FILO_SIZE,
+            sizeof(lcsf_valid_att_t))) {
         return false;
     }
-    if (!FiloInit(&LcsfValidatorInfo.ReceiverFilo, LcsfValidatorInfo.ReceiverFiloData, LCSF_VALIDATOR_RX_FILO_SIZE, sizeof(lcsf_raw_att_t))) {
+    if (!FiloInit(&LcsfValidatorInfo.ReceiverFilo, LcsfValidatorInfo.ReceiverFiloData, LCSF_VALIDATOR_RX_FILO_SIZE,
+            sizeof(lcsf_raw_att_t))) {
         return false;
     }
     // Initialize variables

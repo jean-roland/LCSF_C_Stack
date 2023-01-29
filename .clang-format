@@ -1,0 +1,30 @@
+---
+Language: Cpp
+BasedOnStyle: LLVM
+ColumnLimit: 125
+IndentWidth: 4
+ContinuationIndentWidth: 4
+BreakBeforeBraces: Attach
+
+# A tester
+
+# Oui
+AlignAfterOpenBracket: DontAlign
+AlignEscapedNewlines: DontAlign
+AlignOperands: false
+AlignTrailingComments: false
+AllowShortFunctionsOnASingleLine: None
+AllowShortIfStatementsOnASingleLine: Never
+AlwaysBreakAfterReturnType: None
+BreakBeforeTernaryOperators: false
+BreakStringLiterals: false
+KeepEmptyLinesAtTheStartOfBlocks: false
+ReflowComments: false
+SpaceBeforeSquareBrackets: false
+IndentPPDirectives: None
+MaxEmptyLinesToKeep: 1
+AlignConsecutiveBitFields: false
+AllowShortEnumsOnASingleLine: false
+BitFieldColonSpacing: None
+IndentCaseLabels: true
+IndentCaseBlocks: true
