@@ -604,7 +604,7 @@ static bool LCSF_FillAttributeArray(uint_fast16_t attNb, const lcsf_valid_att_t 
 static bool LCSF_ValidatorSendError(uint_fast8_t errorLoc, uint_fast8_t errorType) {
     // Check error send callback
     if (LcsfValidatorInfo.pFnSendErrCb == NULL) {
-        DEBUG_PRINT("[LCSF_Validator]: Sending error but missing callback\n");
+        LCSF_DBG_PRINT("[LCSF_Validator]: Sending error but missing callback\n");
         return false;
     }
     lcsf_raw_msg_t errorMsg;
@@ -629,13 +629,13 @@ static bool LCSF_ValidatorSendError(uint_fast8_t errorLoc, uint_fast8_t errorTyp
     // Encode the message with transcoder
     int msgSize = LCSF_TranscoderEncode(&errorMsg, LcsfValidatorInfo.Err_buff, ERR_BUFF_SIZE);
     if (msgSize < 0) {
-        DEBUG_PRINT("[LCSF_Validator]: Encoding lcsf error messages failed.\n");
+        LCSF_DBG_PRINT("[LCSF_Validator]: Encoding lcsf error messages failed.\n");
         return false;
     }
     // Send error message
-    DEBUG_PRINT("[LCSF_Validator]: Sending error, location: %d, type: %d\n", errorLoc, errorType);
+    LCSF_DBG_PRINT("[LCSF_Validator]: Sending error, location: %d, type: %d\n", errorLoc, errorType);
     if (!LcsfValidatorInfo.pFnSendErrCb(LcsfValidatorInfo.Err_buff, msgSize)) {
-        DEBUG_PRINT("[LCSF_Validator]: Send lcsf error message failed!\n");
+        LCSF_DBG_PRINT("[LCSF_Validator]: Send lcsf error message failed!\n");
         return false;
     }
     return true;
@@ -651,7 +651,7 @@ static bool LCSF_ValidatorSendError(uint_fast8_t errorLoc, uint_fast8_t errorTyp
 static bool LCSF_ProcessReceivedError(const lcsf_raw_msg_t *pErrorMsg) {
     // Check receive error callback
     if (LcsfValidatorInfo.pFnRecErrCb == NULL) {
-        DEBUG_PRINT("[LCSF_Validator]: Received error but missing callback\n");
+        LCSF_DBG_PRINT("[LCSF_Validator]: Received error but missing callback\n");
         return false;
     }
     // Validate message attribute number
@@ -667,7 +667,7 @@ static bool LCSF_ProcessReceivedError(const lcsf_raw_msg_t *pErrorMsg) {
     uint_fast8_t errorLoc = *(pErrorMsg->pAttArray[0].Payload.pData);
     uint_fast8_t errorType = *(pErrorMsg->pAttArray[1].Payload.pData);
     // Notify the error
-    DEBUG_PRINT("[LCSF_Validator]: Received error, location: %d, type: %d\n", errorLoc, errorType);
+    LCSF_DBG_PRINT("[LCSF_Validator]: Received error, location: %d, type: %d\n", errorLoc, errorType);
     LcsfValidatorInfo.pFnRecErrCb(errorLoc, errorType);
     return true;
 }

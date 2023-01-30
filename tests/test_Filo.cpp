@@ -98,7 +98,7 @@ TEST(filo, take_free) {
     int alloc_size = (rand() % FILO_SIZE) + 1;
     int complem_size = FILO_SIZE - alloc_size;
     int small_size = (rand() % 10) + 1;
-    DEBUG_PRINT("size1: %d, size2: %d, size3: %d\n", alloc_size, complem_size, small_size);
+    LCSF_DBG_PRINT("size1: %d, size2: %d, size3: %d\n", alloc_size, complem_size, small_size);
     CHECK(FiloGet(&TestFilo, alloc_size, &pData1));
     CHECK(pData1 != NULL);
     CHECK_FALSE(FiloGet(&TestFilo, complem_size + 1, &pData2));

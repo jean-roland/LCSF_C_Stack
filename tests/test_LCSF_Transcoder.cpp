@@ -279,10 +279,10 @@ TEST(LCSF_Transcoder, encode) {
 
     // Test valid message
 #ifdef LCSF_SMALL
-    DEBUG_PRINT("[tests]: Smaller LCSF representation is in use.\n");
+    LCSF_DBG_PRINT("[tests]: Smaller LCSF representation is in use.\n");
     CHECK_EQUAL(LCSF_TranscoderEncode(&txMsg, txBuffer, TX_BUFF_SIZE), 39);
 #else
-    DEBUG_PRINT("[tests]: Regular LCSF representation is in use.\n");
+    LCSF_DBG_PRINT("[tests]: Regular LCSF representation is in use.\n");
     CHECK_EQUAL(LCSF_TranscoderEncode(&txMsg, txBuffer, TX_BUFF_SIZE), 54);
 #endif
     MEMCMP_EQUAL(txBuffer, rxMsg, sizeof(rxMsg));

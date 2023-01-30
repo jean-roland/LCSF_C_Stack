@@ -37,12 +37,12 @@
 
 #ifdef _APP_DEBUG
 #include <stdio.h>
-#define DEBUG_PRINT(...) \
+#define LCSF_DBG_PRINT(...) \
     do { \
         printf(__VA_ARGS__); \
     } while (false)
 #else
-#define DEBUG_PRINT(...) \
+#define LCSF_DBG_PRINT(...) \
     do { \
     } while (false)
 #endif

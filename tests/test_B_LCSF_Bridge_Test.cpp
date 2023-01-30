@@ -305,74 +305,74 @@ static lcsf_valid_cmd_t cc5_msg = {
  */
 static bool compare_valid_cc2(const lcsf_valid_cmd_t *p1, const lcsf_valid_cmd_t *p2) {
     if ((p1 == NULL) || (p2 == NULL)) {
-        DEBUG_PRINT("[tests]: Received a null pointer !\n");
+        LCSF_DBG_PRINT("[tests]: Received a null pointer !\n");
         return false;
     }
     if ((p1->CmdId != LCSF_TEST_CMD_ID_CC2) || (p2->CmdId != LCSF_TEST_CMD_ID_CC2)) {
-        DEBUG_PRINT("[tests]: CC2: Wrong command id: %d, %d\n", p1->CmdId, p2->CmdId);
+        LCSF_DBG_PRINT("[tests]: CC2: Wrong command id: %d, %d\n", p1->CmdId, p2->CmdId);
         return false;
     }
     if ((p1->pAttArray == NULL) || (p2->pAttArray == NULL)) {
-        DEBUG_PRINT("[tests]: CC2: Missing attributes\n");
+        LCSF_DBG_PRINT("[tests]: CC2: Missing attributes\n");
         return false;
     }
     // SA1
     lcsf_valid_att_t *pA1 = &p1->pAttArray[0];
     lcsf_valid_att_t *pA2 = &p2->pAttArray[0];
     if ((pA1->Payload.pData == NULL) || (pA2->Payload.pData == NULL)) {
-        DEBUG_PRINT("[tests]: CC2: Missing SA1\n");
+        LCSF_DBG_PRINT("[tests]: CC2: Missing SA1\n");
         return false;
     }
     if (memcmp(pA1->Payload.pData, pA2->Payload.pData, sizeof(uint8_t)) != 0) {
-        DEBUG_PRINT("[tests]: CC2: Different SA1: %d, %d\n", *(uint8_t *)pA1->Payload.pData, *(uint8_t *)pA2->Payload.pData);
+        LCSF_DBG_PRINT("[tests]: CC2: Different SA1: %d, %d\n", *(uint8_t *)pA1->Payload.pData, *(uint8_t *)pA2->Payload.pData);
         return false;
     }
     // SA2
     pA1 = &p1->pAttArray[1];
     pA2 = &p2->pAttArray[1];
     if ((pA1->Payload.pData == NULL) || (pA2->Payload.pData == NULL)) {
-        DEBUG_PRINT("[tests]: CC2: Missing SA2\n");
+        LCSF_DBG_PRINT("[tests]: CC2: Missing SA2\n");
         return false;
     }
     if (memcmp(pA1->Payload.pData, pA2->Payload.pData, sizeof(uint16_t)) != 0) {
-        DEBUG_PRINT("[tests]: CC2: Different SA2: %d, %d\n", *(uint16_t *)pA1->Payload.pData, *(uint16_t *)pA2->Payload.pData);
+        LCSF_DBG_PRINT("[tests]: CC2: Different SA2: %d, %d\n", *(uint16_t *)pA1->Payload.pData, *(uint16_t *)pA2->Payload.pData);
         return false;
     }
     // SA3
     pA1 = &p1->pAttArray[2];
     pA2 = &p2->pAttArray[2];
     if ((pA1->Payload.pData == NULL) || (pA2->Payload.pData == NULL)) {
-        DEBUG_PRINT("[tests]: CC2: Missing SA3\n");
+        LCSF_DBG_PRINT("[tests]: CC2: Missing SA3\n");
         return false;
     }
     if (memcmp(pA1->Payload.pData, pA2->Payload.pData, sizeof(uint32_t)) != 0) {
-        DEBUG_PRINT("[tests]: CC2: Different SA3: %d, %d\n", *(uint32_t *)pA1->Payload.pData, *(uint32_t *)pA2->Payload.pData);
+        LCSF_DBG_PRINT("[tests]: CC2: Different SA3: %d, %d\n", *(uint32_t *)pA1->Payload.pData, *(uint32_t *)pA2->Payload.pData);
         return false;
     }
     // SA4
     pA1 = &p1->pAttArray[3];
     pA2 = &p2->pAttArray[3];
     if (pA1->PayloadSize != pA2->PayloadSize) {
-        DEBUG_PRINT("[tests]: CC2: Wrong SA4 size: %d, %d\n", pA1->PayloadSize, pA2->PayloadSize);
+        LCSF_DBG_PRINT("[tests]: CC2: Wrong SA4 size: %d, %d\n", pA1->PayloadSize, pA2->PayloadSize);
         return false;
     }
     if ((pA1->Payload.pData == NULL) || (pA2->Payload.pData == NULL)) {
-        DEBUG_PRINT("[tests]: CC2: Missing SA4\n");
+        LCSF_DBG_PRINT("[tests]: CC2: Missing SA4\n");
         return false;
     }
     if (memcmp(pA1->Payload.pData, pA2->Payload.pData, pA1->PayloadSize) != 0) {
-        DEBUG_PRINT("[tests]: CC2: Different SA4\n");
+        LCSF_DBG_PRINT("[tests]: CC2: Different SA4\n");
         return false;
     }
     // SA5
     pA1 = &p1->pAttArray[4];
     pA2 = &p2->pAttArray[4];
     if ((pA1->Payload.pData == NULL) || (pA2->Payload.pData == NULL)) {
-        DEBUG_PRINT("[tests]: CC2: Missing SA5\n");
+        LCSF_DBG_PRINT("[tests]: CC2: Missing SA5\n");
         return false;
     }
     if (strcmp((char *)pA1->Payload.pData, (char *)pA2->Payload.pData) != 0) {
-        DEBUG_PRINT("[tests]: CC2: Different SA5\n");
+        LCSF_DBG_PRINT("[tests]: CC2: Different SA5\n");
         return false;
     }
     // SA6
@@ -380,12 +380,12 @@ static bool compare_valid_cc2(const lcsf_valid_cmd_t *p1, const lcsf_valid_cmd_t
     pA2 = &p2->pAttArray[5];
     if ((pA1->Payload.pData == NULL) || (pA2->Payload.pData == NULL)) {
         if (pA1->Payload.pData != pA2->Payload.pData) {
-            DEBUG_PRINT("[tests]: CC2: Mismatch absence of SA6\n");
+            LCSF_DBG_PRINT("[tests]: CC2: Mismatch absence of SA6\n");
             return false;
         }
     } else {
         if (memcmp(pA1->Payload.pData, pA2->Payload.pData, sizeof(uint8_t)) != 0) {
-            DEBUG_PRINT("[tests]: CC2: Different SA6: %d, %d\n", *(uint8_t *)pA1->Payload.pData, *(uint8_t *)pA2->Payload.pData);
+            LCSF_DBG_PRINT("[tests]: CC2: Different SA6: %d, %d\n", *(uint8_t *)pA1->Payload.pData, *(uint8_t *)pA2->Payload.pData);
             return false;
         }
     }
@@ -394,12 +394,12 @@ static bool compare_valid_cc2(const lcsf_valid_cmd_t *p1, const lcsf_valid_cmd_t
     pA2 = &p2->pAttArray[6];
     if ((pA1->Payload.pData == NULL) || (pA2->Payload.pData == NULL)) {
         if (pA1->Payload.pData != pA2->Payload.pData) {
-            DEBUG_PRINT("[tests]: CC2: Mismatch absence of SA7: %p, %p\n", pA1->Payload.pData, pA2->Payload.pData);
+            LCSF_DBG_PRINT("[tests]: CC2: Mismatch absence of SA7: %p, %p\n", pA1->Payload.pData, pA2->Payload.pData);
             return false;
         }
     } else {
         if (memcmp(pA1->Payload.pData, pA2->Payload.pData, sizeof(uint16_t)) != 0) {
-            DEBUG_PRINT("[tests]: CC2: Different SA7: %d, %d\n", *(uint16_t *)pA1->Payload.pData, *(uint16_t *)pA2->Payload.pData);
+            LCSF_DBG_PRINT("[tests]: CC2: Different SA7: %d, %d\n", *(uint16_t *)pA1->Payload.pData, *(uint16_t *)pA2->Payload.pData);
             return false;
         }
     }
@@ -408,12 +408,12 @@ static bool compare_valid_cc2(const lcsf_valid_cmd_t *p1, const lcsf_valid_cmd_t
     pA2 = &p2->pAttArray[7];
     if ((pA1->Payload.pData == NULL) || (pA2->Payload.pData == NULL)) {
         if (pA1->Payload.pData != pA2->Payload.pData) {
-            DEBUG_PRINT("[tests]: CC2: Mismatch absence of SA8\n");
+            LCSF_DBG_PRINT("[tests]: CC2: Mismatch absence of SA8\n");
             return false;
         }
     } else {
         if (memcmp(pA1->Payload.pData, pA2->Payload.pData, sizeof(uint32_t)) != 0) {
-            DEBUG_PRINT("[tests]: CC2: Different SA8: %d, %d\n", *(uint32_t *)pA1->Payload.pData, *(uint32_t *)pA2->Payload.pData);
+            LCSF_DBG_PRINT("[tests]: CC2: Different SA8: %d, %d\n", *(uint32_t *)pA1->Payload.pData, *(uint32_t *)pA2->Payload.pData);
             return false;
         }
     }
@@ -422,16 +422,16 @@ static bool compare_valid_cc2(const lcsf_valid_cmd_t *p1, const lcsf_valid_cmd_t
     pA2 = &p2->pAttArray[8];
     if ((pA1->Payload.pData == NULL) || (pA2->Payload.pData == NULL)) {
         if (pA1->Payload.pData != pA2->Payload.pData) {
-            DEBUG_PRINT("[tests]: CC2: Mismatch absence of SA9\n");
+            LCSF_DBG_PRINT("[tests]: CC2: Mismatch absence of SA9\n");
             return false;
         }
     } else {
         if (pA1->PayloadSize != pA2->PayloadSize) {
-            DEBUG_PRINT("[tests]: CC2: Wrong SA9 size: %d, %d\n", pA1->PayloadSize, pA2->PayloadSize);
+            LCSF_DBG_PRINT("[tests]: CC2: Wrong SA9 size: %d, %d\n", pA1->PayloadSize, pA2->PayloadSize);
             return false;
         }
         if (memcmp(pA1->Payload.pData, pA2->Payload.pData, pA1->PayloadSize) != 0) {
-            DEBUG_PRINT("[tests]: CC2: Different SA9\n");
+            LCSF_DBG_PRINT("[tests]: CC2: Different SA9\n");
             return false;
         }
     }
@@ -440,12 +440,12 @@ static bool compare_valid_cc2(const lcsf_valid_cmd_t *p1, const lcsf_valid_cmd_t
     pA2 = &p2->pAttArray[9];
     if ((pA1->Payload.pData == NULL) || (pA2->Payload.pData == NULL)) {
         if (pA1->Payload.pData != pA2->Payload.pData) {
-            DEBUG_PRINT("[tests]: CC2: Mismatch absence of SA10\n");
+            LCSF_DBG_PRINT("[tests]: CC2: Mismatch absence of SA10\n");
             return false;
         }
     } else {
         if (strcmp((char *)pA1->Payload.pData, (char *)pA2->Payload.pData) != 0) {
-            DEBUG_PRINT("[tests]: CC2: Different SA10: %s, %s\n", (char *)pA1->Payload.pData, (char *)pA2->Payload.pData);
+            LCSF_DBG_PRINT("[tests]: CC2: Different SA10: %s, %s\n", (char *)pA1->Payload.pData, (char *)pA2->Payload.pData);
             return false;
         }
     }
@@ -462,47 +462,47 @@ static bool compare_valid_cc2(const lcsf_valid_cmd_t *p1, const lcsf_valid_cmd_t
  */
 static bool compare_valid_cc5(const lcsf_valid_cmd_t *p1, const lcsf_valid_cmd_t *p2) {
     if ((p1 == NULL) || (p2 == NULL)) {
-        DEBUG_PRINT("[tests]: Received a null pointer !\n");
+        LCSF_DBG_PRINT("[tests]: Received a null pointer !\n");
         return false;
     }
     if ((p1->CmdId != LCSF_TEST_CMD_ID_CC5) || (p2->CmdId != LCSF_TEST_CMD_ID_CC5)) {
-        DEBUG_PRINT("[tests]: CC5: Wrong command id: %d, %d\n", p1->CmdId, p2->CmdId);
+        LCSF_DBG_PRINT("[tests]: CC5: Wrong command id: %d, %d\n", p1->CmdId, p2->CmdId);
         return false;
     }
     if ((p1->pAttArray == NULL) || (p2->pAttArray == NULL)) {
-        DEBUG_PRINT("[tests]: CC5: Missing attributes\n");
+        LCSF_DBG_PRINT("[tests]: CC5: Missing attributes\n");
         return false;
     }
     // SA2
     lcsf_valid_att_t *pA1 = &p1->pAttArray[0];
     lcsf_valid_att_t *pA2 = &p2->pAttArray[0];
     if ((pA1->Payload.pData == NULL) || (pA2->Payload.pData == NULL)) {
-        DEBUG_PRINT("[tests]: CC5: Missing SA2\n");
+        LCSF_DBG_PRINT("[tests]: CC5: Missing SA2\n");
         return false;
     }
     if (memcmp(pA1->Payload.pData, pA2->Payload.pData, sizeof(uint16_t)) != 0) {
-        DEBUG_PRINT("[tests]: CC5: Different SA2: %d, %d\n", *(uint16_t *)pA1->Payload.pData, *(uint16_t *)pA2->Payload.pData);
+        LCSF_DBG_PRINT("[tests]: CC5: Different SA2: %d, %d\n", *(uint16_t *)pA1->Payload.pData, *(uint16_t *)pA2->Payload.pData);
         return false;
     }
     // CA5
     pA1 = &p1->pAttArray[1];
     pA2 = &p2->pAttArray[1];
     if ((pA1->Payload.pSubAttArray == NULL) || (pA2->Payload.pSubAttArray == NULL)) {
-        DEBUG_PRINT("[tests]: CC5: Missing CA5\n");
+        LCSF_DBG_PRINT("[tests]: CC5: Missing CA5\n");
         return false;
     }
     // CA5_SA1
     pA1 = &p1->pAttArray[1].Payload.pSubAttArray[0];
     pA2 = &p2->pAttArray[1].Payload.pSubAttArray[0];
     if (memcmp(pA1->Payload.pData, pA2->Payload.pData, sizeof(uint8_t)) != 0) {
-        DEBUG_PRINT("[tests]: CC5_CA5: Different SA1: %d, %d\n", *(uint8_t *)pA1->Payload.pData, *(uint8_t *)pA2->Payload.pData);
+        LCSF_DBG_PRINT("[tests]: CC5_CA5: Different SA1: %d, %d\n", *(uint8_t *)pA1->Payload.pData, *(uint8_t *)pA2->Payload.pData);
         return false;
     }
     // CA5_SA2
     pA1 = &p1->pAttArray[1].Payload.pSubAttArray[1];
     pA2 = &p2->pAttArray[1].Payload.pSubAttArray[1];
     if (memcmp(pA1->Payload.pData, pA2->Payload.pData, sizeof(uint16_t)) != 0) {
-        DEBUG_PRINT("[tests]: CC5_CA5: Different SA2: %d, %d\n", *(uint16_t *)pA1->Payload.pData, *(uint16_t *)pA2->Payload.pData);
+        LCSF_DBG_PRINT("[tests]: CC5_CA5: Different SA2: %d, %d\n", *(uint16_t *)pA1->Payload.pData, *(uint16_t *)pA2->Payload.pData);
         return false;
     }
     // CA5_SA3
@@ -510,12 +510,12 @@ static bool compare_valid_cc5(const lcsf_valid_cmd_t *p1, const lcsf_valid_cmd_t
     pA2 = &p2->pAttArray[1].Payload.pSubAttArray[2];
     if ((pA1->Payload.pData == NULL) || (pA2->Payload.pData == NULL)) {
         if (pA1->Payload.pData != pA2->Payload.pData) {
-            DEBUG_PRINT("[tests]: CC5_CA3: Mismatch absence of SA3\n");
+            LCSF_DBG_PRINT("[tests]: CC5_CA3: Mismatch absence of SA3\n");
             return false;
         }
     } else {
         if (memcmp(pA1->Payload.pData, pA2->Payload.pData, sizeof(uint32_t)) != 0) {
-            DEBUG_PRINT("[tests]: CC5_CA5: Different SA3: %d, %d\n", *(uint32_t *)pA1->Payload.pData, *(uint32_t *)pA2->Payload.pData);
+            LCSF_DBG_PRINT("[tests]: CC5_CA5: Different SA3: %d, %d\n", *(uint32_t *)pA1->Payload.pData, *(uint32_t *)pA2->Payload.pData);
             return false;
         }
     }
@@ -524,7 +524,7 @@ static bool compare_valid_cc5(const lcsf_valid_cmd_t *p1, const lcsf_valid_cmd_t
     pA2 = &p2->pAttArray[2];
     if ((pA1->Payload.pSubAttArray == NULL) || (pA2->Payload.pSubAttArray == NULL)) {
         if (pA1->Payload.pSubAttArray != pA2->Payload.pSubAttArray) {
-            DEBUG_PRINT("[tests]: CC5: Mismatch absence of CA6\n");
+            LCSF_DBG_PRINT("[tests]: CC5: Mismatch absence of CA6\n");
             return false;
         }
     } else {
@@ -533,12 +533,12 @@ static bool compare_valid_cc5(const lcsf_valid_cmd_t *p1, const lcsf_valid_cmd_t
         pA2 = &p2->pAttArray[2].Payload.pSubAttArray[0];
         if ((pA1->Payload.pData == NULL) || (pA2->Payload.pData == NULL)) {
             if (pA1->Payload.pData != pA2->Payload.pData) {
-                DEBUG_PRINT("[tests]: CC5_CA6: Mismatch absence of SA1\n");
+                LCSF_DBG_PRINT("[tests]: CC5_CA6: Mismatch absence of SA1\n");
                 return false;
             }
         } else {
             if (memcmp(pA1->Payload.pData, pA2->Payload.pData, sizeof(uint8_t)) != 0) {
-                DEBUG_PRINT("[tests]: CC5_CA6: Different SA1: %d, %d\n", *(uint8_t *)pA1->Payload.pData, *(uint8_t *)pA2->Payload.pData);
+                LCSF_DBG_PRINT("[tests]: CC5_CA6: Different SA1: %d, %d\n", *(uint8_t *)pA1->Payload.pData, *(uint8_t *)pA2->Payload.pData);
                 return false;
             }
         }
@@ -546,7 +546,7 @@ static bool compare_valid_cc5(const lcsf_valid_cmd_t *p1, const lcsf_valid_cmd_t
         pA1 = &p1->pAttArray[2].Payload.pSubAttArray[1];
         pA2 = &p2->pAttArray[2].Payload.pSubAttArray[1];
         if ((pA1->Payload.pSubAttArray == NULL) || (pA2->Payload.pSubAttArray == NULL)) {
-            DEBUG_PRINT("[tests]: CC5_CA6: Missing CA7\n");
+            LCSF_DBG_PRINT("[tests]: CC5_CA6: Missing CA7\n");
             return false;
         }
         // CA7_SA1
@@ -554,12 +554,12 @@ static bool compare_valid_cc5(const lcsf_valid_cmd_t *p1, const lcsf_valid_cmd_t
         pA2 = &p2->pAttArray[2].Payload.pSubAttArray[1].Payload.pSubAttArray[0];
         if ((pA1->Payload.pData == NULL) || (pA2->Payload.pData == NULL)) {
             if (pA1->Payload.pData != pA2->Payload.pData) {
-                DEBUG_PRINT("[tests]: CC5_CA7: Mismatch absence of SA1\n");
+                LCSF_DBG_PRINT("[tests]: CC5_CA7: Mismatch absence of SA1\n");
                 return false;
             }
         } else {
             if (memcmp(pA1->Payload.pData, pA2->Payload.pData, sizeof(uint8_t)) != 0) {
-                DEBUG_PRINT("[tests]: CC5_CA7: Different SA1: %d, %d\n", *(uint8_t *)pA1->Payload.pData, *(uint8_t *)pA2->Payload.pData);
+                LCSF_DBG_PRINT("[tests]: CC5_CA7: Different SA1: %d, %d\n", *(uint8_t *)pA1->Payload.pData, *(uint8_t *)pA2->Payload.pData);
                 return false;
             }
         }
@@ -567,22 +567,22 @@ static bool compare_valid_cc5(const lcsf_valid_cmd_t *p1, const lcsf_valid_cmd_t
         pA1 = &p1->pAttArray[2].Payload.pSubAttArray[1].Payload.pSubAttArray[1];
         pA2 = &p2->pAttArray[2].Payload.pSubAttArray[1].Payload.pSubAttArray[1];
         if ((pA1->Payload.pSubAttArray == NULL) || (pA2->Payload.pSubAttArray == NULL)) {
-            DEBUG_PRINT("[tests]: CC5_CA8: Missing CA4\n");
+            LCSF_DBG_PRINT("[tests]: CC5_CA8: Missing CA4\n");
             return false;
         }
         // CA8_SA4
         pA1 = &p1->pAttArray[2].Payload.pSubAttArray[1].Payload.pSubAttArray[1].Payload.pSubAttArray[0];
         pA2 = &p2->pAttArray[2].Payload.pSubAttArray[1].Payload.pSubAttArray[1].Payload.pSubAttArray[0];
         if (pA1->PayloadSize != pA2->PayloadSize) {
-            DEBUG_PRINT("[tests]: CC5_CA8: Wrong SA4 size: %d, %d\n", pA1->PayloadSize, pA2->PayloadSize);
+            LCSF_DBG_PRINT("[tests]: CC5_CA8: Wrong SA4 size: %d, %d\n", pA1->PayloadSize, pA2->PayloadSize);
             return false;
         }
         if ((pA1->Payload.pData == NULL) || (pA2->Payload.pData == NULL)) {
-            DEBUG_PRINT("[tests]: CC5_CA8: Missing SA4\n");
+            LCSF_DBG_PRINT("[tests]: CC5_CA8: Missing SA4\n");
             return false;
         }
         if (memcmp(pA1->Payload.pData, pA2->Payload.pData, pA1->PayloadSize) != 0) {
-            DEBUG_PRINT("[tests]: CC5_CA8: Different SA4\n");
+            LCSF_DBG_PRINT("[tests]: CC5_CA8: Different SA4\n");
             return false;
         }
     }
@@ -599,76 +599,76 @@ static bool compare_valid_cc5(const lcsf_valid_cmd_t *p1, const lcsf_valid_cmd_t
  */
 static bool compare_payload_cc1(const test_cc1_att_payload_t *p1, const test_cc1_att_payload_t *p2) {
     if ((p1 == NULL) || (p2 == NULL)) {
-        DEBUG_PRINT("[tests]: Received a null pointer !\n");
+        LCSF_DBG_PRINT("[tests]: Received a null pointer !\n");
         return false;
     }
     if (p1->optAttFlagsBitfield != p2->optAttFlagsBitfield) {
-        DEBUG_PRINT("[tests]: CC1: Different flag bitfield: %d, %d\n", p1->optAttFlagsBitfield, p2->optAttFlagsBitfield);
+        LCSF_DBG_PRINT("[tests]: CC1: Different flag bitfield: %d, %d\n", p1->optAttFlagsBitfield, p2->optAttFlagsBitfield);
         return false;
     }
     if (p1->sa1 != p2->sa1) {
-        DEBUG_PRINT("[tests]: CC1: Different SA1: %d, %d\n", p1->sa1, p2->sa1);
+        LCSF_DBG_PRINT("[tests]: CC1: Different SA1: %d, %d\n", p1->sa1, p2->sa1);
         return false;
     }
     if (p1->sa2 != p2->sa2) {
-        DEBUG_PRINT("[tests]: CC1: Different SA2: %d, %d\n", p1->sa2, p2->sa2);
+        LCSF_DBG_PRINT("[tests]: CC1: Different SA2: %d, %d\n", p1->sa2, p2->sa2);
         return false;
     }
     if (p1->sa3 != p2->sa3) {
-        DEBUG_PRINT("[tests]: CC1: Different SA3: %d, %d\n", p1->sa3, p2->sa3);
+        LCSF_DBG_PRINT("[tests]: CC1: Different SA3: %d, %d\n", p1->sa3, p2->sa3);
         return false;
     }
     if ((p1->p_sa4 == NULL) || (p2->p_sa4 == NULL)) {
-        DEBUG_PRINT("[tests]: CC1: Missing SA4\n");
+        LCSF_DBG_PRINT("[tests]: CC1: Missing SA4\n");
         return false;
     }
     if (memcmp(p1->p_sa4, p2->p_sa4, ARRAY_SIZE) != 0) {
-        DEBUG_PRINT("[tests]: CC1: Different SA4\n");
+        LCSF_DBG_PRINT("[tests]: CC1: Different SA4\n");
         return false;
     }
     if ((p1->p_sa5 == NULL) || (p2->p_sa5 == NULL)) {
-        DEBUG_PRINT("[tests]: CC1: Missing SA5\n");
+        LCSF_DBG_PRINT("[tests]: CC1: Missing SA5\n");
         return false;
     }
     if (strcmp((char *)p1->p_sa5, (char *)p2->p_sa5) != 0) {
-        DEBUG_PRINT("[tests]: CC1: Different SA5\n");
+        LCSF_DBG_PRINT("[tests]: CC1: Different SA5\n");
         return false;
     }
     if ((p1->optAttFlagsBitfield & TEST_CC1_ATT_SA6_FLAG) != 0) {
         if (p1->sa6 != p2->sa6) {
-            DEBUG_PRINT("[tests]: CC1: Different SA6: %d, %d\n", p1->sa6, p2->sa6);
+            LCSF_DBG_PRINT("[tests]: CC1: Different SA6: %d, %d\n", p1->sa6, p2->sa6);
             return false;
         }
     }
     if ((p1->optAttFlagsBitfield & TEST_CC1_ATT_SA7_FLAG) != 0) {
         if (p1->sa7 != p2->sa7) {
-            DEBUG_PRINT("[tests]: CC1: Different SA7: %d, %d\n", p1->sa7, p2->sa7);
+            LCSF_DBG_PRINT("[tests]: CC1: Different SA7: %d, %d\n", p1->sa7, p2->sa7);
             return false;
         }
     }
     if ((p1->optAttFlagsBitfield & TEST_CC1_ATT_SA8_FLAG) != 0) {
         if (p1->sa8 != p2->sa8) {
-            DEBUG_PRINT("[tests]: CC1: Different SA8: %d, %d\n", p1->sa8, p2->sa8);
+            LCSF_DBG_PRINT("[tests]: CC1: Different SA8: %d, %d\n", p1->sa8, p2->sa8);
             return false;
         }
     }
     if ((p1->optAttFlagsBitfield & TEST_CC1_ATT_SA9_FLAG) != 0) {
         if ((p1->p_sa9 == NULL) || (p2->p_sa9 == NULL)) {
-            DEBUG_PRINT("[tests]: CC1: Missing SA9\n");
+            LCSF_DBG_PRINT("[tests]: CC1: Missing SA9\n");
             return false;
         }
         if (memcmp(p1->p_sa9, p2->p_sa9, ARRAY_SIZE) != 0) {
-            DEBUG_PRINT("[tests]: CC1: Different SA9\n");
+            LCSF_DBG_PRINT("[tests]: CC1: Different SA9\n");
             return false;
         }
     }
     if ((p1->optAttFlagsBitfield & TEST_CC1_ATT_SA10_FLAG) != 0) {
         if ((p1->p_sa10 == NULL) || (p2->p_sa10 == NULL)) {
-            DEBUG_PRINT("[tests]: CC1: Missing SA10\n");
+            LCSF_DBG_PRINT("[tests]: CC1: Missing SA10\n");
             return false;
         }
         if (strcmp((char *)p1->p_sa10, (char *)p2->p_sa10) != 0) {
-            DEBUG_PRINT("[tests]: CC1: Different SA10\n");
+            LCSF_DBG_PRINT("[tests]: CC1: Different SA10\n");
             return false;
         }
     }
@@ -685,31 +685,31 @@ static bool compare_payload_cc1(const test_cc1_att_payload_t *p1, const test_cc1
  */
 static bool compare_payload_cc4(const test_cc4_att_payload_t *p1, const test_cc4_att_payload_t *p2) {
     if ((p1 == NULL) || (p2 == NULL)) {
-        DEBUG_PRINT("[tests]: Received a null pointer !\n");
+        LCSF_DBG_PRINT("[tests]: Received a null pointer !\n");
         return false;
     }
     if (p1->optAttFlagsBitfield != p2->optAttFlagsBitfield) {
-        DEBUG_PRINT("[tests]: CC4: Different flag bitfield: %d, %d\n", p1->optAttFlagsBitfield, p2->optAttFlagsBitfield);
+        LCSF_DBG_PRINT("[tests]: CC4: Different flag bitfield: %d, %d\n", p1->optAttFlagsBitfield, p2->optAttFlagsBitfield);
         return false;
     }
     if (p1->sa1 != p2->sa1) {
-        DEBUG_PRINT("[tests]: CC4: Different SA1: %d, %d\n", p1->sa1, p2->sa1);
+        LCSF_DBG_PRINT("[tests]: CC4: Different SA1: %d, %d\n", p1->sa1, p2->sa1);
         return false;
     }
     // CA1
     const test_cc4_att_ca1_att_payload_t *pca1_a = &p1->ca1_payload;
     const test_cc4_att_ca1_att_payload_t *pca1_b = &p2->ca1_payload;
     if (pca1_a->sa1 != pca1_b->sa1) {
-        DEBUG_PRINT("[tests]: CC4_CA1: Different SA1: %d, %d\n", pca1_a->sa1, pca1_b->sa1);
+        LCSF_DBG_PRINT("[tests]: CC4_CA1: Different SA1: %d, %d\n", pca1_a->sa1, pca1_b->sa1);
         return false;
     }
     if (pca1_a->sa2 != pca1_b->sa2) {
-        DEBUG_PRINT("[tests]: CC4_CA1: Different SA2: %d, %d\n", pca1_a->sa2, pca1_b->sa2);
+        LCSF_DBG_PRINT("[tests]: CC4_CA1: Different SA2: %d, %d\n", pca1_a->sa2, pca1_b->sa2);
         return false;
     }
     if ((pca1_a->optAttFlagsBitfield & TEST_CA1_ATT_SA3_FLAG) != 0) {
         if (pca1_a->sa3 != pca1_b->sa3) {
-            DEBUG_PRINT("[tests]: CC4_CA1: Different SA3: %d, %d\n", pca1_a->sa3, pca1_b->sa3);
+            LCSF_DBG_PRINT("[tests]: CC4_CA1: Different SA3: %d, %d\n", pca1_a->sa3, pca1_b->sa3);
             return false;
         }
     }
@@ -720,7 +720,7 @@ static bool compare_payload_cc4(const test_cc4_att_payload_t *p1, const test_cc4
 
         if ((pca2_a->optAttFlagsBitfield & TEST_CA2_ATT_SA1_FLAG) != 0) {
             if (pca2_a->sa1 != pca2_b->sa1) {
-                DEBUG_PRINT("[tests]: CC4_CA2: Different SA1: %d, %d\n", pca2_a->sa1, pca2_b->sa1);
+                LCSF_DBG_PRINT("[tests]: CC4_CA2: Different SA1: %d, %d\n", pca2_a->sa1, pca2_b->sa1);
                 return false;
             }
         }
@@ -730,7 +730,7 @@ static bool compare_payload_cc4(const test_cc4_att_payload_t *p1, const test_cc4
 
         if ((pca3_a->optAttFlagsBitfield & TEST_CA3_ATT_SA1_FLAG) != 0) {
             if (pca3_a->sa1 != pca3_b->sa1) {
-                DEBUG_PRINT("[tests]: CC4_CA3: Different SA1: %d, %d\n", pca3_a->sa1, pca3_b->sa1);
+                LCSF_DBG_PRINT("[tests]: CC4_CA3: Different SA1: %d, %d\n", pca3_a->sa1, pca3_b->sa1);
                 return false;
             }
         }
@@ -739,11 +739,11 @@ static bool compare_payload_cc4(const test_cc4_att_payload_t *p1, const test_cc4
         const test_ca3_att_ca4_att_payload_t *pca4_b = &pca3_b->ca4_payload;
 
         if ((pca4_a->p_sa4 == NULL) || (pca4_b->p_sa4 == NULL)) {
-            DEBUG_PRINT("[tests]: CC4_CA4: Missing SA4\n");
+            LCSF_DBG_PRINT("[tests]: CC4_CA4: Missing SA4\n");
             return false;
         }
         if (memcmp(pca4_a->p_sa4, pca4_b->p_sa4, pca4_a->sa4Size) != 0) {
-            DEBUG_PRINT("[tests]: CC4_CA4: Different SA4\n");
+            LCSF_DBG_PRINT("[tests]: CC4_CA4: Different SA4\n");
             return false;
         }
     }
@@ -782,12 +782,12 @@ static void ExpectExecute(uint_fast16_t cmdName) {
  * @return     int: -1 if error, encoded message size if success
  */
 int LCSF_ValidatorEncode(uint_fast16_t protId, const lcsf_valid_cmd_t *pCommand, uint8_t *pBuffer, size_t buffSize) {
-    DEBUG_PRINT("[tests]: Encode cmd: %d\n", pCommand->CmdId);
+    LCSF_DBG_PRINT("[tests]: Encode cmd: %d\n", pCommand->CmdId);
     mock().actualCall("LCSF_ValidatorEncode").withParameter("protId", protId);
     uint_fast16_t refCmdId = mock().getData("refCmdId").getUnsignedIntValue();
     // Process cmd id for return
     if (refCmdId != pCommand->CmdId) {
-        DEBUG_PRINT("[tests]: Bad cmd id\n");
+        LCSF_DBG_PRINT("[tests]: Bad cmd id\n");
         return -1;
     }
     switch (pCommand->CmdId) {
@@ -817,7 +817,7 @@ int LCSF_ValidatorEncode(uint_fast16_t protId, const lcsf_valid_cmd_t *pCommand,
  * @return     bool: true if successful
  */
 bool Test_MainExecute(uint_fast16_t cmdName, test_cmd_payload_t *pCmdPayload) {
-    DEBUG_PRINT("[tests]: Received send cmd: %ld\n", cmdName);
+    LCSF_DBG_PRINT("[tests]: Received send cmd: %ld\n", cmdName);
     mock().actualCall("Test_MainExecute").withParameter("cmdName", cmdName);
     // Process cmdName for return
     switch (cmdName) {

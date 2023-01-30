@@ -253,7 +253,7 @@ static bool senderr_callback(const uint8_t *pBuffer, size_t buffSize) {
  */
 static void recerr_callback(uint_fast8_t errorLoc, uint_fast8_t errorType) {
     mock().actualCall("recerr_callback");
-    DEBUG_PRINT("[tests]: Receive error function called %d %d\n", errorLoc, errorType);
+    LCSF_DBG_PRINT("[tests]: Receive error function called %d %d\n", errorLoc, errorType);
 }
 
 /**

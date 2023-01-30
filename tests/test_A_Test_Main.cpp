@@ -155,84 +155,84 @@ static uint8_t pattern[ARRAY_SIZE] = {0x12,0x34,0x56,0x78,0x89};
  */
 static bool compare_payload_cc1(const test_cc1_att_payload_t *p1, const test_cc1_att_payload_t *p2) {
     if ((p1 == NULL) || (p2 == NULL)) {
-        DEBUG_PRINT("[tests]: Received a null pointer !\n");
+        LCSF_DBG_PRINT("[tests]: Received a null pointer !\n");
         return false;
     }
     if (p1->optAttFlagsBitfield != p2->optAttFlagsBitfield) {
-        DEBUG_PRINT("[tests]: CC1: Different flag bitfield: %d, %d\n", p1->optAttFlagsBitfield, p2->optAttFlagsBitfield);
+        LCSF_DBG_PRINT("[tests]: CC1: Different flag bitfield: %d, %d\n", p1->optAttFlagsBitfield, p2->optAttFlagsBitfield);
         return false;
     }
     if (p1->sa1 != p2->sa1) {
-        DEBUG_PRINT("[tests]: CC1: Different SA1: %d, %d\n", p1->sa1, p2->sa1);
+        LCSF_DBG_PRINT("[tests]: CC1: Different SA1: %d, %d\n", p1->sa1, p2->sa1);
         return false;
     }
     if (p1->sa2 != p2->sa2) {
-        DEBUG_PRINT("[tests]: CC1: Different SA2: %d, %d\n", p1->sa2, p2->sa2);
+        LCSF_DBG_PRINT("[tests]: CC1: Different SA2: %d, %d\n", p1->sa2, p2->sa2);
         return false;
     }
     if (p1->sa3 != p2->sa3) {
-        DEBUG_PRINT("[tests]: CC1: Different SA3: %d, %d\n", p1->sa3, p2->sa3);
+        LCSF_DBG_PRINT("[tests]: CC1: Different SA3: %d, %d\n", p1->sa3, p2->sa3);
         return false;
     }
     if (p1->sa4Size != p2->sa4Size) {
-        DEBUG_PRINT("[tests]: CC1: Different SA4 size: %d, %d\n", p1->sa4Size, p2->sa4Size);
+        LCSF_DBG_PRINT("[tests]: CC1: Different SA4 size: %d, %d\n", p1->sa4Size, p2->sa4Size);
         return false;
     }
     if ((p1->p_sa4 == NULL) || (p2->p_sa4 == NULL)) {
-        DEBUG_PRINT("[tests]: CC1: Missing SA4\n");
+        LCSF_DBG_PRINT("[tests]: CC1: Missing SA4\n");
         return false;
     }
     if (memcmp(p1->p_sa4, p2->p_sa4, p1->sa4Size) != 0) {
-        DEBUG_PRINT("[tests]: CC1: Different SA4\n");
+        LCSF_DBG_PRINT("[tests]: CC1: Different SA4\n");
         return false;
     }
     if ((p1->p_sa5 == NULL) || (p2->p_sa5 == NULL)) {
-        DEBUG_PRINT("[tests]: CC1: Missing SA5\n");
+        LCSF_DBG_PRINT("[tests]: CC1: Missing SA5\n");
         return false;
     }
     if (strcmp(p1->p_sa5, p2->p_sa5) != 0) {
-        DEBUG_PRINT("[tests]: CC1: Different SA5\n");
+        LCSF_DBG_PRINT("[tests]: CC1: Different SA5\n");
         return false;
     }
     if ((p1->optAttFlagsBitfield & TEST_CC1_ATT_SA6_FLAG) != 0) {
         if (p1->sa6 != p2->sa6) {
-            DEBUG_PRINT("[tests]: CC1: Different SA6: %d, %d\n", p1->sa6, p2->sa6);
+            LCSF_DBG_PRINT("[tests]: CC1: Different SA6: %d, %d\n", p1->sa6, p2->sa6);
             return false;
         }
     }
     if ((p1->optAttFlagsBitfield & TEST_CC1_ATT_SA7_FLAG) != 0) {
         if (p1->sa7 != p2->sa7) {
-            DEBUG_PRINT("[tests]: CC1: Different SA7: %d, %d\n", p1->sa7, p2->sa7);
+            LCSF_DBG_PRINT("[tests]: CC1: Different SA7: %d, %d\n", p1->sa7, p2->sa7);
             return false;
         }
     }
     if ((p1->optAttFlagsBitfield & TEST_CC1_ATT_SA8_FLAG) != 0) {
         if (p1->sa8 != p2->sa8) {
-            DEBUG_PRINT("[tests]: CC1: Different SA8: %d, %d\n", p1->sa8, p2->sa8);
+            LCSF_DBG_PRINT("[tests]: CC1: Different SA8: %d, %d\n", p1->sa8, p2->sa8);
             return false;
         }
     }
     if ((p1->optAttFlagsBitfield & TEST_CC1_ATT_SA9_FLAG) != 0) {
         if (p1->sa9Size != p2->sa9Size) {
-            DEBUG_PRINT("[tests]: CC1: Different SA9 size: %d, %d\n", p1->sa9Size, p2->sa9Size);
+            LCSF_DBG_PRINT("[tests]: CC1: Different SA9 size: %d, %d\n", p1->sa9Size, p2->sa9Size);
             return false;
         }
         if ((p1->p_sa9 == NULL) || (p2->p_sa9 == NULL)) {
-            DEBUG_PRINT("[tests]: CC1: Missing SA9\n");
+            LCSF_DBG_PRINT("[tests]: CC1: Missing SA9\n");
             return false;
         }
         if (memcmp(p1->p_sa9, p2->p_sa9, p1->sa9Size) != 0) {
-            DEBUG_PRINT("[tests]: CC1: Different SA9\n");
+            LCSF_DBG_PRINT("[tests]: CC1: Different SA9\n");
             return false;
         }
     }
     if ((p1->optAttFlagsBitfield & TEST_CC1_ATT_SA10_FLAG) != 0) {
         if ((p1->p_sa10 == NULL) || (p2->p_sa10 == NULL)) {
-            DEBUG_PRINT("[tests]: CC1: Missing SA10\n");
+            LCSF_DBG_PRINT("[tests]: CC1: Missing SA10\n");
             return false;
         }
         if (strcmp(p1->p_sa10, p2->p_sa10) != 0) {
-            DEBUG_PRINT("[tests]: CC1: Different SA10\n");
+            LCSF_DBG_PRINT("[tests]: CC1: Different SA10\n");
             return false;
         }
     }
@@ -249,31 +249,31 @@ static bool compare_payload_cc1(const test_cc1_att_payload_t *p1, const test_cc1
  */
 static bool compare_payload_cc4(const test_cc4_att_payload_t *p1, const test_cc4_att_payload_t *p2) {
     if ((p1 == NULL) || (p2 == NULL)) {
-        DEBUG_PRINT("[tests]: Received a null pointer !\n");
+        LCSF_DBG_PRINT("[tests]: Received a null pointer !\n");
         return false;
     }
     if (p1->optAttFlagsBitfield != p2->optAttFlagsBitfield) {
-        DEBUG_PRINT("[tests]: CC4: Different flag bitfield: %d, %d\n", p1->optAttFlagsBitfield, p2->optAttFlagsBitfield);
+        LCSF_DBG_PRINT("[tests]: CC4: Different flag bitfield: %d, %d\n", p1->optAttFlagsBitfield, p2->optAttFlagsBitfield);
         return false;
     }
     if (p1->sa1 != p2->sa1) {
-        DEBUG_PRINT("[tests]: CC4: Different SA1: %d, %d\n", p1->sa1, p2->sa1);
+        LCSF_DBG_PRINT("[tests]: CC4: Different SA1: %d, %d\n", p1->sa1, p2->sa1);
         return false;
     }
     // CA1
     const test_cc4_att_ca1_att_payload_t *pca1_a = &p1->ca1_payload;
     const test_cc4_att_ca1_att_payload_t *pca1_b = &p2->ca1_payload;
     if (pca1_a->sa1 != pca1_b->sa1) {
-        DEBUG_PRINT("[tests]: CC4_CA1: Different SA1: %d, %d\n", pca1_a->sa1, pca1_b->sa1);
+        LCSF_DBG_PRINT("[tests]: CC4_CA1: Different SA1: %d, %d\n", pca1_a->sa1, pca1_b->sa1);
         return false;
     }
     if (pca1_a->sa2 != pca1_b->sa2) {
-        DEBUG_PRINT("[tests]: CC4_CA1: Different SA2: %d, %d\n", pca1_a->sa2, pca1_b->sa2);
+        LCSF_DBG_PRINT("[tests]: CC4_CA1: Different SA2: %d, %d\n", pca1_a->sa2, pca1_b->sa2);
         return false;
     }
     if ((pca1_a->optAttFlagsBitfield & TEST_CA1_ATT_SA3_FLAG) != 0) {
         if (pca1_a->sa3 != pca1_b->sa3) {
-            DEBUG_PRINT("[tests]: CC4_CA1: Different SA3: %d, %d\n", pca1_a->sa3, pca1_b->sa3);
+            LCSF_DBG_PRINT("[tests]: CC4_CA1: Different SA3: %d, %d\n", pca1_a->sa3, pca1_b->sa3);
             return false;
         }
     }
@@ -284,7 +284,7 @@ static bool compare_payload_cc4(const test_cc4_att_payload_t *p1, const test_cc4
 
         if ((pca2_a->optAttFlagsBitfield & TEST_CA2_ATT_SA1_FLAG) != 0) {
             if (pca2_a->sa1 != pca2_b->sa1) {
-                DEBUG_PRINT("[tests]: CC4_CA2: Different SA1: %d, %d\n", pca2_a->sa1, pca2_b->sa1);
+                LCSF_DBG_PRINT("[tests]: CC4_CA2: Different SA1: %d, %d\n", pca2_a->sa1, pca2_b->sa1);
                 return false;
             }
         }
@@ -294,7 +294,7 @@ static bool compare_payload_cc4(const test_cc4_att_payload_t *p1, const test_cc4
 
         if ((pca3_a->optAttFlagsBitfield & TEST_CA3_ATT_SA1_FLAG) != 0) {
             if (pca3_a->sa1 != pca3_b->sa1) {
-                DEBUG_PRINT("[tests]: CC4_CA3: Different SA1: %d, %d\n", pca3_a->sa1, pca3_b->sa1);
+                LCSF_DBG_PRINT("[tests]: CC4_CA3: Different SA1: %d, %d\n", pca3_a->sa1, pca3_b->sa1);
                 return false;
             }
         }
@@ -303,15 +303,15 @@ static bool compare_payload_cc4(const test_cc4_att_payload_t *p1, const test_cc4
         const test_ca3_att_ca4_att_payload_t *pca4_b = &pca3_b->ca4_payload;
 
         if (pca4_a->sa4Size != pca4_b->sa4Size) {
-            DEBUG_PRINT("[tests]: CC4_CA4: Different SA4 size: %d, %d\n", pca4_a->sa4Size, pca4_b->sa4Size);
+            LCSF_DBG_PRINT("[tests]: CC4_CA4: Different SA4 size: %d, %d\n", pca4_a->sa4Size, pca4_b->sa4Size);
             return false;
         }
         if ((pca4_a->p_sa4 == NULL) || (pca4_b->p_sa4 == NULL)) {
-            DEBUG_PRINT("[tests]: CC4_CA4: Missing SA4\n");
+            LCSF_DBG_PRINT("[tests]: CC4_CA4: Missing SA4\n");
             return false;
         }
         if (memcmp(pca4_a->p_sa4, pca4_b->p_sa4, pca4_a->sa4Size) != 0) {
-            DEBUG_PRINT("[tests]: CC4_CA4: Different SA4\n");
+            LCSF_DBG_PRINT("[tests]: CC4_CA4: Different SA4\n");
             return false;
         }
     }
@@ -342,7 +342,7 @@ static void ExpectEncode(uint_fast16_t cmdName, bool hasPattern) {
  * @return     int: -1 if operation fail, encoded message size if success
  */
 int LCSF_Bridge_TestEncode(uint_fast16_t cmdName, test_cmd_payload_t *pCmdPayload, uint8_t *pBuffer, size_t buffSize) {
-    DEBUG_PRINT("[tests]: Received send cmd: %ld\n", cmdName);
+    LCSF_DBG_PRINT("[tests]: Received send cmd: %ld\n", cmdName);
     bool hasPattern = mock().getData("hasPattern").getBoolValue();
     mock().actualCall("LCSF_Bridge_TestEncode").withParameter("cmdName", cmdName);
     // Process cmdName for return

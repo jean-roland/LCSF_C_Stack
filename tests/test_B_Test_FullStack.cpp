@@ -342,37 +342,37 @@ static uint8_t cc6_msg_tx[] = {
 static void test_buffer(int testid, const uint8_t *pBuffer) {
     switch (testid) {
         case TEST_ID_SC2:
-            DEBUG_PRINT("[tests]: SC2 test.\n");
+            LCSF_DBG_PRINT("[tests]: SC2 test.\n");
             MEMCMP_EQUAL(pBuffer, sc2_msg, sizeof(sc2_msg));
         break;
 
         case TEST_ID_SC3:
-            DEBUG_PRINT("[tests]: SC3 test.\n");
+            LCSF_DBG_PRINT("[tests]: SC3 test.\n");
             MEMCMP_EQUAL(pBuffer, sc3_msg, sizeof(sc3_msg));
         break;
 
         case TEST_ID_CC2:
-            DEBUG_PRINT("[tests]: CC2 test.\n");
+            LCSF_DBG_PRINT("[tests]: CC2 test.\n");
             MEMCMP_EQUAL(pBuffer, cc2_msg, sizeof(cc2_msg));
         break;
 
         case TEST_ID_CC3:
-            DEBUG_PRINT("[tests]: CC3 test.\n");
+            LCSF_DBG_PRINT("[tests]: CC3 test.\n");
             MEMCMP_EQUAL(pBuffer, cc3_msg_tx, sizeof(cc3_msg_tx));
         break;
 
         case TEST_ID_CC5:
-            DEBUG_PRINT("[tests]: CC5 test.\n");
+            LCSF_DBG_PRINT("[tests]: CC5 test.\n");
             MEMCMP_EQUAL(pBuffer, cc5_msg, sizeof(cc5_msg));
         break;
 
         case TEST_ID_CC6:
-            DEBUG_PRINT("[tests]: CC6 test.\n");
+            LCSF_DBG_PRINT("[tests]: CC6 test.\n");
             MEMCMP_EQUAL(pBuffer, cc6_msg_tx, sizeof(cc6_msg_tx));
         break;
 
         default:
-            DEBUG_PRINT("[tests]: Unknown test!\n");
+            LCSF_DBG_PRINT("[tests]: Unknown test!\n");
             CHECK(false);
         break;
     }
@@ -391,7 +391,7 @@ static bool senderr_callback(const uint8_t *pBuffer, size_t buffSize) {
     size_t refBuffSize = mock().getData("refBuffSize").getUnsignedIntValue();
     mock().actualCall("senderr_callback");
     if (buffSize != refBuffSize) {
-        DEBUG_PRINT("[tests]: buffer size mismatch %ld %ld\n", buffSize, refBuffSize);
+        LCSF_DBG_PRINT("[tests]: buffer size mismatch %ld %ld\n", buffSize, refBuffSize);
         return false;
     }
     MEMCMP_EQUAL(pBuffer, pRefBuff, refBuffSize);
@@ -443,9 +443,9 @@ TEST_GROUP(B_Test_Fullstack) {
  */
 TEST(B_Test_Fullstack, valid) {
 #ifdef LCSF_SMALL
-    DEBUG_PRINT("Smaller LCSF representation is in use.\n");
+    LCSF_DBG_PRINT("Smaller LCSF representation is in use.\n");
 #else
-    DEBUG_PRINT("Regular LCSF representation is in use.\n");
+    LCSF_DBG_PRINT("Regular LCSF representation is in use.\n");
 #endif
     // Test function bad command cases
     CHECK(LCSF_TranscoderReceive(sc2_msg, sizeof(sc2_msg)));
