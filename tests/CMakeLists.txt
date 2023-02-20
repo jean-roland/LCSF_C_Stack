@@ -37,11 +37,11 @@ target_include_directories(${TESTS_A_BRIDGE_BIN_NAME} PUBLIC "../include/" "../i
 target_link_libraries(${TESTS_A_BRIDGE_BIN_NAME} PRIVATE ${CORE_LIB_NAME} ${PROT_TEST_A_LIB_NAME} ${CPPUTEST_LIB} ${CPPUTEST_EXT_LIB})
 
 add_executable(${TESTS_A_MAIN_BIN_NAME} main_tests.cpp test_LCSF_Validator.cpp test_A_Test_Main.cpp)
-target_include_directories(${TESTS_A_BRIDGE_BIN_NAME} PUBLIC "../include/" "../include/lib/" "../include/protocols/" "../src/protocols_a/" "${CPPUTEST_INC_PATH}")
+target_include_directories(${TESTS_A_MAIN_BIN_NAME} PUBLIC "../include/" "../include/lib/" "../include/protocols/" "../src/protocols_a/" "${CPPUTEST_INC_PATH}")
 target_link_libraries(${TESTS_A_MAIN_BIN_NAME} PRIVATE ${CORE_LIB_NAME} ${PROT_EXAMPLE_LIB_NAME} ${PROT_TEST_A_LIB_NAME} ${CPPUTEST_LIB} ${CPPUTEST_EXT_LIB})
 
 add_executable(${TESTS_A_FULLSTACK_BIN_NAME} main_tests.cpp test_A_Test_FullStack.cpp)
-target_include_directories(${TESTS_A_BRIDGE_BIN_NAME} PUBLIC "../include/" "../include/lib/" "../src/protocols_a/" "${CPPUTEST_INC_PATH}")
+target_include_directories(${TESTS_A_FULLSTACK_BIN_NAME} PUBLIC "../include/" "../include/lib/" "../src/protocols_a/" "${CPPUTEST_INC_PATH}")
 target_link_libraries(${TESTS_A_FULLSTACK_BIN_NAME} PRIVATE ${CORE_LIB_NAME} ${PROT_TEST_A_LIB_NAME} ${CPPUTEST_LIB} ${CPPUTEST_EXT_LIB})
 
 # Tests B targets
