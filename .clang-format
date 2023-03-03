@@ -6,9 +6,6 @@ IndentWidth: 4
 ContinuationIndentWidth: 4
 BreakBeforeBraces: Attach
 
-# A tester
-
-# Oui
 AlignAfterOpenBracket: DontAlign
 AlignEscapedNewlines: DontAlign
 AlignOperands: false
