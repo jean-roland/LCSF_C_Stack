@@ -72,3 +72,9 @@ add_custom_target(doc
     COMMAND ln -sf ${DOXYGEN_INDEX} ${DOXYGEN_SHORTCUT}
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
     COMMENT "Build doxygen doc")
+
+# Clang-format target (requires v14)
+add_custom_target(format_style
+    COMMAND clang-format-14 -i --style=file **/*.c **/*.h
+    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+    COMMENT "Format code style")
