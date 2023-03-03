@@ -53,10 +53,22 @@ set(TESTS_B_BRIDGE_BIN_NAME "lcsf_stack_tests_b_bridge_bin")
 set(TESTS_B_MAIN_BIN_NAME "lcsf_stack_tests_b_main_bin")
 set(TESTS_B_FULLSTACK_BIN_NAME "lcsf_stack_tests_b_fullstack_bin")
 
-# # CppUtest paths (configure as needed)
+# CppUtest paths (configure as needed)
 set(CPPUTEST_INC_PATH "/usr/include/CppUtest/")
 set(CPPUTEST_BIN_PATH "/usr/bin/x86_64-linux-gnu")
+
+# Doxygen vars
+set(DOXYGEN_CFG_FILE "${PROJECT_SOURCE_DIR}/doc/cfg/doxcfg.cfg")
+set(DOXYGEN_INDEX "${PROJECT_SOURCE_DIR}/doc/html/index.html")
+set(DOXYGEN_SHORTCUT "${PROJECT_SOURCE_DIR}/doc/linux_index.html")
 
 # Project subdirs
 add_subdirectory(src)
 add_subdirectory(tests)
+
+# Doxygen target
+add_custom_target(doc
+    COMMAND doxygen ${DOXYGEN_CFG_FILE}
+    COMMAND ln -sf ${DOXYGEN_INDEX} ${DOXYGEN_SHORTCUT}
+    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+    COMMENT "Build doxygen doc")
