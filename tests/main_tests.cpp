@@ -29,6 +29,6 @@
  *
  * @return     int: execution status
  */
-int main(int argc, const char** argv) {
+int main(int argc, const char **argv) {
     return RUN_ALL_TESTS(argc, argv);
 }

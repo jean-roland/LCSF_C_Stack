@@ -100,7 +100,7 @@ static void app_process(void) {
  * \fn void main(void)
  * \brief Program entry
  *
-* \return int: 0 if successful
+ * \return int: 0 if successful
  */
 int main(void) {
     // Modules initialization
