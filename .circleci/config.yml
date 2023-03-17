@@ -1,7 +1,7 @@
 version: 2.1
 
 jobs:
-  run_ci:
+  run-ci:
     docker:
       - image: cimg/base:2023.03
     steps:
@@ -13,6 +13,6 @@ jobs:
       - run: ninja -C build/ run_tests
 
 workflows:
-  say-hello-workflow:
+  run-ci-workflow:
     jobs:
-      - run_ci
+      - run-ci
