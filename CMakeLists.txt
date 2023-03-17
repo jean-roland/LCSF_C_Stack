@@ -78,3 +78,8 @@ add_custom_target(format_style
     COMMAND clang-format-14 -i --style=file **/*.c **/*.h
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
     COMMENT "Format code style")
+
+add_custom_target(check_style
+    COMMAND clang-format-14 --dry-run --Werror --style=file **/*.c **/*.h
+    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+    COMMENT "Check code style")
