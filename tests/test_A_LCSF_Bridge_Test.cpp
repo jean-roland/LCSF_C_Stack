@@ -852,7 +852,7 @@ TEST_GROUP(A_LCSF_Bridge_Test) {
 TEST(A_LCSF_Bridge_Test, execute) {
     // Test error cases
     CHECK_EQUAL(LCSF_Bridge_TestEncode(TEST_CMD_CC1, NULL, txbuffer, TX_BUFF_SIZE), -1);
-    // Test valid encorde
+    // Test valid encode
     ExpectEncode(LCSF_TEST_CMD_ID_SC1);
     CHECK_EQUAL(LCSF_Bridge_TestEncode(TEST_CMD_SC1, NULL, txbuffer, TX_BUFF_SIZE), TX_BUFF_SIZE);
     ExpectEncode(LCSF_TEST_CMD_ID_CC1);
