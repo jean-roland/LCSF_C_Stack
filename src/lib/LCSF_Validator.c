@@ -315,14 +315,14 @@ static bool LCSF_ValidateDataType(size_t dataSize, uint_fast8_t descDataType) {
             return (dataSize == sizeof(uint8_t));
 
         case LCSF_UINT16:
-            return (dataSize == sizeof(uint16_t));
+            return ((dataSize != 0) && (dataSize <= sizeof(uint16_t)));
 
         case LCSF_UINT32:
-            return (dataSize == sizeof(uint32_t));
+            return ((dataSize != 0) && (dataSize <= sizeof(uint32_t)));
 
         case LCSF_BYTE_ARRAY:
         case LCSF_STRING:
-            return (dataSize != 0); // Check data presence only
+            return (dataSize > 0); // Check data presence only
 
         default: // Unknown data type
             return false;
@@ -465,17 +465,26 @@ static bool LCSF_FillAttributeInfo(
     // Check data type
     switch (descDataType) {
         case LCSF_UINT8:
-            pRawAtt->PayloadSize = sizeof(uint8_t);
+            if (pValidAtt->PayloadSize != sizeof(uint8_t)) {
+                return false;
+            }
+            pRawAtt->PayloadSize = (uint16_t)pValidAtt->PayloadSize;
             pRawAtt->HasSubAtt = false;
             return true;
 
         case LCSF_UINT16:
-            pRawAtt->PayloadSize = sizeof(uint16_t);
+            if ((pValidAtt->PayloadSize == 0) && (pValidAtt->PayloadSize > sizeof(uint16_t))) {
+                return false;
+            }
+            pRawAtt->PayloadSize = (uint16_t)pValidAtt->PayloadSize;
             pRawAtt->HasSubAtt = false;
             return true;
 
         case LCSF_UINT32:
-            pRawAtt->PayloadSize = sizeof(uint32_t);
+            if ((pValidAtt->PayloadSize == 0) && (pValidAtt->PayloadSize > sizeof(uint32_t))) {
+                return false;
+            }
+            pRawAtt->PayloadSize = (uint16_t)pValidAtt->PayloadSize;
             pRawAtt->HasSubAtt = false;
             return true;
 

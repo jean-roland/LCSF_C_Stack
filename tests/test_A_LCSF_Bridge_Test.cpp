@@ -227,7 +227,7 @@ static lcsf_valid_att_t ca3_ca4_subatt_array[] = {
 };
 
 static lcsf_valid_att_t ca2_ca3_subatt_array[] = {
-    {0, {.pData = &ca2_ca3_sa1}},
+    {1, {.pData = &ca2_ca3_sa1}},
     {0, {.pSubAttArray = ca3_ca4_subatt_array}},
 };
 
@@ -237,13 +237,13 @@ static lcsf_valid_att_t cc4_ca2_subatt_array[] = {
 };
 
 static lcsf_valid_att_t cc4_ca1_subatt_array[] = {
-    {0, {.pData = &cc4_ca1_sa1}},
-    {0, {.pData = &cc4_ca1_sa2}},
+    {1, {.pData = &cc4_ca1_sa1}},
+    {2, {.pData = &cc4_ca1_sa2}},
     {0, {.pData = NULL}},
 };
 
 static lcsf_valid_att_t cc4_att_array[] = {
-    {0, {.pData = &cc4_sa1}},
+    {1, {.pData = &cc4_sa1}},
     {0, {.pSubAttArray = cc4_ca1_subatt_array}},
     {0, {.pSubAttArray = cc4_ca2_subatt_array}},
 };
@@ -271,18 +271,18 @@ static lcsf_valid_att_t ca6_ca7_subatt_array[] = {
 };
 
 static lcsf_valid_att_t cc5_ca6_subatt_array[] = {
-    {0, {.pData = &cc5_ca6_sa1}},
+    {1, {.pData = &cc5_ca6_sa1}},
     {0, {.pSubAttArray = ca6_ca7_subatt_array}},
 };
 
 static lcsf_valid_att_t cc5_ca5_subatt_array[] = {
-    {0, {.pData = &cc5_ca5_sa1}},
-    {0, {.pData = &cc5_ca5_sa2}},
+    {1, {.pData = &cc5_ca5_sa1}},
+    {2, {.pData = &cc5_ca5_sa2}},
     {0, {.pData = NULL}},
 };
 
 static lcsf_valid_att_t cc5_att_array[] = {
-    {0, {.pData = &cc5_sa2}},
+    {2, {.pData = &cc5_sa2}},
     {0, {.pSubAttArray = cc5_ca5_subatt_array}},
     {0, {.pSubAttArray = cc5_ca6_subatt_array}},
 };
