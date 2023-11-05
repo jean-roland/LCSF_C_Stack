@@ -103,6 +103,9 @@ enum _lcsf_test_cc1_att_id {
     LCSF_TEST_CC1_ATT_ID_SA8 = 0x7,
     LCSF_TEST_CC1_ATT_ID_SA9 = 0x8,
     LCSF_TEST_CC1_ATT_ID_SA10 = 0x9,
+    LCSF_TEST_CC1_ATT_ID_SA11 = 0xa,
+    LCSF_TEST_CC1_ATT_ID_SA12 = 0xb,
+    LCSF_TEST_CC1_ATT_ID_SA13 = 0xc,
 };
 
 enum _lcsf_test_cc2_att_id {
@@ -116,6 +119,9 @@ enum _lcsf_test_cc2_att_id {
     LCSF_TEST_CC2_ATT_ID_SA8 = 0x7,
     LCSF_TEST_CC2_ATT_ID_SA9 = 0x8,
     LCSF_TEST_CC2_ATT_ID_SA10 = 0x9,
+    LCSF_TEST_CC2_ATT_ID_SA11 = 0xa,
+    LCSF_TEST_CC2_ATT_ID_SA12 = 0xb,
+    LCSF_TEST_CC2_ATT_ID_SA13 = 0xc,
 };
 
 enum _lcsf_test_cc3_att_id {
@@ -129,6 +135,9 @@ enum _lcsf_test_cc3_att_id {
     LCSF_TEST_CC3_ATT_ID_SA8 = 0x7,
     LCSF_TEST_CC3_ATT_ID_SA9 = 0x8,
     LCSF_TEST_CC3_ATT_ID_SA10 = 0x9,
+    LCSF_TEST_CC3_ATT_ID_SA11 = 0xa,
+    LCSF_TEST_CC3_ATT_ID_SA12 = 0xb,
+    LCSF_TEST_CC3_ATT_ID_SA13 = 0xc,
 };
 
 enum _lcsf_test_cc4_att_id {
@@ -152,15 +161,15 @@ enum _lcsf_test_cc6_att_id {
 // --- Public Constants ---
 
 // Bridge decoder filo size
-#define LCSF_BRIDGE_TEST_FILO_SIZE 11
+#define LCSF_BRIDGE_TEST_FILO_SIZE 13
 // Lcsf protocol identifier
 #define LCSF_TEST_PROTOCOL_ID 0x55
 // Command number
 #define LCSF_TEST_CMD_NB TEST_CMD_COUNT
 // Command attribute number
-#define LCSF_TEST_CMD_CC1_ATT_NB 10
-#define LCSF_TEST_CMD_CC2_ATT_NB 10
-#define LCSF_TEST_CMD_CC3_ATT_NB 10
+#define LCSF_TEST_CMD_CC1_ATT_NB 13
+#define LCSF_TEST_CMD_CC2_ATT_NB 13
+#define LCSF_TEST_CMD_CC3_ATT_NB 13
 #define LCSF_TEST_CMD_CC4_ATT_NB 3
 #define LCSF_TEST_CMD_CC5_ATT_NB 3
 #define LCSF_TEST_CMD_CC6_ATT_NB 3

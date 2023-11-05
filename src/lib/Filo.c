@@ -98,3 +98,23 @@ bool FiloFreeAll(filo_desc_t *pFiloDesc) {
     pFiloDesc->FreeItemNb = pFiloDesc->ItemNb;
     return true;
 }
+
+uint16_t GetVLESize(uint64_t value) {
+    if (value <= 0x000000ff) {
+        return 1;
+    } else if (value <= 0x0000ffff) {
+        return 2;
+    } else if (value <= 0x00ffffff) {
+        return 3;
+    } else if (value <= 0xffffffff) {
+        return 4;
+    } else if (value <= 0x00ffffffffff) {
+        return 5;
+    } else if (value <= 0x00ffffffffffff) {
+        return 6;
+    } else if (value <= 0x00ffffffffffffff) {
+        return 7;
+    } else {
+        return 8;
+    }
+}

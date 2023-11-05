@@ -84,5 +84,13 @@ bool FiloFree(filo_desc_t *pFiloDesc, size_t itemNb);
  */
 bool FiloFreeAll(filo_desc_t *pFiloDesc);
 
+/**
+ * \brief Return byte number to encode value
+ *
+ * \param value value to encode
+ * \return uint16_t: number of bytes to encode value
+ */
+uint16_t GetVLESize(uint64_t value);
+
 // *** End Definitions ***
 #endif // _Filo_h

@@ -320,6 +320,15 @@ static bool LCSF_ValidateDataType(size_t dataSize, uint_fast8_t descDataType) {
         case LCSF_UINT32:
             return ((dataSize != 0) && (dataSize <= sizeof(uint32_t)));
 
+        case LCSF_UINT64:
+            return ((dataSize != 0) && (dataSize <= sizeof(uint64_t)));
+
+        case LCSF_FLOAT32:
+            return (dataSize == sizeof(float));
+
+        case LCSF_FLOAT64:
+            return (dataSize == sizeof(double));
+
         case LCSF_BYTE_ARRAY:
         case LCSF_STRING:
             return (dataSize > 0); // Check data presence only
@@ -482,6 +491,30 @@ static bool LCSF_FillAttributeInfo(
 
         case LCSF_UINT32:
             if ((pValidAtt->PayloadSize == 0) && (pValidAtt->PayloadSize > sizeof(uint32_t))) {
+                return false;
+            }
+            pRawAtt->PayloadSize = (uint16_t)pValidAtt->PayloadSize;
+            pRawAtt->HasSubAtt = false;
+            return true;
+
+        case LCSF_UINT64:
+            if ((pValidAtt->PayloadSize == 0) && (pValidAtt->PayloadSize > sizeof(uint64_t))) {
+                return false;
+            }
+            pRawAtt->PayloadSize = (uint16_t)pValidAtt->PayloadSize;
+            pRawAtt->HasSubAtt = false;
+            return true;
+
+        case LCSF_FLOAT32:
+            if (pValidAtt->PayloadSize != sizeof(float)) {
+                return false;
+            }
+            pRawAtt->PayloadSize = (uint16_t)pValidAtt->PayloadSize;
+            pRawAtt->HasSubAtt = false;
+            return true;
+
+        case LCSF_FLOAT64:
+            if (pValidAtt->PayloadSize != sizeof(double)) {
                 return false;
             }
             pRawAtt->PayloadSize = (uint16_t)pValidAtt->PayloadSize;

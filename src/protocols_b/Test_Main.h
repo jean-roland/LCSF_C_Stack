@@ -102,6 +102,9 @@ enum _test_cc1_att_names {
     TEST_CC1_ATT_SA8,
     TEST_CC1_ATT_SA9,
     TEST_CC1_ATT_SA10,
+    TEST_CC1_ATT_SA11,
+    TEST_CC1_ATT_SA12,
+    TEST_CC1_ATT_SA13,
 };
 
 enum _test_cc2_att_names {
@@ -115,6 +118,9 @@ enum _test_cc2_att_names {
     TEST_CC2_ATT_SA8,
     TEST_CC2_ATT_SA9,
     TEST_CC2_ATT_SA10,
+    TEST_CC2_ATT_SA11,
+    TEST_CC2_ATT_SA12,
+    TEST_CC2_ATT_SA13,
 };
 
 enum _test_cc3_att_names {
@@ -128,6 +134,9 @@ enum _test_cc3_att_names {
     TEST_CC3_ATT_SA8,
     TEST_CC3_ATT_SA9,
     TEST_CC3_ATT_SA10,
+    TEST_CC3_ATT_SA11,
+    TEST_CC3_ATT_SA12,
+    TEST_CC3_ATT_SA13,
 };
 
 enum _test_cc4_att_names {
@@ -250,6 +259,9 @@ typedef struct _test_cc1_att_payload {
     uint32_t sa9Size;
     uint8_t *p_sa9;
     char *p_sa10;
+    uint64_t sa11;
+    float sa12;
+    double sa13;
 } test_cc1_att_payload_t;
 
 #define TEST_CC2_ATT_SA6_FLAG (1 << 0)
@@ -271,6 +283,9 @@ typedef struct _test_cc2_att_payload {
     uint32_t sa9Size;
     uint8_t *p_sa9;
     char *p_sa10;
+    uint64_t sa11;
+    float sa12;
+    double sa13;
 } test_cc2_att_payload_t;
 
 #define TEST_CC3_ATT_SA6_FLAG (1 << 0)
@@ -292,6 +307,9 @@ typedef struct _test_cc3_att_payload {
     uint32_t sa9Size;
     uint8_t *p_sa9;
     char *p_sa10;
+    uint64_t sa11;
+    float sa12;
+    double sa13;
 } test_cc3_att_payload_t;
 
 #define TEST_CC4_ATT_CA2_FLAG (1 << 0)

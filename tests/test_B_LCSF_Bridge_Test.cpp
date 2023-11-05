@@ -70,6 +70,9 @@ static test_cmd_payload_t cc1_cmd_payload = {
         .sa9Size = ARRAY_SIZE,
         .p_sa9 = cc1_sa9_array,
         .p_sa10 = cc1_sa10_str,
+        .sa11 = 5000000001,
+        .sa12 = 2.61803398875,
+        .sa13 = 4.14159265359,
     },
 };
 
@@ -93,6 +96,9 @@ static test_cmd_payload_t cc2_cmd_payload = {
         .sa9Size = ARRAY_SIZE,
         .p_sa9 = cc2_sa9_array,
         .p_sa10 = cc2_sa10_str,
+        .sa11 = 5000000000,
+        .sa12 = 1.61803398875,
+        .sa13 = 3.14159265359,
     },
 };
 
@@ -166,6 +172,9 @@ static uint16_t cc1_sa7 = 4001;
 static uint32_t cc1_sa8 = 150000;
 static uint8_t cc1_sa9[ARRAY_SIZE] = {2,3,4,5,6};
 static char cc1_sa10[] = "Qbvm";
+static uint64_t cc1_sa11 = 5000000001;
+static float cc1_sa12 = 2.61803398875;
+static double cc1_sa13 = 4.14159265359;
 
 static lcsf_valid_att_t cc1_att_array[] = {
     {sizeof(cc1_sa1), {.pData = &cc1_sa1}},
@@ -178,6 +187,9 @@ static lcsf_valid_att_t cc1_att_array[] = {
     {sizeof(cc1_sa8), {.pData = &cc1_sa8}},
     {sizeof(cc1_sa9), {.pData = &cc1_sa9}},
     {sizeof(cc1_sa10), {.pData = &cc1_sa10}},
+    {sizeof(cc1_sa11), {.pData = &cc1_sa11}},
+    {sizeof(cc1_sa12), {.pData = &cc1_sa12}},
+    {sizeof(cc1_sa13), {.pData = &cc1_sa13}},
 };
 
 static lcsf_valid_cmd_t cc1_msg = {
@@ -195,6 +207,9 @@ static uint16_t cc2_sa7 = 4000;
 static uint32_t cc2_sa8 = 149999;
 static uint8_t cc2_sa9[ARRAY_SIZE] = {1,2,3,4,5};
 static char cc2_sa10[] = "Paul";
+static uint64_t cc2_sa11 = 5000000000;
+static float cc2_sa12 = 1.61803398875;
+static double cc2_sa13 = 3.14159265359;
 
 static lcsf_valid_att_t cc2_att_array[] = {
     {sizeof(cc2_sa1), {.pData = &cc2_sa1}},
@@ -207,6 +222,9 @@ static lcsf_valid_att_t cc2_att_array[] = {
     {sizeof(cc2_sa8), {.pData = &cc2_sa8}},
     {sizeof(cc2_sa9), {.pData = &cc2_sa9}},
     {sizeof(cc2_sa10), {.pData = &cc2_sa10}},
+    {sizeof(cc2_sa11), {.pData = &cc2_sa11}},
+    {sizeof(cc2_sa12), {.pData = &cc2_sa12}},
+    {sizeof(cc2_sa13), {.pData = &cc2_sa13}},
 };
 
 static lcsf_valid_cmd_t cc2_msg = {
@@ -448,6 +466,39 @@ static bool compare_valid_cc2(const lcsf_valid_cmd_t *p1, const lcsf_valid_cmd_t
             return false;
         }
     }
+    // SA11
+    pA1 = &p1->pAttArray[10];
+    pA2 = &p2->pAttArray[10];
+    if ((pA1->Payload.pData == NULL) || (pA2->Payload.pData == NULL)) {
+        LCSF_DBG_PRINT("[tests]: CC2: Missing SA11\n");
+        return false;
+    }
+    if (memcmp(pA1->Payload.pData, pA2->Payload.pData, sizeof(uint64_t)) != 0) {
+        LCSF_DBG_PRINT("[tests]: CC2: Different SA11: %ld, %ld\n", *(uint64_t *)pA1->Payload.pData, *(uint64_t *)pA2->Payload.pData);
+        return false;
+    }
+    // SA12
+    pA1 = &p1->pAttArray[11];
+    pA2 = &p2->pAttArray[11];
+    if ((pA1->Payload.pData == NULL) || (pA2->Payload.pData == NULL)) {
+        LCSF_DBG_PRINT("[tests]: CC2: Missing SA12\n");
+        return false;
+    }
+    if (memcmp(pA1->Payload.pData, pA2->Payload.pData, sizeof(float)) != 0) {
+        LCSF_DBG_PRINT("[tests]: CC2: Different SA12: %f, %f\n", *(float *)pA1->Payload.pData, *(float *)pA2->Payload.pData);
+        return false;
+    }
+    // SA13
+    pA1 = &p1->pAttArray[12];
+    pA2 = &p2->pAttArray[12];
+    if ((pA1->Payload.pData == NULL) || (pA2->Payload.pData == NULL)) {
+        LCSF_DBG_PRINT("[tests]: CC2: Missing SA13\n");
+        return false;
+    }
+    if (memcmp(pA1->Payload.pData, pA2->Payload.pData, sizeof(double)) != 0) {
+        LCSF_DBG_PRINT("[tests]: CC2: Different SA13: %f, %f\n", *(double *)pA1->Payload.pData, *(double *)pA2->Payload.pData);
+        return false;
+    }
     return true;
 }
 
@@ -670,6 +721,18 @@ static bool compare_payload_cc1(const test_cc1_att_payload_t *p1, const test_cc1
             LCSF_DBG_PRINT("[tests]: CC1: Different SA10\n");
             return false;
         }
+    }
+    if (p1->sa11 != p2->sa11) {
+        LCSF_DBG_PRINT("[tests]: CC1: Different SA11: %ld, %ld\n", p1->sa11, p2->sa11);
+        return false;
+    }
+    if (p1->sa12 != p2->sa12) {
+        LCSF_DBG_PRINT("[tests]: CC1: Different SA12: %f, %f\n", p1->sa12, p2->sa12);
+        return false;
+    }
+    if (p1->sa13 != p2->sa13) {
+        LCSF_DBG_PRINT("[tests]: CC1: Different SA13: %f, %f\n", p1->sa13, p2->sa13);
+        return false;
     }
     return true;
 }

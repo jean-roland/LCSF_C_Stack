@@ -60,6 +60,9 @@ static test_cmd_payload_t cc1_cmd_payload = {
         .sa9Size = ARRAY_SIZE,
         .p_sa9 = cc1_sa9_array,
         .p_sa10 = cc1_sa10_str,
+        .sa11 = 5000000001,
+        .sa12 = 2.61803398875,
+        .sa13 = 4.14159265359,
     },
 };
 
@@ -83,6 +86,9 @@ static test_cmd_payload_t cc2_cmd_payload = {
         .sa9Size = ARRAY_SIZE,
         .p_sa9 = cc2_sa9_array,
         .p_sa10 = cc2_sa10_str,
+        .sa11 = 5000000000,
+        .sa12 = 1.61803398875,
+        .sa13 = 3.14159265359,
     },
 };
 
@@ -234,6 +240,18 @@ static bool compare_payload_cc1(const test_cc1_att_payload_t *p1, const test_cc1
             LCSF_DBG_PRINT("[tests]: CC1: Different SA10\n");
             return false;
         }
+    }
+    if (p1->sa11 != p2->sa11) {
+        LCSF_DBG_PRINT("[tests]: CC1: Different SA11: %ld, %ld\n", p1->sa11, p2->sa11);
+        return false;
+    }
+    if (p1->sa12 != p2->sa12) {
+        LCSF_DBG_PRINT("[tests]: CC1: Different SA12: %f, %f\n", p1->sa12, p2->sa12);
+        return false;
+    }
+    if (p1->sa13 != p2->sa13) {
+        LCSF_DBG_PRINT("[tests]: CC1: Different SA13: %f, %f\n", p1->sa13, p2->sa13);
+        return false;
     }
     return true;
 }

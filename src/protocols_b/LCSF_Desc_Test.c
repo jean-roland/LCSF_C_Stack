@@ -98,6 +98,9 @@ static const lcsf_attribute_desc_t LCSF_Test_CC1_AttDescArray[LCSF_TEST_CMD_CC1_
     {true, LCSF_UINT32, LCSF_TEST_CC1_ATT_ID_SA8, 0, NULL},
     {true, LCSF_BYTE_ARRAY, LCSF_TEST_CC1_ATT_ID_SA9, 0, NULL},
     {true, LCSF_STRING, LCSF_TEST_CC1_ATT_ID_SA10, 0, NULL},
+    {false, LCSF_UINT64, LCSF_TEST_CC1_ATT_ID_SA11, 0, NULL},
+    {false, LCSF_FLOAT32, LCSF_TEST_CC1_ATT_ID_SA12, 0, NULL},
+    {false, LCSF_FLOAT64, LCSF_TEST_CC1_ATT_ID_SA13, 0, NULL},
 };
 
 // Attribute array descriptor of command CC2
@@ -112,6 +115,9 @@ static const lcsf_attribute_desc_t LCSF_Test_CC2_AttDescArray[LCSF_TEST_CMD_CC2_
     {true, LCSF_UINT32, LCSF_TEST_CC2_ATT_ID_SA8, 0, NULL},
     {true, LCSF_BYTE_ARRAY, LCSF_TEST_CC2_ATT_ID_SA9, 0, NULL},
     {true, LCSF_STRING, LCSF_TEST_CC2_ATT_ID_SA10, 0, NULL},
+    {false, LCSF_UINT64, LCSF_TEST_CC2_ATT_ID_SA11, 0, NULL},
+    {false, LCSF_FLOAT32, LCSF_TEST_CC2_ATT_ID_SA12, 0, NULL},
+    {false, LCSF_FLOAT64, LCSF_TEST_CC2_ATT_ID_SA13, 0, NULL},
 };
 
 // Attribute array descriptor of command CC3
@@ -126,6 +132,9 @@ static const lcsf_attribute_desc_t LCSF_Test_CC3_AttDescArray[LCSF_TEST_CMD_CC3_
     {true, LCSF_UINT32, LCSF_TEST_CC3_ATT_ID_SA8, 0, NULL},
     {true, LCSF_BYTE_ARRAY, LCSF_TEST_CC3_ATT_ID_SA9, 0, NULL},
     {true, LCSF_STRING, LCSF_TEST_CC3_ATT_ID_SA10, 0, NULL},
+    {false, LCSF_UINT64, LCSF_TEST_CC3_ATT_ID_SA11, 0, NULL},
+    {false, LCSF_FLOAT32, LCSF_TEST_CC3_ATT_ID_SA12, 0, NULL},
+    {false, LCSF_FLOAT64, LCSF_TEST_CC3_ATT_ID_SA13, 0, NULL},
 };
 
 // Attribute array descriptor of command CC4
