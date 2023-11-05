@@ -75,11 +75,11 @@ add_custom_target(doc
 
 # Clang-format target (requires v14)
 add_custom_target(format_style
-    COMMAND clang-format-14 -i --style=file **/*.c **/*.h
+    COMMAND find . -iname "*.h" -o -iname "*.c" | xargs clang-format-14 -i --style=file
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
     COMMENT "Format code style")
 
 add_custom_target(check_style
-    COMMAND clang-format-14 --dry-run --Werror --style=file **/*.c **/*.h
+    COMMAND find . -iname "*.h" -o -iname "*.c" | xargs clang-format-14 -n --Werror --style=file
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
     COMMENT "Check code style")
