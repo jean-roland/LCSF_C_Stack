@@ -21,11 +21,11 @@
 // Standard lib
 #include <string.h>
 // Custom lib
-#include <Example_Main.h>
-#include <Filo.h>
-#include <LCSF_Bridge_Example.h>
-#include <LCSF_Transcoder.h>
-#include <LCSF_Validator.h>
+#include <lib/Filo.h>
+#include <lib/LCSF_Transcoder.h>
+#include <lib/LCSF_Validator.h>
+#include <protocols/Example_Main.h>
+#include <protocols/LCSF_Bridge_Example.h>
 
 // *** Module definitions ***
 

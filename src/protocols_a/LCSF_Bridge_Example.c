@@ -23,11 +23,11 @@
 // Standard lib
 #include <string.h>
 // Custom lib
-#include "LCSF_Bridge_Example.h"
-#include <Filo.h>
 #include <LCSF_Config.h>
-#include <LCSF_Transcoder.h>
-#include <LCSF_Validator.h>
+#include <lib/Filo.h>
+#include <lib/LCSF_Transcoder.h>
+#include <lib/LCSF_Validator.h>
+#include <protocols/LCSF_Bridge_Example.h>
 
 // *** Definitions ***
 // --- Private Types ---

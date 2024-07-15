@@ -26,7 +26,7 @@
 // Standard lib
 // Custom lib
 #include <LCSF_Config.h>
-#include <LCSF_Transcoder.h>
+#include <lib/LCSF_Transcoder.h>
 
 // *** Definitions ***
 // --- Public Types ---

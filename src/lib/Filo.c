@@ -23,8 +23,8 @@
 // Standard lib
 #include <string.h>
 // Custom lib
-#include <Filo.h>
 #include <LCSF_Config.h>
+#include <lib/Filo.h>
 
 // *** Definitions ***
 // --- Private Types ---

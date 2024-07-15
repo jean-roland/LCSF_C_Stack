@@ -23,9 +23,9 @@
 // Standard lib
 #include <string.h>
 // Custom lib
-#include "Example_Main.h"
-#include "LCSF_Bridge_Example.h"
 #include <LCSF_Config.h>
+#include <protocols/Example_Main.h>
+#include <protocols/LCSF_Bridge_Example.h>
 
 // *** Definitions ***
 // --- Private Macros ---

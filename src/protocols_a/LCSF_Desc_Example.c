@@ -22,8 +22,8 @@
 // *** Libraries include ***
 // Standard lib
 // Custom lib
-#include "LCSF_Bridge_Example.h"
 #include <LCSF_Config.h>
+#include <protocols/LCSF_Bridge_Example.h>
 
 // *** Definitions ***
 // --- Private Constants ---

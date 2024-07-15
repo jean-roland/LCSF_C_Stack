@@ -13,7 +13,7 @@
 // Custom lib
 #include "Test_Main.h"
 #include <LCSF_Config.h>
-#include <LCSF_Validator.h>
+#include <lib/LCSF_Validator.h>
 
 // *** Definitions ***
 // --- Public Types ---

@@ -10,10 +10,10 @@
 #include <string.h>
 // Custom lib
 #include "LCSF_Bridge_Test.h"
-#include <Filo.h>
 #include <LCSF_Config.h>
-#include <LCSF_Transcoder.h>
-#include <LCSF_Validator.h>
+#include <lib/Filo.h>
+#include <lib/LCSF_Transcoder.h>
+#include <lib/LCSF_Validator.h>
 
 // *** Definitions ***
 // --- Private Types ---
