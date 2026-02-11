@@ -482,7 +482,7 @@ static bool LCSF_FillAttributeInfo(
             return true;
 
         case LCSF_UINT16:
-            if ((pValidAtt->PayloadSize == 0) && (pValidAtt->PayloadSize > sizeof(uint16_t))) {
+            if ((pValidAtt->PayloadSize == 0) || (pValidAtt->PayloadSize > sizeof(uint16_t))) {
                 return false;
             }
             pRawAtt->PayloadSize = (uint16_t)pValidAtt->PayloadSize;
@@ -490,7 +490,7 @@ static bool LCSF_FillAttributeInfo(
             return true;
 
         case LCSF_UINT32:
-            if ((pValidAtt->PayloadSize == 0) && (pValidAtt->PayloadSize > sizeof(uint32_t))) {
+            if ((pValidAtt->PayloadSize == 0) || (pValidAtt->PayloadSize > sizeof(uint32_t))) {
                 return false;
             }
             pRawAtt->PayloadSize = (uint16_t)pValidAtt->PayloadSize;
@@ -498,7 +498,7 @@ static bool LCSF_FillAttributeInfo(
             return true;
 
         case LCSF_UINT64:
-            if ((pValidAtt->PayloadSize == 0) && (pValidAtt->PayloadSize > sizeof(uint64_t))) {
+            if ((pValidAtt->PayloadSize == 0) || (pValidAtt->PayloadSize > sizeof(uint64_t))) {
                 return false;
             }
             pRawAtt->PayloadSize = (uint16_t)pValidAtt->PayloadSize;
