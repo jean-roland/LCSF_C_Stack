@@ -188,7 +188,7 @@ enum _lcsf_test_cc6_att_id {
 #define LCSF_TEST_ATT_CA12_SUBATT_NB 1
 
 // Protocol descriptor
-extern const lcsf_protocol_desc_t LCSF_Test_ProtDesc;
+extern const lcsf_validator_protocol_desc_t LCSF_Test_ProtDesc;
 
 // --- Public Function Prototypes ---
 

@@ -62,13 +62,6 @@ static void recerr_callback(uint_fast8_t errorLoc, uint_fast8_t errorType);
 // *** Private global vars ***
 static uint8_t txbuffer[TX_BUFF_SIZE];
 
-// Protocol descriptor
-static const lcsf_validator_protocol_desc_t test_prot_desc = {
-    LCSF_TEST_PROTOCOL_ID,
-    &LCSF_Test_ProtDesc,
-    LCSF_Bridge_TestReceive,
-};
-
 // *** Model data ***
 #ifdef LCSF_SMALL
 // Error messages
@@ -460,7 +453,7 @@ TEST_GROUP(B_Test_Fullstack) {
         // Init modules
         CHECK(LCSF_TranscoderInit());
         CHECK(LCSF_ValidatorInit(&senderr_callback, NULL));
-        CHECK(LCSF_ValidatorAddProtocol(0, &test_prot_desc));
+        CHECK(LCSF_ValidatorAddProtocol(0, &LCSF_Test_ProtDesc));
         CHECK(LCSF_Bridge_TestInit());
         CHECK(Test_MainInit(txbuffer, TX_BUFF_SIZE));
     }

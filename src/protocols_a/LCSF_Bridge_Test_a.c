@@ -1,5 +1,5 @@
 /**
- * \file LCSF_Bridge_Test.c
+ * \file LCSF_Bridge_Test_a.c
  * \brief Test LCSF bridge module (A)
  * \author LCSF Generator v1.4
  *
@@ -13,7 +13,6 @@
 #include <LCSF_Config.h>
 #include <lib/Filo.h>
 #include <lib/LCSF_Transcoder.h>
-#include <lib/LCSF_Validator.h>
 
 // *** Definitions ***
 // --- Private Types ---
@@ -100,9 +99,6 @@ static uint16_t LCSF_Bridge_Test_CMDID2CMDNAME(uint_fast16_t cmdId) {
  * \return void
  */
 static void LCSF_Bridge_TestCC2GetData(lcsf_valid_att_t *pAttArray, test_cmd_payload_t *pCmdPayload) {
-    if (pCmdPayload == NULL) {
-        return;
-    }
     // Initialize optional attribute flags bitfield
     pCmdPayload->cc2_payload.optAttFlagsBitfield = 0;
     // Retrieve data of attribute SA1
@@ -116,8 +112,10 @@ static void LCSF_Bridge_TestCC2GetData(lcsf_valid_att_t *pAttArray, test_cmd_pay
         &(pCmdPayload->cc2_payload.sa3), pAttArray[TEST_CC2_ATT_SA3].Payload.pData, pAttArray[TEST_CC2_ATT_SA3].PayloadSize);
     // Retrieve data of attribute SA4
     pCmdPayload->cc2_payload.p_sa4 = pAttArray[TEST_CC2_ATT_SA4].Payload.pData;
+    pCmdPayload->cc2_payload.sa4Size = pAttArray[TEST_CC2_ATT_SA4].PayloadSize;
     // Retrieve data of attribute SA5
     pCmdPayload->cc2_payload.p_sa5 = pAttArray[TEST_CC2_ATT_SA5].Payload.pData;
+    pCmdPayload->cc2_payload.sa5Size = pAttArray[TEST_CC2_ATT_SA5].PayloadSize;
     // Retrieve data of attribute SA6
     if (pAttArray[TEST_CC2_ATT_SA6].Payload.pData != NULL) {
         // Note presence of optional attribute
@@ -144,12 +142,14 @@ static void LCSF_Bridge_TestCC2GetData(lcsf_valid_att_t *pAttArray, test_cmd_pay
         // Note presence of optional attribute
         pCmdPayload->cc2_payload.optAttFlagsBitfield |= TEST_CC2_ATT_SA9_FLAG;
         pCmdPayload->cc2_payload.p_sa9 = pAttArray[TEST_CC2_ATT_SA9].Payload.pData;
+        pCmdPayload->cc2_payload.sa9Size = pAttArray[TEST_CC2_ATT_SA9].PayloadSize;
     }
     // Retrieve data of attribute SA10
     if (pAttArray[TEST_CC2_ATT_SA10].Payload.pData != NULL) {
         // Note presence of optional attribute
         pCmdPayload->cc2_payload.optAttFlagsBitfield |= TEST_CC2_ATT_SA10_FLAG;
         pCmdPayload->cc2_payload.p_sa10 = pAttArray[TEST_CC2_ATT_SA10].Payload.pData;
+        pCmdPayload->cc2_payload.sa10Size = pAttArray[TEST_CC2_ATT_SA10].PayloadSize;
     }
     // Retrieve data of attribute SA11
     memcpy(&(pCmdPayload->cc2_payload.sa11), pAttArray[TEST_CC2_ATT_SA11].Payload.pData,
@@ -163,9 +163,6 @@ static void LCSF_Bridge_TestCC2GetData(lcsf_valid_att_t *pAttArray, test_cmd_pay
 }
 
 static void LCSF_Bridge_TestCC3GetData(lcsf_valid_att_t *pAttArray, test_cmd_payload_t *pCmdPayload) {
-    if (pCmdPayload == NULL) {
-        return;
-    }
     // Initialize optional attribute flags bitfield
     pCmdPayload->cc3_payload.optAttFlagsBitfield = 0;
     // Retrieve data of attribute SA1
@@ -179,8 +176,10 @@ static void LCSF_Bridge_TestCC3GetData(lcsf_valid_att_t *pAttArray, test_cmd_pay
         &(pCmdPayload->cc3_payload.sa3), pAttArray[TEST_CC3_ATT_SA3].Payload.pData, pAttArray[TEST_CC3_ATT_SA3].PayloadSize);
     // Retrieve data of attribute SA4
     pCmdPayload->cc3_payload.p_sa4 = pAttArray[TEST_CC3_ATT_SA4].Payload.pData;
+    pCmdPayload->cc3_payload.sa4Size = pAttArray[TEST_CC3_ATT_SA4].PayloadSize;
     // Retrieve data of attribute SA5
     pCmdPayload->cc3_payload.p_sa5 = pAttArray[TEST_CC3_ATT_SA5].Payload.pData;
+    pCmdPayload->cc3_payload.sa5Size = pAttArray[TEST_CC3_ATT_SA5].PayloadSize;
     // Retrieve data of attribute SA6
     if (pAttArray[TEST_CC3_ATT_SA6].Payload.pData != NULL) {
         // Note presence of optional attribute
@@ -207,12 +206,14 @@ static void LCSF_Bridge_TestCC3GetData(lcsf_valid_att_t *pAttArray, test_cmd_pay
         // Note presence of optional attribute
         pCmdPayload->cc3_payload.optAttFlagsBitfield |= TEST_CC3_ATT_SA9_FLAG;
         pCmdPayload->cc3_payload.p_sa9 = pAttArray[TEST_CC3_ATT_SA9].Payload.pData;
+        pCmdPayload->cc3_payload.sa9Size = pAttArray[TEST_CC3_ATT_SA9].PayloadSize;
     }
     // Retrieve data of attribute SA10
     if (pAttArray[TEST_CC3_ATT_SA10].Payload.pData != NULL) {
         // Note presence of optional attribute
         pCmdPayload->cc3_payload.optAttFlagsBitfield |= TEST_CC3_ATT_SA10_FLAG;
         pCmdPayload->cc3_payload.p_sa10 = pAttArray[TEST_CC3_ATT_SA10].Payload.pData;
+        pCmdPayload->cc3_payload.sa10Size = pAttArray[TEST_CC3_ATT_SA10].PayloadSize;
     }
     // Retrieve data of attribute SA11
     memcpy(&(pCmdPayload->cc3_payload.sa11), pAttArray[TEST_CC3_ATT_SA11].Payload.pData,
@@ -226,9 +227,6 @@ static void LCSF_Bridge_TestCC3GetData(lcsf_valid_att_t *pAttArray, test_cmd_pay
 }
 
 static void LCSF_Bridge_TestCC5GetData(lcsf_valid_att_t *pAttArray, test_cmd_payload_t *pCmdPayload) {
-    if (pCmdPayload == NULL) {
-        return;
-    }
     // Initialize optional attribute flags bitfield
     pCmdPayload->cc5_payload.optAttFlagsBitfield = 0;
     // Retrieve data of attribute SA2
@@ -297,17 +295,20 @@ static void LCSF_Bridge_TestCC5GetData(lcsf_valid_att_t *pAttArray, test_cmd_pay
                                                                                  .Payload.pSubAttArray[TEST_CA7_ATT_CA8]
                                                                                  .Payload.pSubAttArray[TEST_CA8_ATT_SA4]
                                                                                  .Payload.pData;
+        pCmdPayload->cc5_payload.ca6_payload.ca7_payload.ca8_payload.sa4Size = pAttArray[TEST_CC5_ATT_CA6]
+                                                                                   .Payload.pSubAttArray[TEST_CA6_ATT_CA7]
+                                                                                   .Payload.pSubAttArray[TEST_CA7_ATT_CA8]
+                                                                                   .Payload.pSubAttArray[TEST_CA8_ATT_SA4]
+                                                                                   .PayloadSize;
     }
 }
 
 static void LCSF_Bridge_TestCC6GetData(lcsf_valid_att_t *pAttArray, test_cmd_payload_t *pCmdPayload) {
-    if (pCmdPayload == NULL) {
-        return;
-    }
     // Initialize optional attribute flags bitfield
     pCmdPayload->cc6_payload.optAttFlagsBitfield = 0;
     // Retrieve data of attribute SA4
     pCmdPayload->cc6_payload.p_sa4 = pAttArray[TEST_CC6_ATT_SA4].Payload.pData;
+    pCmdPayload->cc6_payload.sa4Size = pAttArray[TEST_CC6_ATT_SA4].PayloadSize;
     // Retrieve data of attribute CA9
     // Initialize optional attribute flags bitfield
     pCmdPayload->cc6_payload.ca9_payload.optAttFlagsBitfield = 0;
@@ -371,6 +372,12 @@ static void LCSF_Bridge_TestCC6GetData(lcsf_valid_att_t *pAttArray, test_cmd_pay
                                                                                     .Payload.pSubAttArray[TEST_CA11_ATT_CA12]
                                                                                     .Payload.pSubAttArray[TEST_CA12_ATT_SA4]
                                                                                     .Payload.pData;
+        pCmdPayload->cc6_payload.ca10_payload.ca11_payload.ca12_payload.sa4Size =
+            pAttArray[TEST_CC6_ATT_CA10]
+                .Payload.pSubAttArray[TEST_CA10_ATT_CA11]
+                .Payload.pSubAttArray[TEST_CA11_ATT_CA12]
+                .Payload.pSubAttArray[TEST_CA12_ATT_SA4]
+                .PayloadSize;
     }
 }
 
@@ -440,6 +447,7 @@ static bool LCSF_Bridge_TestCC1FillAtt(lcsf_valid_att_t **pAttArrayAddr, test_cm
     pAttArray[TEST_CC1_ATT_SA4].PayloadSize = pCmdPayload->cc1_payload.sa4Size;
     pAttArray[TEST_CC1_ATT_SA4].Payload.pData = pCmdPayload->cc1_payload.p_sa4;
     // Fill data of attribute SA5
+    pAttArray[TEST_CC1_ATT_SA5].PayloadSize = pCmdPayload->cc1_payload.sa5Size;
     pAttArray[TEST_CC1_ATT_SA5].Payload.pData = pCmdPayload->cc1_payload.p_sa5;
     // Fill data of attribute SA6
     if ((pCmdPayload->cc1_payload.optAttFlagsBitfield & TEST_CC1_ATT_SA6_FLAG) != 0) {
@@ -471,6 +479,7 @@ static bool LCSF_Bridge_TestCC1FillAtt(lcsf_valid_att_t **pAttArrayAddr, test_cm
     }
     // Fill data of attribute SA10
     if ((pCmdPayload->cc1_payload.optAttFlagsBitfield & TEST_CC1_ATT_SA10_FLAG) != 0) {
+        pAttArray[TEST_CC1_ATT_SA10].PayloadSize = pCmdPayload->cc1_payload.sa10Size;
         pAttArray[TEST_CC1_ATT_SA10].Payload.pData = pCmdPayload->cc1_payload.p_sa10;
     } else {
         pAttArray[TEST_CC1_ATT_SA10].Payload.pData = NULL;
@@ -510,6 +519,7 @@ static bool LCSF_Bridge_TestCC3FillAtt(lcsf_valid_att_t **pAttArrayAddr, test_cm
     pAttArray[TEST_CC3_ATT_SA4].PayloadSize = pCmdPayload->cc3_payload.sa4Size;
     pAttArray[TEST_CC3_ATT_SA4].Payload.pData = pCmdPayload->cc3_payload.p_sa4;
     // Fill data of attribute SA5
+    pAttArray[TEST_CC3_ATT_SA5].PayloadSize = pCmdPayload->cc3_payload.sa5Size;
     pAttArray[TEST_CC3_ATT_SA5].Payload.pData = pCmdPayload->cc3_payload.p_sa5;
     // Fill data of attribute SA6
     if ((pCmdPayload->cc3_payload.optAttFlagsBitfield & TEST_CC3_ATT_SA6_FLAG) != 0) {
@@ -541,6 +551,7 @@ static bool LCSF_Bridge_TestCC3FillAtt(lcsf_valid_att_t **pAttArrayAddr, test_cm
     }
     // Fill data of attribute SA10
     if ((pCmdPayload->cc3_payload.optAttFlagsBitfield & TEST_CC3_ATT_SA10_FLAG) != 0) {
+        pAttArray[TEST_CC3_ATT_SA10].PayloadSize = pCmdPayload->cc3_payload.sa10Size;
         pAttArray[TEST_CC3_ATT_SA10].Payload.pData = pCmdPayload->cc3_payload.p_sa10;
     } else {
         pAttArray[TEST_CC3_ATT_SA10].Payload.pData = NULL;
