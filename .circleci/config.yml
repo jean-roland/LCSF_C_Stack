@@ -6,7 +6,7 @@ jobs:
       - image: cimg/base:2023.03
     steps:
       - checkout
-      - run: sudo apt-get update && sudo apt-get install -y cmake ninja-build cpputest clang-format-14
+      - run: sudo apt-get update && sudo apt-get install -y cmake ninja-build cpputest clang-format
       - run: cmake -B build/ -G Ninja
       - run: ninja -C build/
       - run: ninja -C build/ check_style
