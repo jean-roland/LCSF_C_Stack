@@ -72,3 +72,10 @@ add_custom_target(run_tests
 add_dependencies(run_tests ${TESTS_A_BRIDGE_BIN_NAME} ${TESTS_A_MAIN_BIN_NAME} ${TESTS_A_FULLSTACK_BIN_NAME}
  ${TESTS_B_BRIDGE_BIN_NAME} ${TESTS_B_MAIN_BIN_NAME} ${TESTS_B_FULLSTACK_BIN_NAME})
 
+# Custom target to run end-to-end test
+add_custom_target(run_e2e_test
+  COMMAND python3 ./tests/e2e_test.py
+  COMMENT "Run end-to-end test"
+  WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+)
+
