@@ -83,3 +83,4 @@ add_custom_target(check_style
     COMMAND find ./src ./include -iname "*.h" -o -iname "*.c" | xargs clang-format -n --Werror --style=file
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
     COMMENT "Check code style")
+
