@@ -24,9 +24,9 @@
 #include <string.h>
 // Custom lib
 #include <LCSF_Config.h>
-#include <lib/Lifo.h>
 #include <lib/LCSF_Transcoder.h>
 #include <lib/LCSF_Validator.h>
+#include <lib/Lifo.h>
 
 // *** Definitions ***
 // --- Private Types ---

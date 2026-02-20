@@ -21,9 +21,9 @@
 // Standard lib
 #include <string.h>
 // Custom lib
-#include <lib/Lifo.h>
 #include <lib/LCSF_Transcoder.h>
 #include <lib/LCSF_Validator.h>
+#include <lib/Lifo.h>
 #include <protocols/Example_Main.h>
 #include <protocols/LCSF_Bridge_Example.h>
 
