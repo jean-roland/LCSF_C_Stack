@@ -24,7 +24,7 @@
 #include <string.h>
 // Custom lib
 #include <LCSF_Config.h>
-#include <lib/Filo.h>
+#include <lib/Lifo.h>
 #include <lib/LCSF_Transcoder.h>
 #include <lib/LCSF_Validator.h>
 
@@ -85,9 +85,9 @@ typedef struct _lcsf_ep_cmd_error_desc {
 
 // Module information structure
 typedef struct _lcsf_validator_info {
-    // Filo desc
-    filo_desc_t ReceiverFilo; // Structure ot the receiver filo
-    filo_desc_t SenderFilo; // Structure of the sender filo
+    // Lifo desc
+    lifo_desc_t ReceiverLifo; // Structure ot the receiver lifo
+    lifo_desc_t SenderLifo; // Structure of the sender lifo
     // Protocol array
     const lcsf_validator_protocol_desc_t
         *pProtArray[LCSF_VALIDATOR_PROTOCOL_NB]; // Pointer to contain the module protocol array
@@ -95,9 +95,9 @@ typedef struct _lcsf_validator_info {
     LCSFSendErrCallback_t *pFnSendErrCb; // Optional function pointer to send lcsf error messages
     LCSFReceiveErrCallback_t *pFnRecErrCb; // Optional function pointer to receive lcsf error messages
     uint16_t ProtNb; // Number of protocol handled by the module
-    // Filo values
-    uint8_t ReceiverFiloData[LCSF_VALIDATOR_RX_FILO_SIZE * sizeof(lcsf_raw_att_t)]; // Receiver filo data buffer
-    uint8_t SenderFiloData[LCSF_VALIDATOR_TX_FILO_SIZE * sizeof(lcsf_valid_att_t)]; // Sender filo data buffer
+    // Lifo values
+    uint8_t ReceiverLifoData[LCSF_VALIDATOR_RX_LIFO_SIZE * sizeof(lcsf_raw_att_t)]; // Receiver lifo data buffer
+    uint8_t SenderLifoData[LCSF_VALIDATOR_TX_LIFO_SIZE * sizeof(lcsf_valid_att_t)]; // Sender lifo data buffer
     // Error values
     uint8_t Err_buff[ERR_BUFF_SIZE]; // Buffer to contain encoded error message
     uint8_t LastErrorType; // Contains the last error the module encountered
@@ -150,7 +150,7 @@ static lcsf_validator_info_t LcsfValidatorInfo;
  * \return bool: true if operation was a success
  */
 static bool LCSF_AllocateReceiverAttArray(uint_fast16_t attNb, lcsf_valid_att_t **pAttArray) {
-    return FiloGet(&LcsfValidatorInfo.ReceiverFilo, attNb, (void **)pAttArray);
+    return LifoGet(&LcsfValidatorInfo.ReceiverLifo, attNb, (void **)pAttArray);
 }
 
 /**
@@ -162,7 +162,7 @@ static bool LCSF_AllocateReceiverAttArray(uint_fast16_t attNb, lcsf_valid_att_t 
  * \return bool: true if operation was a success
  */
 static bool LCSF_AllocateSenderAttArray(uint_fast16_t attNb, lcsf_raw_att_t **pAttArray) {
-    return FiloGet(&LcsfValidatorInfo.SenderFilo, attNb, (void **)pAttArray);
+    return LifoGet(&LcsfValidatorInfo.SenderLifo, attNb, (void **)pAttArray);
 }
 
 /**
@@ -736,11 +736,11 @@ bool LCSF_ValidatorInit(LCSFSendErrCallback_t *pFnSendErrCb, LCSFReceiveErrCallb
         LcsfValidatorInfo.pFnRecErrCb = pFnRecErrCb;
     }
     // Initialize structures
-    if (!FiloInit(&LcsfValidatorInfo.SenderFilo, LcsfValidatorInfo.SenderFiloData, LCSF_VALIDATOR_TX_FILO_SIZE,
+    if (!LifoInit(&LcsfValidatorInfo.SenderLifo, LcsfValidatorInfo.SenderLifoData, LCSF_VALIDATOR_TX_LIFO_SIZE,
             sizeof(lcsf_valid_att_t))) {
         return false;
     }
-    if (!FiloInit(&LcsfValidatorInfo.ReceiverFilo, LcsfValidatorInfo.ReceiverFiloData, LCSF_VALIDATOR_RX_FILO_SIZE,
+    if (!LifoInit(&LcsfValidatorInfo.ReceiverLifo, LcsfValidatorInfo.ReceiverLifoData, LCSF_VALIDATOR_RX_LIFO_SIZE,
             sizeof(lcsf_raw_att_t))) {
         return false;
     }
@@ -779,7 +779,7 @@ bool LCSF_ValidatorReceive(const lcsf_raw_msg_t *pMessage) {
     // Variables initialization
     uint16_t descCmdIdx = 0;
     lcsf_valid_cmd_t validMsg;
-    FiloFreeAll(&LcsfValidatorInfo.ReceiverFilo);
+    LifoFreeAll(&LcsfValidatorInfo.ReceiverLifo);
     memset(&validMsg, 0, sizeof(lcsf_valid_cmd_t));
     // Check if command id is valid
     if (!LCSF_ValidateCmdId(pMessage->CmdId, pProtDesc->CmdNb, &descCmdIdx, pProtDesc->pCmdDescArray)) {
@@ -812,7 +812,7 @@ int LCSF_ValidatorEncode(uint_fast16_t protId, const lcsf_valid_cmd_t *pCommand,
     uint16_t cmdIdx = 0;
     lcsf_raw_msg_t sendMsg;
     memset(&sendMsg, 0, sizeof(lcsf_raw_msg_t));
-    FiloFreeAll(&LcsfValidatorInfo.SenderFilo);
+    LifoFreeAll(&LcsfValidatorInfo.SenderLifo);
     // Note the protocol id
     sendMsg.ProtId = protId;
     // Validate command id

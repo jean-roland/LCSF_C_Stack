@@ -16,6 +16,6 @@
 # Author: Jean-Roland Gosse
 
 # Core library target
-add_library(${CORE_LIB_NAME} STATIC Filo.c LCSF_Transcoder.c LCSF_Validator.c)
+add_library(${CORE_LIB_NAME} STATIC Lifo.c LCSF_Transcoder.c LCSF_Validator.c)
 # Dependencies
 target_include_directories(${CORE_LIB_NAME} PUBLIC "../../include/" "../../include/lib/")

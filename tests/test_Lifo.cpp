@@ -1,6 +1,6 @@
 /**
- * @file test_Filo.cpp
- * @brief Unit test of the Filo module
+ * @file test_Lifo.cpp
+ * @brief Unit test of the Lifo module
  * @author Jean-Roland Gosse
  *
  * This file is part of LCSF C Stack.
@@ -25,25 +25,25 @@
 
 extern "C" {
 #include "LCSF_Config.h"
-#include "Filo.h"
+#include "Lifo.h"
 }
 
 // *** Private macros ***
-#define FILO_SIZE 100
+#define LIFO_SIZE 100
 
 // *** Private variables ***
-static filo_desc_t TestFilo;
-static uint8_t FiloData[FILO_SIZE];
+static lifo_desc_t TestLifo;
+static uint8_t LifoData[LIFO_SIZE];
 static bool init_srand;
 
 // *** Public functions ***
 
 /**
- * testgroup: filo
+ * testgroup: lifo
  *
- * This group tests all the filo features
+ * This group tests all the lifo features
  */
-TEST_GROUP(filo) {
+TEST_GROUP(lifo) {
 
     void setup() {
         mock().strictOrder();
@@ -60,71 +60,71 @@ TEST_GROUP(filo) {
 };
 
 /**
- * testgroup: filo
+ * testgroup: lifo
  * testname: init
  *
- * Test the FiloInit function
+ * Test the LifoInit function
  */
-TEST(filo, init) {
-    // Null filo pointer
-    CHECK_FALSE(FiloInit(NULL, FiloData, FILO_SIZE, sizeof(uint8_t)));
+TEST(lifo, init) {
+    // Null lifo pointer
+    CHECK_FALSE(LifoInit(NULL, LifoData, LIFO_SIZE, sizeof(uint8_t)));
 
     // Null data pointer
-    CHECK_FALSE(FiloInit(&TestFilo, NULL, FILO_SIZE, sizeof(uint8_t)));
+    CHECK_FALSE(LifoInit(&TestLifo, NULL, LIFO_SIZE, sizeof(uint8_t)));
 
     // OK creation
-    CHECK(FiloInit(&TestFilo, FiloData, FILO_SIZE, sizeof(uint8_t)));
+    CHECK(LifoInit(&TestLifo, LifoData, LIFO_SIZE, sizeof(uint8_t)));
 }
 
 /**
- * testgroup: filo
+ * testgroup: lifo
  * testname: take_free
  *
- * Test the take/free filo features
+ * Test the take/free lifo features
  */
-TEST(filo, take_free) {
+TEST(lifo, take_free) {
     void *pData1, *pData2, *pData3;
 
-    // Create filo
-    CHECK_TEXT(FiloInit(&TestFilo, FiloData, FILO_SIZE, sizeof(uint8_t)), "[tests]: Couldn't init filo!");
+    // Create lifo
+    CHECK_TEXT(LifoInit(&TestLifo, LifoData, LIFO_SIZE, sizeof(uint8_t)), "[tests]: Couldn't init lifo!");
 
     // Allocation tests
-    CHECK_FALSE(FiloGet(NULL, 0, &pData1));
-    CHECK_FALSE(FiloGet(&TestFilo, FILO_SIZE + 1, &pData1));
+    CHECK_FALSE(LifoGet(NULL, 0, &pData1));
+    CHECK_FALSE(LifoGet(&TestLifo, LIFO_SIZE + 1, &pData1));
     CHECK(pData1 == NULL);
-    CHECK(FiloGet(&TestFilo, 0, &pData1));
+    CHECK(LifoGet(&TestLifo, 0, &pData1));
     CHECK(pData1 != NULL);
-    int alloc_size = (rand() % FILO_SIZE) + 1;
-    int complem_size = FILO_SIZE - alloc_size;
+    int alloc_size = (rand() % LIFO_SIZE) + 1;
+    int complem_size = LIFO_SIZE - alloc_size;
     int small_size = (rand() % 10) + 1;
     LCSF_DBG_PRINT("size1: %d, size2: %d, size3: %d\n", alloc_size, complem_size, small_size);
-    CHECK(FiloGet(&TestFilo, alloc_size, &pData1));
+    CHECK(LifoGet(&TestLifo, alloc_size, &pData1));
     CHECK(pData1 != NULL);
-    CHECK_FALSE(FiloGet(&TestFilo, complem_size + 1, &pData2));
+    CHECK_FALSE(LifoGet(&TestLifo, complem_size + 1, &pData2));
     CHECK(pData2 == NULL);
-    CHECK(FiloGet(&TestFilo, complem_size, &pData2));
+    CHECK(LifoGet(&TestLifo, complem_size, &pData2));
     CHECK(pData2 != NULL);
 
     // Free All tests
-    CHECK_FALSE(FiloFreeAll(NULL));
-    CHECK_FALSE(FiloGet(&TestFilo, alloc_size, &pData1));
+    CHECK_FALSE(LifoFreeAll(NULL));
+    CHECK_FALSE(LifoGet(&TestLifo, alloc_size, &pData1));
     CHECK(pData1 == NULL);
-    CHECK(FiloFreeAll(&TestFilo));
-    CHECK(FiloGet(&TestFilo, alloc_size, &pData1));
-    CHECK(FiloGet(&TestFilo, complem_size, &pData2));
+    CHECK(LifoFreeAll(&TestLifo));
+    CHECK(LifoGet(&TestLifo, alloc_size, &pData1));
+    CHECK(LifoGet(&TestLifo, complem_size, &pData2));
     CHECK(pData1 != NULL);
     CHECK(pData2 != NULL);
 
     // Free tests
-    CHECK_FALSE(FiloFree(NULL, 0));
-    CHECK(FiloFree(&TestFilo, 0));
-    CHECK_FALSE(FiloGet(&TestFilo, small_size, &pData3));
+    CHECK_FALSE(LifoFree(NULL, 0));
+    CHECK(LifoFree(&TestLifo, 0));
+    CHECK_FALSE(LifoGet(&TestLifo, small_size, &pData3));
     CHECK(pData3 == NULL);
-    CHECK(FiloFree(&TestFilo, small_size));
-    CHECK(FiloGet(&TestFilo, small_size, &pData3));
+    CHECK(LifoFree(&TestLifo, small_size));
+    CHECK(LifoGet(&TestLifo, small_size, &pData3));
     CHECK(pData3 != NULL);
-    CHECK(FiloFree(&TestFilo, 2 * FILO_SIZE));
-    CHECK(FiloGet(&TestFilo, small_size, &pData3));
+    CHECK(LifoFree(&TestLifo, 2 * LIFO_SIZE));
+    CHECK(LifoGet(&TestLifo, small_size, &pData3));
     CHECK(pData3 != NULL);
     CHECK_EQUAL((uintptr_t)pData1, (uintptr_t)pData3);
 }

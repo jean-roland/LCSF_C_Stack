@@ -32,7 +32,7 @@
 // *** Definitions ***
 // --- Public Types ---
 
-#define LCSF_EXAMPLE_BRIDGE_FILO_SIZE 5 // Max number of attributes
+#define LCSF_EXAMPLE_BRIDGE_LIFO_SIZE 5 // Max number of attributes
 
 // Lcsf example protocol identifier
 #define LCSF_EXAMPLE_PROTOCOL_ID 0x00
@@ -80,7 +80,7 @@ extern const lcsf_protocol_desc_t LCSF_Example_ProtDesc;
 
 // --- Public Function Prototypes ---
 /**
- * \fn bool LCSF_Bridge_ExampleInit(size_t filoSize)
+ * \fn bool LCSF_Bridge_ExampleInit(size_t lifoSize)
  * \brief Initialize the module
 
  * \return bool: true if operation was a success

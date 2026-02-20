@@ -20,7 +20,7 @@ Then, to interface with your project:
 * Call the function `LCSF_TranscoderReceive` when you received a buffer containing an lcsf message, this will call the adequate function in your `<protocol>_Main.c`.
 * Call the function `LCSF_Bridge_Encode` to encode a buffer with an lcsf_message that you can then send. Example call can be found in your `<protocol>_Main.c`.
 
-You can change some stack parameters (protocol array size, filo size) in `include/LCSF_config.h`.
+You can change some stack parameters (protocol array size, lifo size) in `include/LCSF_config.h`.
 
 ## How the stack works
 
@@ -29,7 +29,7 @@ The stack itself is composed of two main files:
 * `LCSF_Validator.c`: This module is in charge of verifying if messages correspond to a known command set protocol.
 
 They are accompanied by a support file:
-* `Filo.c`: A module that creates memory pool that can be used as filo memory.
+* `Lifo.c`: A module that creates memory pool that can be used as lifo memory.
 
 Then the actual protocols are fed into the stack at initialization time.
 
@@ -55,7 +55,7 @@ Since LCSF is based on nested structures, the stack use recursive functions.
 Recursivity is generally frowned upon in embedded applications, which is why the stack is made to limit the issue:
 * The number of calls is directly linked to the number of sub-attribute layers in a protocol, that means the user has direct control.
 * The stack is linear in its recursivity (one call will only lead to a maximum of one other call).
-* The stack is limited by the depth of its filo when making new calls, it is guaranteed to not infinitely loop.
+* The stack is limited by the depth of its lifo when making new calls, it is guaranteed to not infinitely loop.
 
 ## Build, tests & docs
 

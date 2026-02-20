@@ -1,6 +1,6 @@
 /**
- * \file Filo.c
- * \brief Filo module
+ * \file Lifo.c
+ * \brief Lifo module
  * \author Jean-Roland Gosse
  *
  * This file is part of LCSF C Stack.
@@ -24,10 +24,17 @@
 #include <string.h>
 // Custom lib
 #include <LCSF_Config.h>
-#include <lib/Filo.h>
+#include <lib/Lifo.h>
 
 // *** Definitions ***
 // --- Private Types ---
+#define MAX_VLE_VALUE_1B 0x00000000000000ff
+#define MAX_VLE_VALUE_2B 0x000000000000ffff
+#define MAX_VLE_VALUE_3B 0x0000000000ffffff
+#define MAX_VLE_VALUE_4B 0x00000000ffffffff
+#define MAX_VLE_VALUE_5B 0x000000ffffffffff
+#define MAX_VLE_VALUE_6B 0x0000ffffffffffff
+#define MAX_VLE_VALUE_7B 0x00ffffffffffffff
 // --- Private Constants ---
 // --- Private Function Prototypes ---
 // --- Private Variables ---
@@ -37,82 +44,82 @@
 
 // *** Public Functions ***
 
-bool FiloInit(filo_desc_t *pFilo, void *pData, size_t itemNb, size_t itemSize) {
+bool LifoInit(lifo_desc_t *pLifo, void *pData, size_t itemNb, size_t itemSize) {
     // Bad parameters guard
-    if (pFilo == NULL) {
+    if (pLifo == NULL) {
         return false;
     }
     if (pData == NULL) {
         return false;
     }
-    // Filo Initialization
-    pFilo->pDataArray = pData;
-    pFilo->ItemSize = itemSize;
-    pFilo->ItemNb = itemNb;
-    pFilo->FreeItemNb = itemNb;
+    // Lifo Initialization
+    pLifo->pDataArray = pData;
+    pLifo->ItemSize = itemSize;
+    pLifo->ItemNb = itemNb;
+    pLifo->FreeItemNb = itemNb;
     return true;
 }
 
-bool FiloGet(filo_desc_t *pFiloDesc, size_t itemNb, void **pFreeSlot) {
+bool LifoGet(lifo_desc_t *pLifoDesc, size_t itemNb, void **pFreeSlot) {
     // Bad parameters guard
-    if ((pFiloDesc == NULL) || (pFreeSlot == NULL)) {
+    if ((pLifoDesc == NULL) || (pFreeSlot == NULL)) {
         return false;
     }
     // Overflow guard
-    if (itemNb > pFiloDesc->FreeItemNb) {
+    if (itemNb > pLifoDesc->FreeItemNb) {
         // Out of memory
         *pFreeSlot = NULL;
         return false;
     }
     // First available index calculation
-    uint32_t slotIndex = pFiloDesc->ItemNb - pFiloDesc->FreeItemNb;
+    uint32_t slotIndex = pLifoDesc->ItemNb - pLifoDesc->FreeItemNb;
     // Resolve index memory address
-    *pFreeSlot = (uint8_t *)pFiloDesc->pDataArray + slotIndex * pFiloDesc->ItemSize;
+    *pFreeSlot = (uint8_t *)pLifoDesc->pDataArray + slotIndex * pLifoDesc->ItemSize;
     // Take allocation into account
-    pFiloDesc->FreeItemNb -= itemNb;
+    pLifoDesc->FreeItemNb -= itemNb;
     return true;
 }
 
-bool FiloFree(filo_desc_t *pFiloDesc, size_t itemNb) {
+bool LifoFree(lifo_desc_t *pLifoDesc, size_t itemNb) {
     // Bad parameters guard
-    if (pFiloDesc == NULL) {
+    if (pLifoDesc == NULL) {
         return false;
     }
     // Calc number of taken slots
-    uint32_t takenSlotNumber = pFiloDesc->ItemNb - pFiloDesc->FreeItemNb;
+    uint32_t takenSlotNumber = pLifoDesc->ItemNb - pLifoDesc->FreeItemNb;
     // Safety limitation
     if (itemNb > takenSlotNumber) {
         itemNb = takenSlotNumber;
     }
     // Take liberation into account
-    pFiloDesc->FreeItemNb += itemNb;
+    pLifoDesc->FreeItemNb += itemNb;
     return true;
 }
 
-bool FiloFreeAll(filo_desc_t *pFiloDesc) {
+bool LifoFreeAll(lifo_desc_t *pLifoDesc) {
     // Bad parameters guard
-    if (pFiloDesc == NULL) {
+    if (pLifoDesc == NULL) {
         return false;
     }
-    // Clear the fifo
-    pFiloDesc->FreeItemNb = pFiloDesc->ItemNb;
+    // Clear the lifo
+    pLifoDesc->FreeItemNb = pLifoDesc->ItemNb;
     return true;
 }
 
 uint16_t GetVLESize(uint64_t value) {
-    if (value <= 0x000000ff) {
+    if (value <= MAX_VLE_VALUE_1B) {
         return 1;
-    } else if (value <= 0x0000ffff) {
+    } else if (value <= MAX_VLE_VALUE_2B) {
         return 2;
-    } else if (value <= 0x00ffffff) {
+    } else if (value <= MAX_VLE_VALUE_3B) {
         return 3;
-    } else if (value <= 0xffffffff) {
+    } else if (value <= MAX_VLE_VALUE_4B) {
         return 4;
-    } else if (value <= 0x00ffffffffff) {
+    } else if (value <= MAX_VLE_VALUE_5B) {
         return 5;
-    } else if (value <= 0x00ffffffffffff) {
+    } else if (value <= MAX_VLE_VALUE_6B) {
         return 6;
-    } else if (value <= 0x00ffffffffffffff) {
+    } else if (value <= MAX_VLE_VALUE_7B) {
         return 7;
     } else {
         return 8;

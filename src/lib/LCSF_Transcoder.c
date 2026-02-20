@@ -24,7 +24,7 @@
 #include <string.h>
 // Custom lib
 #include <LCSF_Config.h>
-#include <lib/Filo.h>
+#include <lib/Lifo.h>
 #include <lib/LCSF_Transcoder.h>
 #include <lib/LCSF_Validator.h>
 
@@ -39,10 +39,10 @@ enum _lcsf_decode_error_enum {
 
 // Module information structure
 typedef struct _lcsf_trnscdr_info {
-    filo_desc_t DecoderFilo; // Structure of the decoder filo
+    lifo_desc_t DecoderLifo; // Structure of the decoder lifo
     lcsf_raw_msg_t DecoderMsg; // Structure of the decoder message header
     uint8_t *pEncoderBuffer; // Pointer to the transmission buffer
-    uint8_t DecoderFiloData[LCSF_TRANSCODER_RX_FILO_SIZE * sizeof(lcsf_raw_att_t)]; // Decoder filo data buffer
+    uint8_t DecoderLifoData[LCSF_TRANSCODER_RX_LIFO_SIZE * sizeof(lcsf_raw_att_t)]; // Decoder lifo data buffer
     uint8_t LastErrCode; // Last error code encountered during decoding
 } lcsf_trnscdr_info_t;
 
@@ -83,8 +83,8 @@ static lcsf_trnscdr_info_t LcsfTranscoderInfo;
  * \return bool: true if operation was a success
  */
 static bool LCSF_AllocateAttArray(uint_fast16_t attNb, lcsf_raw_att_t **pAttArray) {
-    // Attempt to allocate the array from the filo
-    return FiloGet(&LcsfTranscoderInfo.DecoderFilo, attNb, (void **)pAttArray);
+    // Attempt to allocate the array from the lifo
+    return LifoGet(&LcsfTranscoderInfo.DecoderLifo, attNb, (void **)pAttArray);
 }
 
 /**
@@ -254,14 +254,14 @@ static bool LCSF_DecodeAtt_Rec(
  * \param pBuffer pointer to the buffer
  * \param buffSize size of the buffer
  * \param pMsg pointer to contain the message header
- * \param pFilo pointer to the decoder filo
+ * \param pLifo pointer to the decoder lifo
  * \return bool: true if operation was a success
  */
 static bool LCSF_DecodeBuffer(const uint8_t *pBuffer, size_t buffSize, lcsf_raw_msg_t *pMsg) {
     uint16_t buffIdx = 0;
 
-    // Clear filo memory
-    FiloFreeAll(&LcsfTranscoderInfo.DecoderFilo);
+    // Clear lifo memory
+    LifoFreeAll(&LcsfTranscoderInfo.DecoderLifo);
     // Message header initialization
     memset(pMsg, 0, sizeof(lcsf_raw_msg_t));
     // Decode message header
@@ -467,8 +467,8 @@ static bool LCSF_EncodeBuffer(uint16_t *pBuffIdx, uint8_t *pBuffer, size_t buffS
 // *** Public Functions ***
 
 bool LCSF_TranscoderInit(void) {
-    // Filo creation
-    return FiloInit(&LcsfTranscoderInfo.DecoderFilo, LcsfTranscoderInfo.DecoderFiloData, LCSF_TRANSCODER_RX_FILO_SIZE,
+    // Lifo creation
+    return LifoInit(&LcsfTranscoderInfo.DecoderLifo, LcsfTranscoderInfo.DecoderLifoData, LCSF_TRANSCODER_RX_LIFO_SIZE,
         sizeof(lcsf_raw_att_t));
 }
 

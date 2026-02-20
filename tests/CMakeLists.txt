@@ -32,7 +32,7 @@ endif()
 # message("Found libCppUTest.a at ${CPPUTEST_LIB} and libCppUTestExt.a at ${CPPUTEST_EXT_LIB}")
 
 # Tests lib + A targets
-add_executable(${TESTS_A_BRIDGE_BIN_NAME} main_tests.cpp test_Filo.cpp test_LCSF_Transcoder.cpp test_A_LCSF_Bridge_Test.cpp)
+add_executable(${TESTS_A_BRIDGE_BIN_NAME} main_tests.cpp test_Lifo.cpp test_LCSF_Transcoder.cpp test_A_LCSF_Bridge_Test.cpp)
 target_include_directories(${TESTS_A_BRIDGE_BIN_NAME} PUBLIC "../include/" "../include/lib/" "../include/protocols/" "../src/protocols_a/" "${CPPUTEST_INC_PATH}")
 target_link_libraries(${TESTS_A_BRIDGE_BIN_NAME} PRIVATE ${CORE_LIB_NAME} ${PROT_TEST_A_LIB_NAME} ${CPPUTEST_LIB} ${CPPUTEST_EXT_LIB})
 

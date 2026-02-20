@@ -1,6 +1,6 @@
 /**
- * \file Filo.h
- * \brief Filo module
+ * \file Lifo.h
+ * \brief Lifo module
  * \author Jean-Roland Gosse
  *
  * This file is part of LCSF C Stack.
@@ -19,8 +19,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>
  */
 
-#ifndef _Filo_h
-#define _Filo_h
+#ifndef _Lifo_h
+#define _Lifo_h
 
 // *** Libraries include ***
 // Standard lib
@@ -30,59 +30,59 @@
 // *** Definitions ***
 // --- Public Types ---
 
-/** Filo descriptor structure */
-typedef struct _filo_desc {
-    uint16_t ItemSize; /**< Size of the filo item */
-    uint16_t ItemNb; /**< Number of filo items */
-    uint16_t FreeItemNb; /**< Number of free filo space (item number) */
-    void *pDataArray; /**< Pointer to the filo data array */
-} filo_desc_t; // total: 12 bytes, 2 padding
+/** Lifo descriptor structure */
+typedef struct _lifo_desc {
+    uint16_t ItemSize; /**< Size of the lifo item */
+    uint16_t ItemNb; /**< Number of lifo items */
+    uint16_t FreeItemNb; /**< Number of free lifo space (item number) */
+    void *pDataArray; /**< Pointer to the lifo data array */
+} lifo_desc_t; // total: 12 bytes, 2 padding
 
 // --- Public Constants ---
 // --- Public Variables ---
 // --- Public Function Prototypes ---
 
 /**
- * \fn void FiloInit(filo_desc_t *pFilo, size_t itemNb, size_t itemSize)
- * \brief Initialize a filo
+ * \fn void LifoInit(lifo_desc_t *pLifo, size_t itemNb, size_t itemSize)
+ * \brief Initialize a lifo
  *
- * \param pFilo: pointer to the filo
- * \param pBuffer: pointer to the filo data buffer (size must be itemNb * itemSize)
- * \param itemNb number of items in the filo
+ * \param pLifo: pointer to the lifo
+ * \param pBuffer: pointer to the lifo data buffer (size must be itemNb * itemSize)
+ * \param itemNb number of items in the lifo
  * \param itemSize size of each item
  * \return bool: true if operation was a success
  */
-bool FiloInit(filo_desc_t *pFilo, void *pBuffer, size_t itemNb, size_t itemSize);
+bool LifoInit(lifo_desc_t *pLifo, void *pBuffer, size_t itemNb, size_t itemSize);
 
 /**
- * \fn bool FiloGet(filo_desc_t *pFiloDesc, size_t slotNumber, void **pFreeSlot)
- * \brief Allocate a table of item from a filo and return the pointer
+ * \fn bool LifoGet(lifo_desc_t *pLifoDesc, size_t slotNumber, void **pFreeSlot)
+ * \brief Allocate a table of item from a lifo and return the pointer
  *
- * \param pFiloDesc pointer to the filo
+ * \param pLifoDesc pointer to the lifo
  * \param itemNb number of items
  * \param pFreeSlot pointer to contain the item table pointer
  * \return bool: true if operation was a success
  */
-bool FiloGet(filo_desc_t *pFiloDesc, size_t itemNb, void **pFreeSlot);
+bool LifoGet(lifo_desc_t *pLifoDesc, size_t itemNb, void **pFreeSlot);
 
 /**
- * \fn bool FiloFree(filo_desc_t *pFiloDesc, size_t itemNb)
- * \brief Free items from a filo
+ * \fn bool LifoFree(lifo_desc_t *pLifoDesc, size_t itemNb)
+ * \brief Free items from a lifo
  *
- * \param pFiloDesc pointer to the filo
+ * \param pLifoDesc pointer to the lifo
  * \param itemNb number of items
  * \return bool: true if operation was a success
  */
-bool FiloFree(filo_desc_t *pFiloDesc, size_t itemNb);
+bool LifoFree(lifo_desc_t *pLifoDesc, size_t itemNb);
 
 /**
- * \fn bool FiloFreeAll(filo_desc_t *pFiloDesc)
- * \brief Free all items from a filo
+ * \fn bool LifoFreeAll(lifo_desc_t *pLifoDesc)
+ * \brief Free all items from a lifo
  *
- * \param pFiloDesc pointer to the filo
+ * \param pLifoDesc pointer to the lifo
  * \return bool: true if operation was a success
  */
-bool FiloFreeAll(filo_desc_t *pFiloDesc);
+bool LifoFreeAll(lifo_desc_t *pLifoDesc);
 
 /**
  * \brief Return byte number to encode value
@@ -93,4 +93,4 @@ bool FiloFreeAll(filo_desc_t *pFiloDesc);
 uint16_t GetVLESize(uint64_t value);
 
 // *** End Definitions ***
-#endif // _Filo_h
+#endif // _Lifo_h

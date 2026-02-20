@@ -19,21 +19,21 @@ The heap memory consumption was measured by looking at all the static variables 
 
 LCSF Stack heap usage is mostly due to:
 * Transcoder transmit buffer.
-* Transcoder receive filo.
-* Validator tx and rx filos.
+* Transcoder receive lifo.
+* Validator tx and rx lifo.
 
 All of which have configurable sizes in `LCSF_Config.h`. There is also the validator protocol array size which is a parameter of `LCSF_ValidatorInit`.
 
 Protocol heap usage is mostly due to:
-* Bridge transmit filo.
+* Bridge transmit lifo.
 * Bridge receive command payload.
 * Protocol main transmit command payload.
 
-The filo size is a parameter of the bridge init function, the command payload size is equal to the size of the command with the largest payload. It will also vary if the user specific code has heavy use of heap memory.
+The lifo size is a parameter of the bridge init function, the command payload size is equal to the size of the command with the largest payload. It will also vary if the user specific code has heavy use of heap memory.
 
 There is also the static variables in each module of the LCSF stack and protocol that consumes a bit of heap memory.
 
-For this test, the command payload size is `40 bytes`, a 12 items value was used for all filos and a 256 value for the buffer size. This represents `548 bytes` for the LCSF stack, `176 bytes` for the protocol.
+For this test, the command payload size is `40 bytes`, a 12 items value was used for all lifo and a 256 value for the buffer size. This represents `548 bytes` for the LCSF stack, `176 bytes` for the protocol.
 
 The results were:
 * LCSF stack heap usage: `632 bytes` (static + alloc),

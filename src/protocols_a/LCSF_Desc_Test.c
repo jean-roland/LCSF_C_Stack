@@ -175,5 +175,4 @@ static const lcsf_command_desc_t LCSF_Test_CmdDescArray[LCSF_TEST_CMD_NB] = {
 
 // Protocol descriptor
 static const lcsf_protocol_desc_t LCSF_Test_Desc = {.CmdNb = LCSF_TEST_CMD_NB, .pCmdDescArray = LCSF_Test_CmdDescArray};
-const lcsf_validator_protocol_desc_t LCSF_Test_ProtDesc = {
-    .ProtId = LCSF_TEST_PROTOCOL_ID, .pProtDesc = &LCSF_Test_Desc, .pFnInterpretMsg = LCSF_Bridge_TestReceive};
+const lcsf_validator_protocol_desc_t LCSF_Test_ProtDesc = {.ProtId = LCSF_TEST_PROTOCOL_ID, .pProtDesc = &LCSF_Test_Desc, .pFnInterpretMsg = LCSF_Bridge_TestReceive};
