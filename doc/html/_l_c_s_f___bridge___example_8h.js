@@ -2,7 +2,7 @@ var _l_c_s_f___bridge___example_8h =
 [
     [ "LCSF_EXAMPLE_ATT_RGB_SUBATT_NB", "_l_c_s_f___bridge___example_8h.html#a31967983aeff61bbd4aadbb21bc5cce6", null ],
     [ "LCSF_EXAMPLE_ATT_YUV_SUBATT_NB", "_l_c_s_f___bridge___example_8h.html#a3bc4014e6f0ba860212d2606495a2519", null ],
-    [ "LCSF_EXAMPLE_BRIDGE_FILO_SIZE", "_l_c_s_f___bridge___example_8h.html#a319989732199a786ebec28f2e7d1e1f0", null ],
+    [ "LCSF_EXAMPLE_BRIDGE_LIFO_SIZE", "_l_c_s_f___bridge___example_8h.html#a319989732199a786ebec28f2e7d1e1f0", null ],
     [ "LCSF_EXAMPLE_CMD_COLOR_SPACE_ATT_NB", "_l_c_s_f___bridge___example_8h.html#aedefa04b8488486ff8a5ea1b28b40400", null ],
     [ "LCSF_EXAMPLE_CMD_ERROR_ATT_NB", "_l_c_s_f___bridge___example_8h.html#aed704b0de12e27ba23eb08ba59b2c1d9", null ],
     [ "LCSF_EXAMPLE_CMD_JUMP_ATT_NB", "_l_c_s_f___bridge___example_8h.html#a883892df4d0cc7a809b0bfc7e3d1c8d6", null ],

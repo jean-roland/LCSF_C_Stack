@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>LCSF C Stack: include/lib/Filo.h Source File</title>
+<title>LCSF C Stack: include/lib/Lifo.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -62,7 +62,7 @@ $(function() {
 </div>
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
-$(document).ready(function(){initNavTree('_filo_8h_source.html',''); initResizable(); });
+$(document).ready(function(){initNavTree('_lifo_8h_source.html',''); initResizable(); });
 /* @license-end */
 </script>
 <div id="doc-content">
@@ -82,12 +82,12 @@ $(document).ready(function(){initNavTree('_filo_8h_source.html',''); initResizab
 
 <div class="header">
   <div class="headertitle">
-<div class="title">Filo.h</div>  </div>
+<div class="title">Lifo.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="_filo_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160; </div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#ifndef _Filo_h</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#define _Filo_h</span></div>
+<a href="_lifo_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160; </div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#ifndef _Lifo_h</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#define _Lifo_h</span></div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="comment">// *** Libraries include ***</span></div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="comment">// Standard lib</span></div>
@@ -97,43 +97,43 @@ $(document).ready(function(){initNavTree('_filo_8h_source.html',''); initResizab
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="comment">// *** Definitions ***</span></div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="comment">// --- Public Types ---</span></div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
-<div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="struct__filo__desc.html">   34</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="struct__filo__desc.html">_filo_desc</a> {</div>
-<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="struct__filo__desc.html#a4680566b4126699c7c30315235199490">   35</a></span>&#160;    uint16_t <a class="code" href="struct__filo__desc.html#a4680566b4126699c7c30315235199490">ItemSize</a>; </div>
-<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="struct__filo__desc.html#a169ab4d68176e3cf0aa7099cdd5ee755">   36</a></span>&#160;    uint16_t <a class="code" href="struct__filo__desc.html#a169ab4d68176e3cf0aa7099cdd5ee755">ItemNb</a>; </div>
-<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="struct__filo__desc.html#a254937ec49cb21805008a3c31eb2be3e">   37</a></span>&#160;    uint16_t <a class="code" href="struct__filo__desc.html#a254937ec49cb21805008a3c31eb2be3e">FreeItemNb</a>; </div>
-<div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="struct__filo__desc.html#a407a9593d0f5c240b631b6a59f6d6cad">   38</a></span>&#160;    <span class="keywordtype">void</span> *<a class="code" href="struct__filo__desc.html#a407a9593d0f5c240b631b6a59f6d6cad">pDataArray</a>; </div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;} <a class="code" href="_filo_8h.html#a9ea4cdcff1a0967c3c9be0106defdfb9">filo_desc_t</a>; <span class="comment">// total: 12 bytes, 2 padding</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="struct__lifo__desc.html">   34</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="struct__lifo__desc.html">_lifo_desc</a> {</div>
+<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="struct__lifo__desc.html#a4680566b4126699c7c30315235199490">   35</a></span>&#160;    uint16_t <a class="code" href="struct__lifo__desc.html#a4680566b4126699c7c30315235199490">ItemSize</a>; </div>
+<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="struct__lifo__desc.html#a169ab4d68176e3cf0aa7099cdd5ee755">   36</a></span>&#160;    uint16_t <a class="code" href="struct__lifo__desc.html#a169ab4d68176e3cf0aa7099cdd5ee755">ItemNb</a>; </div>
+<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="struct__lifo__desc.html#a254937ec49cb21805008a3c31eb2be3e">   37</a></span>&#160;    uint16_t <a class="code" href="struct__lifo__desc.html#a254937ec49cb21805008a3c31eb2be3e">FreeItemNb</a>; </div>
+<div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="struct__lifo__desc.html#a407a9593d0f5c240b631b6a59f6d6cad">   38</a></span>&#160;    <span class="keywordtype">void</span> *<a class="code" href="struct__lifo__desc.html#a407a9593d0f5c240b631b6a59f6d6cad">pDataArray</a>; </div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;} <a class="code" href="_lifo_8h.html#a9ea4cdcff1a0967c3c9be0106defdfb9">lifo_desc_t</a>; <span class="comment">// total: 12 bytes, 2 padding</span></div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="comment">// --- Public Constants ---</span></div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="comment">// --- Public Variables ---</span></div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="comment">// --- Public Function Prototypes ---</span></div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="keywordtype">bool</span> FiloInit(<a class="code" href="struct__filo__desc.html">filo_desc_t</a> *pFilo, <span class="keywordtype">void</span> *pBuffer, <span class="keywordtype">size_t</span> itemNb, <span class="keywordtype">size_t</span> itemSize);</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="keywordtype">bool</span> LifoInit(<a class="code" href="struct__lifo__desc.html">lifo_desc_t</a> *pLifo, <span class="keywordtype">void</span> *pBuffer, <span class="keywordtype">size_t</span> itemNb, <span class="keywordtype">size_t</span> itemSize);</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="_filo_8h.html#aec8c2d96ee433c6cf1bd8315680d0798">FiloGet</a>(<a class="code" href="struct__filo__desc.html">filo_desc_t</a> *pFiloDesc, <span class="keywordtype">size_t</span> itemNb, <span class="keywordtype">void</span> **pFreeSlot);</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="_lifo_8h.html#aec8c2d96ee433c6cf1bd8315680d0798">LifoGet</a>(<a class="code" href="struct__lifo__desc.html">lifo_desc_t</a> *pLifoDesc, <span class="keywordtype">size_t</span> itemNb, <span class="keywordtype">void</span> **pFreeSlot);</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="_filo_8h.html#ace7bfc3da3970d82ce06f62d824c1330">FiloFree</a>(<a class="code" href="struct__filo__desc.html">filo_desc_t</a> *pFiloDesc, <span class="keywordtype">size_t</span> itemNb);</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="_lifo_8h.html#ace7bfc3da3970d82ce06f62d824c1330">LifoFree</a>(<a class="code" href="struct__lifo__desc.html">lifo_desc_t</a> *pLifoDesc, <span class="keywordtype">size_t</span> itemNb);</div>
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="_filo_8h.html#a98ae2bb75274c4e67bf862270ae88602">FiloFreeAll</a>(<a class="code" href="struct__filo__desc.html">filo_desc_t</a> *pFiloDesc);</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="_lifo_8h.html#a98ae2bb75274c4e67bf862270ae88602">LifoFreeAll</a>(<a class="code" href="struct__lifo__desc.html">lifo_desc_t</a> *pLifoDesc);</div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="comment">// *** End Definitions ***</span></div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="preprocessor">#endif // _Filo_h</span></div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="preprocessor">#endif // _Lifo_h</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="astruct__filo__desc_html_a254937ec49cb21805008a3c31eb2be3e"><div class="ttname"><a href="struct__filo__desc.html#a254937ec49cb21805008a3c31eb2be3e">_filo_desc::FreeItemNb</a></div><div class="ttdeci">uint16_t FreeItemNb</div><div class="ttdef"><b>Definition:</b> Filo.h:37</div></div>
-<div class="ttc" id="a_filo_8h_html_aec8c2d96ee433c6cf1bd8315680d0798"><div class="ttname"><a href="_filo_8h.html#aec8c2d96ee433c6cf1bd8315680d0798">FiloGet</a></div><div class="ttdeci">bool FiloGet(filo_desc_t *pFiloDesc, size_t itemNb, void **pFreeSlot)</div><div class="ttdoc">Allocate a table of item from a filo and return the pointer.</div><div class="ttdef"><b>Definition:</b> Filo.c:56</div></div>
-<div class="ttc" id="astruct__filo__desc_html_a4680566b4126699c7c30315235199490"><div class="ttname"><a href="struct__filo__desc.html#a4680566b4126699c7c30315235199490">_filo_desc::ItemSize</a></div><div class="ttdeci">uint16_t ItemSize</div><div class="ttdef"><b>Definition:</b> Filo.h:35</div></div>
-<div class="ttc" id="a_filo_8h_html_a9ea4cdcff1a0967c3c9be0106defdfb9"><div class="ttname"><a href="_filo_8h.html#a9ea4cdcff1a0967c3c9be0106defdfb9">filo_desc_t</a></div><div class="ttdeci">struct _filo_desc filo_desc_t</div></div>
-<div class="ttc" id="astruct__filo__desc_html_a169ab4d68176e3cf0aa7099cdd5ee755"><div class="ttname"><a href="struct__filo__desc.html#a169ab4d68176e3cf0aa7099cdd5ee755">_filo_desc::ItemNb</a></div><div class="ttdeci">uint16_t ItemNb</div><div class="ttdef"><b>Definition:</b> Filo.h:36</div></div>
-<div class="ttc" id="astruct__filo__desc_html_a407a9593d0f5c240b631b6a59f6d6cad"><div class="ttname"><a href="struct__filo__desc.html#a407a9593d0f5c240b631b6a59f6d6cad">_filo_desc::pDataArray</a></div><div class="ttdeci">void * pDataArray</div><div class="ttdef"><b>Definition:</b> Filo.h:38</div></div>
-<div class="ttc" id="astruct__filo__desc_html"><div class="ttname"><a href="struct__filo__desc.html">_filo_desc</a></div><div class="ttdef"><b>Definition:</b> Filo.h:34</div></div>
-<div class="ttc" id="a_filo_8h_html_ace7bfc3da3970d82ce06f62d824c1330"><div class="ttname"><a href="_filo_8h.html#ace7bfc3da3970d82ce06f62d824c1330">FiloFree</a></div><div class="ttdeci">bool FiloFree(filo_desc_t *pFiloDesc, size_t itemNb)</div><div class="ttdoc">Free items from a filo.</div><div class="ttdef"><b>Definition:</b> Filo.c:76</div></div>
+<div class="ttc" id="astruct__lifo__desc_html_a254937ec49cb21805008a3c31eb2be3e"><div class="ttname"><a href="struct__lifo__desc.html#a254937ec49cb21805008a3c31eb2be3e">_lifo_desc::FreeItemNb</a></div><div class="ttdeci">uint16_t FreeItemNb</div><div class="ttdef"><b>Definition:</b> Lifo.h:37</div></div>
+<div class="ttc" id="a_lifo_8h_html_aec8c2d96ee433c6cf1bd8315680d0798"><div class="ttname"><a href="_lifo_8h.html#aec8c2d96ee433c6cf1bd8315680d0798">LifoGet</a></div><div class="ttdeci">bool LifoGet(lifo_desc_t *pLifoDesc, size_t itemNb, void **pFreeSlot)</div><div class="ttdoc">Allocate a table of item from a lifo and return the pointer.</div><div class="ttdef"><b>Definition:</b> Lifo.c:56</div></div>
+<div class="ttc" id="astruct__lifo__desc_html_a4680566b4126699c7c30315235199490"><div class="ttname"><a href="struct__lifo__desc.html#a4680566b4126699c7c30315235199490">_lifo_desc::ItemSize</a></div><div class="ttdeci">uint16_t ItemSize</div><div class="ttdef"><b>Definition:</b> Lifo.h:35</div></div>
+<div class="ttc" id="a_lifo_8h_html_a9ea4cdcff1a0967c3c9be0106defdfb9"><div class="ttname"><a href="_lifo_8h.html#a9ea4cdcff1a0967c3c9be0106defdfb9">lifo_desc_t</a></div><div class="ttdeci">struct _lifo_desc lifo_desc_t</div></div>
+<div class="ttc" id="astruct__lifo__desc_html_a169ab4d68176e3cf0aa7099cdd5ee755"><div class="ttname"><a href="struct__lifo__desc.html#a169ab4d68176e3cf0aa7099cdd5ee755">_lifo_desc::ItemNb</a></div><div class="ttdeci">uint16_t ItemNb</div><div class="ttdef"><b>Definition:</b> Lifo.h:36</div></div>
+<div class="ttc" id="astruct__lifo__desc_html_a407a9593d0f5c240b631b6a59f6d6cad"><div class="ttname"><a href="struct__lifo__desc.html#a407a9593d0f5c240b631b6a59f6d6cad">_lifo_desc::pDataArray</a></div><div class="ttdeci">void * pDataArray</div><div class="ttdef"><b>Definition:</b> Lifo.h:38</div></div>
+<div class="ttc" id="astruct__lifo__desc_html"><div class="ttname"><a href="struct__lifo__desc.html">_lifo_desc</a></div><div class="ttdef"><b>Definition:</b> Lifo.h:34</div></div>
+<div class="ttc" id="a_lifo_8h_html_ace7bfc3da3970d82ce06f62d824c1330"><div class="ttname"><a href="_lifo_8h.html#ace7bfc3da3970d82ce06f62d824c1330">LifoFree</a></div><div class="ttdeci">bool LifoFree(lifo_desc_t *pLifoDesc, size_t itemNb)</div><div class="ttdoc">Free items from a lifo.</div><div class="ttdef"><b>Definition:</b> Lifo.c:76</div></div>
 <div class="ttc" id="a_l_c_s_f___config_8h_html"><div class="ttname"><a href="_l_c_s_f___config_8h.html">LCSF_Config.h</a></div><div class="ttdoc">Light Command Set Format configuration file.</div></div>
-<div class="ttc" id="a_filo_8h_html_a98ae2bb75274c4e67bf862270ae88602"><div class="ttname"><a href="_filo_8h.html#a98ae2bb75274c4e67bf862270ae88602">FiloFreeAll</a></div><div class="ttdeci">bool FiloFreeAll(filo_desc_t *pFiloDesc)</div><div class="ttdoc">Free all items from a filo.</div><div class="ttdef"><b>Definition:</b> Filo.c:92</div></div>
+<div class="ttc" id="a_lifo_8h_html_a98ae2bb75274c4e67bf862270ae88602"><div class="ttname"><a href="_lifo_8h.html#a98ae2bb75274c4e67bf862270ae88602">LifoFreeAll</a></div><div class="ttdeci">bool LifoFreeAll(lifo_desc_t *pLifoDesc)</div><div class="ttdoc">Free all items from a lifo.</div><div class="ttdef"><b>Definition:</b> Lifo.c:92</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_a61f22007e0f347cded0d82030ee545d.html">lib</a></li><li class="navelem"><a class="el" href="_filo_8h.html">Filo.h</a></li>
+    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_a61f22007e0f347cded0d82030ee545d.html">lib</a></li><li class="navelem"><a class="el" href="_lifo_8h.html">Lifo.h</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>

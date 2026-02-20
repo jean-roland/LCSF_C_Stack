@@ -1,6 +1,6 @@
 var protocols__b_2_l_c_s_f___bridge___test_8h =
 [
-    [ "LCSF_BRIDGE_TEST_FILO_SIZE", "protocols__b_2_l_c_s_f___bridge___test_8h.html#a900870814d0e1f3c66112aebca000251", null ],
+    [ "LCSF_BRIDGE_TEST_LIFO_SIZE", "protocols__b_2_l_c_s_f___bridge___test_8h.html#a900870814d0e1f3c66112aebca000251", null ],
     [ "LCSF_TEST_ATT_CA10_SUBATT_NB", "protocols__b_2_l_c_s_f___bridge___test_8h.html#aeab0a2825090a71f7f94d7863ef0015f", null ],
     [ "LCSF_TEST_ATT_CA11_SUBATT_NB", "protocols__b_2_l_c_s_f___bridge___test_8h.html#ad270fdde1ba6e063c2d2a46a64b89eae", null ],
     [ "LCSF_TEST_ATT_CA12_SUBATT_NB", "protocols__b_2_l_c_s_f___bridge___test_8h.html#aa0d181836b593ccc4055fba9c346cee8", null ],

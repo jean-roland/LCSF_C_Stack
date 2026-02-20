@@ -8,7 +8,7 @@ var annotated_dup =
     [ "_example_jump_att_payload", "struct__example__jump__att__payload.html", "struct__example__jump__att__payload" ],
     [ "_example_rgb_att_payload", "struct__example__rgb__att__payload.html", "struct__example__rgb__att__payload" ],
     [ "_example_yuv_att_payload", "struct__example__yuv__att__payload.html", "struct__example__yuv__att__payload" ],
-    [ "_filo_desc", "struct__filo__desc.html", "struct__filo__desc" ],
+    [ "_lifo_desc", "struct__lifo__desc.html", "struct__lifo__desc" ],
     [ "_lcsf_attribute_desc", "struct__lcsf__attribute__desc.html", "struct__lcsf__attribute__desc" ],
     [ "_lcsf_bridge_example_info", "struct__lcsf__bridge__example__info.html", "struct__lcsf__bridge__example__info" ],
     [ "_lcsf_bridge_test_info", "struct__lcsf__bridge__test__info.html", "struct__lcsf__bridge__test__info" ],

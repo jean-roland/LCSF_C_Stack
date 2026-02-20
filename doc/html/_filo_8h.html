@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>LCSF C Stack: include/lib/Filo.h File Reference</title>
+<title>LCSF C Stack: include/lib/Lifo.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -62,7 +62,7 @@ $(function() {
 </div>
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
-$(document).ready(function(){initNavTree('_filo_8h.html',''); initResizable(); });
+$(document).ready(function(){initNavTree('_lifo_8h.html',''); initResizable(); });
 /* @license-end */
 </script>
 <div id="doc-content">
@@ -86,43 +86,43 @@ $(document).ready(function(){initNavTree('_filo_8h.html',''); initResizable(); }
 <a href="#typedef-members">Typedefs</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
-<div class="title">Filo.h File Reference</div>  </div>
+<div class="title">Lifo.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>Filo module.  
+<p>Lifo module.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;<a class="el" href="_l_c_s_f___config_8h_source.html">LCSF_Config.h</a>&gt;</code><br />
 </div>
-<p><a href="_filo_8h_source.html">Go to the source code of this file.</a></p>
+<p><a href="_lifo_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Data Structures</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__filo__desc.html">_filo_desc</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct__lifo__desc.html">_lifo_desc</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:a9ea4cdcff1a0967c3c9be0106defdfb9"><td class="memItemLeft" align="right" valign="top">typedef struct <a class="el" href="struct__filo__desc.html">_filo_desc</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_filo_8h.html#a9ea4cdcff1a0967c3c9be0106defdfb9">filo_desc_t</a></td></tr>
+<tr class="memitem:a9ea4cdcff1a0967c3c9be0106defdfb9"><td class="memItemLeft" align="right" valign="top">typedef struct <a class="el" href="struct__lifo__desc.html">_lifo_desc</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_lifo_8h.html#a9ea4cdcff1a0967c3c9be0106defdfb9">lifo_desc_t</a></td></tr>
 <tr class="separator:a9ea4cdcff1a0967c3c9be0106defdfb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:aed36896eab03b41e7fe4df9644f3070a"><td class="memItemLeft" align="right" valign="top"><a id="aed36896eab03b41e7fe4df9644f3070a"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>FiloInit</b> (<a class="el" href="_filo_8h.html#a9ea4cdcff1a0967c3c9be0106defdfb9">filo_desc_t</a> *pFilo, void *pBuffer, size_t itemNb, size_t itemSize)</td></tr>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>LifoInit</b> (<a class="el" href="_lifo_8h.html#a9ea4cdcff1a0967c3c9be0106defdfb9">lifo_desc_t</a> *pLifo, void *pBuffer, size_t itemNb, size_t itemSize)</td></tr>
 <tr class="separator:aed36896eab03b41e7fe4df9644f3070a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aec8c2d96ee433c6cf1bd8315680d0798"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_filo_8h.html#aec8c2d96ee433c6cf1bd8315680d0798">FiloGet</a> (<a class="el" href="_filo_8h.html#a9ea4cdcff1a0967c3c9be0106defdfb9">filo_desc_t</a> *pFiloDesc, size_t itemNb, void **pFreeSlot)</td></tr>
-<tr class="memdesc:aec8c2d96ee433c6cf1bd8315680d0798"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocate a table of item from a filo and return the pointer.  <a href="_filo_8h.html#aec8c2d96ee433c6cf1bd8315680d0798">More...</a><br /></td></tr>
+<tr class="memitem:aec8c2d96ee433c6cf1bd8315680d0798"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_lifo_8h.html#aec8c2d96ee433c6cf1bd8315680d0798">LifoGet</a> (<a class="el" href="_lifo_8h.html#a9ea4cdcff1a0967c3c9be0106defdfb9">lifo_desc_t</a> *pLifoDesc, size_t itemNb, void **pFreeSlot)</td></tr>
+<tr class="memdesc:aec8c2d96ee433c6cf1bd8315680d0798"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocate a table of item from a lifo and return the pointer.  <a href="_lifo_8h.html#aec8c2d96ee433c6cf1bd8315680d0798">More...</a><br /></td></tr>
 <tr class="separator:aec8c2d96ee433c6cf1bd8315680d0798"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ace7bfc3da3970d82ce06f62d824c1330"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_filo_8h.html#ace7bfc3da3970d82ce06f62d824c1330">FiloFree</a> (<a class="el" href="_filo_8h.html#a9ea4cdcff1a0967c3c9be0106defdfb9">filo_desc_t</a> *pFiloDesc, size_t itemNb)</td></tr>
-<tr class="memdesc:ace7bfc3da3970d82ce06f62d824c1330"><td class="mdescLeft">&#160;</td><td class="mdescRight">Free items from a filo.  <a href="_filo_8h.html#ace7bfc3da3970d82ce06f62d824c1330">More...</a><br /></td></tr>
+<tr class="memitem:ace7bfc3da3970d82ce06f62d824c1330"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_lifo_8h.html#ace7bfc3da3970d82ce06f62d824c1330">LifoFree</a> (<a class="el" href="_lifo_8h.html#a9ea4cdcff1a0967c3c9be0106defdfb9">lifo_desc_t</a> *pLifoDesc, size_t itemNb)</td></tr>
+<tr class="memdesc:ace7bfc3da3970d82ce06f62d824c1330"><td class="mdescLeft">&#160;</td><td class="mdescRight">Free items from a lifo.  <a href="_lifo_8h.html#ace7bfc3da3970d82ce06f62d824c1330">More...</a><br /></td></tr>
 <tr class="separator:ace7bfc3da3970d82ce06f62d824c1330"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a98ae2bb75274c4e67bf862270ae88602"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_filo_8h.html#a98ae2bb75274c4e67bf862270ae88602">FiloFreeAll</a> (<a class="el" href="_filo_8h.html#a9ea4cdcff1a0967c3c9be0106defdfb9">filo_desc_t</a> *pFiloDesc)</td></tr>
-<tr class="memdesc:a98ae2bb75274c4e67bf862270ae88602"><td class="mdescLeft">&#160;</td><td class="mdescRight">Free all items from a filo.  <a href="_filo_8h.html#a98ae2bb75274c4e67bf862270ae88602">More...</a><br /></td></tr>
+<tr class="memitem:a98ae2bb75274c4e67bf862270ae88602"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_lifo_8h.html#a98ae2bb75274c4e67bf862270ae88602">LifoFreeAll</a> (<a class="el" href="_lifo_8h.html#a9ea4cdcff1a0967c3c9be0106defdfb9">lifo_desc_t</a> *pLifoDesc)</td></tr>
+<tr class="memdesc:a98ae2bb75274c4e67bf862270ae88602"><td class="mdescLeft">&#160;</td><td class="mdescRight">Free all items from a lifo.  <a href="_lifo_8h.html#a98ae2bb75274c4e67bf862270ae88602">More...</a><br /></td></tr>
 <tr class="separator:a98ae2bb75274c4e67bf862270ae88602"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Filo module. </p>
+<div class="textblock"><p>Lifo module. </p>
 <dl class="section author"><dt>Author</dt><dd>Jean-Roland Gosse</dd></dl>
 <p>This file is part of LCSF C Stack.</p>
 <p>This program is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.</p>
@@ -130,32 +130,32 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>FiloInit</b> (<a clas
 <p>You should have received a copy of the GNU Lesser General Public License along with this program. If not, see <a href="https://www.gnu.org/licenses/">https://www.gnu.org/licenses/</a> </p>
 </div><h2 class="groupheader">Typedef Documentation</h2>
 <a id="a9ea4cdcff1a0967c3c9be0106defdfb9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9ea4cdcff1a0967c3c9be0106defdfb9">&#9670;&nbsp;</a></span>filo_desc_t</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ea4cdcff1a0967c3c9be0106defdfb9">&#9670;&nbsp;</a></span>lifo_desc_t</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef struct <a class="el" href="struct__filo__desc.html">_filo_desc</a> <a class="el" href="_filo_8h.html#a9ea4cdcff1a0967c3c9be0106defdfb9">filo_desc_t</a></td>
+          <td class="memname">typedef struct <a class="el" href="struct__lifo__desc.html">_lifo_desc</a> <a class="el" href="_lifo_8h.html#a9ea4cdcff1a0967c3c9be0106defdfb9">lifo_desc_t</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Filo descriptor structure </p>
+<p>Lifo descriptor structure </p>
 
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="ace7bfc3da3970d82ce06f62d824c1330"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ace7bfc3da3970d82ce06f62d824c1330">&#9670;&nbsp;</a></span>FiloFree()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ace7bfc3da3970d82ce06f62d824c1330">&#9670;&nbsp;</a></span>LifoFree()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool FiloFree </td>
+          <td class="memname">bool LifoFree </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="_filo_8h.html#a9ea4cdcff1a0967c3c9be0106defdfb9">filo_desc_t</a> *&#160;</td>
-          <td class="paramname"><em>pFiloDesc</em>, </td>
+          <td class="paramtype"><a class="el" href="_lifo_8h.html#a9ea4cdcff1a0967c3c9be0106defdfb9">lifo_desc_t</a> *&#160;</td>
+          <td class="paramname"><em>pLifoDesc</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -171,10 +171,10 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>FiloInit</b> (<a clas
       </table>
 </div><div class="memdoc">
 
-<p>Free items from a filo. </p>
+<p>Free items from a lifo. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">pFiloDesc</td><td>pointer to the filo </td></tr>
+    <tr><td class="paramname">pLifoDesc</td><td>pointer to the lifo </td></tr>
     <tr><td class="paramname">itemNb</td><td>number of items </td></tr>
   </table>
   </dd>
@@ -184,25 +184,25 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>FiloInit</b> (<a clas
 </div>
 </div>
 <a id="a98ae2bb75274c4e67bf862270ae88602"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a98ae2bb75274c4e67bf862270ae88602">&#9670;&nbsp;</a></span>FiloFreeAll()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a98ae2bb75274c4e67bf862270ae88602">&#9670;&nbsp;</a></span>LifoFreeAll()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool FiloFreeAll </td>
+          <td class="memname">bool LifoFreeAll </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="_filo_8h.html#a9ea4cdcff1a0967c3c9be0106defdfb9">filo_desc_t</a> *&#160;</td>
-          <td class="paramname"><em>pFiloDesc</em></td><td>)</td>
+          <td class="paramtype"><a class="el" href="_lifo_8h.html#a9ea4cdcff1a0967c3c9be0106defdfb9">lifo_desc_t</a> *&#160;</td>
+          <td class="paramname"><em>pLifoDesc</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Free all items from a filo. </p>
+<p>Free all items from a lifo. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">pFiloDesc</td><td>pointer to the filo </td></tr>
+    <tr><td class="paramname">pLifoDesc</td><td>pointer to the lifo </td></tr>
   </table>
   </dd>
 </dl>
@@ -211,16 +211,16 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>FiloInit</b> (<a clas
 </div>
 </div>
 <a id="aec8c2d96ee433c6cf1bd8315680d0798"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aec8c2d96ee433c6cf1bd8315680d0798">&#9670;&nbsp;</a></span>FiloGet()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aec8c2d96ee433c6cf1bd8315680d0798">&#9670;&nbsp;</a></span>LifoGet()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool FiloGet </td>
+          <td class="memname">bool LifoGet </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="_filo_8h.html#a9ea4cdcff1a0967c3c9be0106defdfb9">filo_desc_t</a> *&#160;</td>
-          <td class="paramname"><em>pFiloDesc</em>, </td>
+          <td class="paramtype"><a class="el" href="_lifo_8h.html#a9ea4cdcff1a0967c3c9be0106defdfb9">lifo_desc_t</a> *&#160;</td>
+          <td class="paramname"><em>pLifoDesc</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -242,10 +242,10 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>FiloInit</b> (<a clas
       </table>
 </div><div class="memdoc">
 
-<p>Allocate a table of item from a filo and return the pointer. </p>
+<p>Allocate a table of item from a lifo and return the pointer. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">pFiloDesc</td><td>pointer to the filo </td></tr>
+    <tr><td class="paramname">pLifoDesc</td><td>pointer to the lifo </td></tr>
     <tr><td class="paramname">itemNb</td><td>number of items </td></tr>
     <tr><td class="paramname">pFreeSlot</td><td>pointer to contain the item table pointer </td></tr>
   </table>
@@ -260,7 +260,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>FiloInit</b> (<a clas
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_a61f22007e0f347cded0d82030ee545d.html">lib</a></li><li class="navelem"><a class="el" href="_filo_8h.html">Filo.h</a></li>
+    <li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_a61f22007e0f347cded0d82030ee545d.html">lib</a></li><li class="navelem"><a class="el" href="_lifo_8h.html">Lifo.h</a></li>
     <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.17 </li>

@@ -160,8 +160,8 @@ enum _lcsf_test_cc6_att_id {
 
 // --- Public Constants ---
 
-// Bridge decoder filo size
-#define LCSF_BRIDGE_TEST_FILO_SIZE 13
+// Bridge decoder lifo size
+#define LCSF_BRIDGE_TEST_LIFO_SIZE 13
 // Lcsf protocol identifier
 #define LCSF_TEST_PROTOCOL_ID 0x55
 // Command number
