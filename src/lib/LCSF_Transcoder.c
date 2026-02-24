@@ -37,12 +37,14 @@ enum _lcsf_decode_error_enum {
     LCSF_DECODE_UNKNOWN_ERROR = 0xFF, // Unknown error
 };
 
+// Decoder lifo data buffer
+static uint8_t DecoderLifoData[LCSF_TRANSCODER_RX_LIFO_SIZE * sizeof(lcsf_raw_att_t)];
+
 // Module information structure
 typedef struct _lcsf_trnscdr_info {
     lifo_desc_t DecoderLifo; // Structure of the decoder lifo
     lcsf_raw_msg_t DecoderMsg; // Structure of the decoder message header
     uint8_t *pEncoderBuffer; // Pointer to the transmission buffer
-    uint8_t DecoderLifoData[LCSF_TRANSCODER_RX_LIFO_SIZE * sizeof(lcsf_raw_att_t)]; // Decoder lifo data buffer
     uint8_t LastErrCode; // Last error code encountered during decoding
 } lcsf_trnscdr_info_t;
 
@@ -468,7 +470,7 @@ static bool LCSF_EncodeBuffer(uint16_t *pBuffIdx, uint8_t *pBuffer, size_t buffS
 
 bool LCSF_TranscoderInit(void) {
     // Lifo creation
-    return LifoInit(&LcsfTranscoderInfo.DecoderLifo, LcsfTranscoderInfo.DecoderLifoData, LCSF_TRANSCODER_RX_LIFO_SIZE,
+    return LifoInit(&LcsfTranscoderInfo.DecoderLifo, DecoderLifoData, LCSF_TRANSCODER_RX_LIFO_SIZE,
         sizeof(lcsf_raw_att_t));
 }
 

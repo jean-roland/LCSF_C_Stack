@@ -83,6 +83,10 @@ typedef struct _lcsf_ep_cmd_error_desc {
     uint8_t ErrorType;
 } lcsf_ep_cmd_error_desc_t;
 
+// Lifo data buffers
+static uint8_t ReceiverLifoData[LCSF_VALIDATOR_RX_LIFO_SIZE * sizeof(lcsf_raw_att_t)];
+static uint8_t SenderLifoData[LCSF_VALIDATOR_TX_LIFO_SIZE * sizeof(lcsf_valid_att_t)];
+
 // Module information structure
 typedef struct _lcsf_validator_info {
     // Lifo desc
@@ -95,12 +99,9 @@ typedef struct _lcsf_validator_info {
     LCSFSendErrCallback_t *pFnSendErrCb; // Optional function pointer to send lcsf error messages
     LCSFReceiveErrCallback_t *pFnRecErrCb; // Optional function pointer to receive lcsf error messages
     uint16_t ProtNb; // Number of protocol handled by the module
-    // Lifo values
-    uint8_t ReceiverLifoData[LCSF_VALIDATOR_RX_LIFO_SIZE * sizeof(lcsf_raw_att_t)]; // Receiver lifo data buffer
-    uint8_t SenderLifoData[LCSF_VALIDATOR_TX_LIFO_SIZE * sizeof(lcsf_valid_att_t)]; // Sender lifo data buffer
     // Error values
-    uint8_t Err_buff[ERR_BUFF_SIZE]; // Buffer to contain encoded error message
     uint8_t LastErrorType; // Contains the last error the module encountered
+    uint8_t Err_buff[ERR_BUFF_SIZE]; // Buffer to contain encoded error message
 } lcsf_validator_info_t;
 
 // --- Private Constants ---
@@ -736,11 +737,11 @@ bool LCSF_ValidatorInit(LCSFSendErrCallback_t *pFnSendErrCb, LCSFReceiveErrCallb
         LcsfValidatorInfo.pFnRecErrCb = pFnRecErrCb;
     }
     // Initialize structures
-    if (!LifoInit(&LcsfValidatorInfo.SenderLifo, LcsfValidatorInfo.SenderLifoData, LCSF_VALIDATOR_TX_LIFO_SIZE,
+    if (!LifoInit(&LcsfValidatorInfo.SenderLifo, SenderLifoData, LCSF_VALIDATOR_TX_LIFO_SIZE,
             sizeof(lcsf_valid_att_t))) {
         return false;
     }
-    if (!LifoInit(&LcsfValidatorInfo.ReceiverLifo, LcsfValidatorInfo.ReceiverLifoData, LCSF_VALIDATOR_RX_LIFO_SIZE,
+    if (!LifoInit(&LcsfValidatorInfo.ReceiverLifo, ReceiverLifoData, LCSF_VALIDATOR_RX_LIFO_SIZE,
             sizeof(lcsf_raw_att_t))) {
         return false;
     }
