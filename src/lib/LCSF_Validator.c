@@ -737,12 +737,10 @@ bool LCSF_ValidatorInit(LCSFSendErrCallback_t *pFnSendErrCb, LCSFReceiveErrCallb
         LcsfValidatorInfo.pFnRecErrCb = pFnRecErrCb;
     }
     // Initialize structures
-    if (!LifoInit(&LcsfValidatorInfo.SenderLifo, SenderLifoData, LCSF_VALIDATOR_TX_LIFO_SIZE,
-            sizeof(lcsf_valid_att_t))) {
+    if (!LifoInit(&LcsfValidatorInfo.SenderLifo, SenderLifoData, LCSF_VALIDATOR_TX_LIFO_SIZE, sizeof(lcsf_valid_att_t))) {
         return false;
     }
-    if (!LifoInit(&LcsfValidatorInfo.ReceiverLifo, ReceiverLifoData, LCSF_VALIDATOR_RX_LIFO_SIZE,
-            sizeof(lcsf_raw_att_t))) {
+    if (!LifoInit(&LcsfValidatorInfo.ReceiverLifo, ReceiverLifoData, LCSF_VALIDATOR_RX_LIFO_SIZE, sizeof(lcsf_raw_att_t))) {
         return false;
     }
     // Initialize variables

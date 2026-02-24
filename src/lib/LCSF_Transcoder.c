@@ -470,8 +470,7 @@ static bool LCSF_EncodeBuffer(uint16_t *pBuffIdx, uint8_t *pBuffer, size_t buffS
 
 bool LCSF_TranscoderInit(void) {
     // Lifo creation
-    return LifoInit(&LcsfTranscoderInfo.DecoderLifo, DecoderLifoData, LCSF_TRANSCODER_RX_LIFO_SIZE,
-        sizeof(lcsf_raw_att_t));
+    return LifoInit(&LcsfTranscoderInfo.DecoderLifo, DecoderLifoData, LCSF_TRANSCODER_RX_LIFO_SIZE, sizeof(lcsf_raw_att_t));
 }
 
 bool LCSF_TranscoderReceive(const uint8_t *pBuffer, size_t buffSize) {
