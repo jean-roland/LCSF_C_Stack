@@ -1,5 +1,4 @@
 *.o
 *.hex
 build/*
-RustOutputA/*
-RustOutputB/*
+RustOutput/*
