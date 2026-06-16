@@ -823,6 +823,8 @@ bool LCSF_Bridge_TestReceive(lcsf_valid_cmd_t *pValidCmd) {
     uint16_t cmdName = LCSF_Bridge_Test_CMDID2CMDNAME(pValidCmd->CmdId);
     test_cmd_payload_t *pCmdPayload = &LcsfBridgeTestInfo.CmdPayload;
 
+    // Clear payload to remove stale VLE bytes
+    memset(pCmdPayload, 0, sizeof(*pCmdPayload));
     LCSF_Bridge_TestGetCmdData(cmdName, pValidCmd->pAttArray, pCmdPayload);
     return Test_MainExecute(cmdName, pCmdPayload);
 }
