@@ -104,9 +104,10 @@ typedef void(LCSFReceiveErrCallback_t)(uint_fast8_t errorLoc, uint_fast8_t error
 /** Protocol description structure */
 typedef struct _lcsf_validator_protocol_desc {
     uint16_t ProtId; /**< Protocol identifier */
+    uint16_t ProtVer; /**< Protocol version */
     const lcsf_protocol_desc_t *pProtDesc; /**< Pointer to protocol descriptor */
     LCSFInterpretCallback_t *pFnInterpretMsg; /**< Pointer to the message interpretation function */
-} lcsf_validator_protocol_desc_t; // total: 12 bytes, 2 padding
+} lcsf_validator_protocol_desc_t; // total: 12 bytes, 0 padding
 
 // Functions used by transcoder to send errors
 bool LCSF_ValidatorSendTranscoderError(uint_fast8_t errorType);

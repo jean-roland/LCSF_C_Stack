@@ -55,6 +55,7 @@ enum lcsf_validator_protocol_enum {
 
 static const lcsf_validator_protocol_desc_t LcsfProtocolExampleDesc = {
     LCSF_EXAMPLE_PROTOCOL_ID,
+    LCSF_EXAMPLE_PROTOCOL_VERSION,
     &LCSF_Example_ProtDesc,
     LCSF_Bridge_ExampleReceive,
 };

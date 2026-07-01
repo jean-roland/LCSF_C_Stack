@@ -102,31 +102,37 @@ static bool LCSF_AllocateAttArray(uint_fast16_t attNb, lcsf_raw_att_t **pAttArra
 static bool LCSF_FetchMsgHeader(uint16_t *pBuffIdx, size_t buffSize, const uint8_t *pBuffer, lcsf_raw_msg_t *pMsg) {
 #ifdef LCSF_SMALL
     // Buffer overflow guard
-    if ((size_t)(*pBuffIdx + 2) >= buffSize) {
+    if ((size_t)(*pBuffIdx + 3) >= buffSize) {
         return false;
     }
     // Byte 1: Protocol id
     pMsg->ProtId = pBuffer[(*pBuffIdx)++];
-    // Byte 2: Command id
+    // Byte 2: Protocol version
+    pMsg->ProtVer = pBuffer[(*pBuffIdx)++];
+    // Byte 3: Command id
     pMsg->CmdId = pBuffer[(*pBuffIdx)++];
-    // Byte 3: Attribute number
+    // Byte 4: Attribute number
     pMsg->AttNb = pBuffer[(*pBuffIdx)++];
 #else
     // Buffer overflow guard
-    if ((size_t)(*pBuffIdx + 5) >= buffSize) {
+    if ((size_t)(*pBuffIdx + 7) >= buffSize) {
         return false;
     }
     // Byte 1: Protocol ID LSB
     pMsg->ProtId = pBuffer[(*pBuffIdx)++];
     // Byte 2: Protocol ID MSB
     pMsg->ProtId += pBuffer[(*pBuffIdx)++] << 8;
-    // Byte 3: Command ID LSB
+    // Byte 3: Protocol version LSB
+    pMsg->ProtVer = pBuffer[(*pBuffIdx)++];
+    // Byte 4: Protocol version MSB
+    pMsg->ProtVer += pBuffer[(*pBuffIdx)++] << 8;
+    // Byte 5: Command ID LSB
     pMsg->CmdId = pBuffer[(*pBuffIdx)++];
-    // Byte 4: Command ID MSB
+    // Byte 6: Command ID MSB
     pMsg->CmdId += pBuffer[(*pBuffIdx)++] << 8;
-    // Byte 5: Attribute Number LSB
+    // Byte 7: Attribute Number LSB
     pMsg->AttNb = pBuffer[(*pBuffIdx)++];
-    // Byte 6: Attribute Number MSB
+    // Byte 8: Attribute Number MSB
     pMsg->AttNb += pBuffer[(*pBuffIdx)++] << 8;
 #endif
     return true;
@@ -304,31 +310,37 @@ static bool LCSF_DecodeBuffer(const uint8_t *pBuffer, size_t buffSize, lcsf_raw_
 static bool LCSF_FillMsgHeader(uint16_t *pBuffIdx, uint8_t *pBuffer, size_t buffSize, const lcsf_raw_msg_t *pMsg) {
 #ifdef LCSF_SMALL
     // Buffer overflow guard
-    if ((size_t)(*pBuffIdx + 2) >= buffSize) {
+    if ((size_t)(*pBuffIdx + 3) >= buffSize) {
         return false;
     }
     // Byte 1: Protocol id
     pBuffer[(*pBuffIdx)++] = (uint8_t)pMsg->ProtId;
-    // Byte 2: Command id
+    // Byte 2: Protocol version
+    pBuffer[(*pBuffIdx)++] = (uint8_t)pMsg->ProtVer;
+    // Byte 3: Command id
     pBuffer[(*pBuffIdx)++] = (uint8_t)pMsg->CmdId;
-    // Byte 3: Attribute number
+    // Byte 4: Attribute number
     pBuffer[(*pBuffIdx)++] = (uint8_t)pMsg->AttNb;
 #else
     // Buffer overflow guard
-    if ((size_t)(*pBuffIdx + 5) >= buffSize) {
+    if ((size_t)(*pBuffIdx + 7) >= buffSize) {
         return false;
     }
     // Byte 1: Protocol id LSB
     pBuffer[(*pBuffIdx)++] = (uint8_t)pMsg->ProtId;
     // Byte 2: Protocol id MSB
     pBuffer[(*pBuffIdx)++] = (uint8_t)(pMsg->ProtId >> 8);
-    // Byte 3: Command id LSB
+    // Byte 3: Protocol version LSB
+    pBuffer[(*pBuffIdx)++] = (uint8_t)pMsg->ProtVer;
+    // Byte 4: Protocol version MSB
+    pBuffer[(*pBuffIdx)++] = (uint8_t)(pMsg->ProtVer >> 8);
+    // Byte 5: Command id LSB
     pBuffer[(*pBuffIdx)++] = (uint8_t)pMsg->CmdId;
-    // Byte 4: Command id MSB
+    // Byte 6: Command id MSB
     pBuffer[(*pBuffIdx)++] = (uint8_t)(pMsg->CmdId >> 8);
-    // Byte 5: Attribute number LSB
+    // Byte 7: Attribute number LSB
     pBuffer[(*pBuffIdx)++] = (uint8_t)pMsg->AttNb;
-    // Byte 6: Attribute number MSB
+    // Byte 8: Attribute number MSB
     pBuffer[(*pBuffIdx)++] = (uint8_t)(pMsg->AttNb >> 8);
 #endif
     return true;

@@ -164,6 +164,8 @@ enum _lcsf_test_cc6_att_id {
 #define LCSF_BRIDGE_TEST_LIFO_SIZE 13
 // Lcsf protocol identifier
 #define LCSF_TEST_PROTOCOL_ID 0x55
+// Lcsf protocol version
+#define LCSF_TEST_PROTOCOL_VERSION 1
 // Command number
 #define LCSF_TEST_CMD_NB TEST_CMD_COUNT
 // Command attribute number

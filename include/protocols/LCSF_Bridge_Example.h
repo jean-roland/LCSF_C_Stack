@@ -36,6 +36,8 @@
 
 // Lcsf example protocol identifier
 #define LCSF_EXAMPLE_PROTOCOL_ID 0x00
+// Lcsf example protocol version
+#define LCSF_EXAMPLE_PROTOCOL_VERSION 0x01
 
 // Lcsf example protocol command identifier enum
 enum _lcsf_example_cmd_id {

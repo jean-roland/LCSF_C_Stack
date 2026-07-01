@@ -55,6 +55,7 @@ static uint8_t att1Data[] = {0x04};
 // Example protocol descriptor
 static const lcsf_validator_protocol_desc_t example_prot_desc = {
     LCSF_EXAMPLE_PROTOCOL_ID,
+    LCSF_EXAMPLE_PROTOCOL_VERSION,
     &LCSF_Example_ProtDesc,
     interpret_callback,
 };
@@ -82,7 +83,8 @@ static lcsf_raw_att_t errAttArr[] = {
 };
 
 static const lcsf_raw_msg_t errMsg = {
-    0xFFFF,
+    0xFFFF, // ProtId
+    0x00, // ProtVer (LCSF error protocol version)
     0x00,
     2,
     errAttArr,
@@ -102,9 +104,48 @@ static lcsf_raw_att_t rxAttArr[] = {
 
 static const lcsf_raw_msg_t rxMsg = {
     LCSF_EXAMPLE_PROTOCOL_ID,
+    LCSF_EXAMPLE_PROTOCOL_VERSION,
     LCSF_EXAMPLE_CMD_ID_ERROR,
     LCSF_EXAMPLE_CMD_ERROR_ATT_NB,
     rxAttArr,
+};
+
+// Model raw msg with a mismatched protocol version
+static const lcsf_raw_msg_t badVerMsg = {
+    LCSF_EXAMPLE_PROTOCOL_ID,
+    LCSF_EXAMPLE_PROTOCOL_VERSION + 1,
+    LCSF_EXAMPLE_CMD_ID_ERROR,
+    LCSF_EXAMPLE_CMD_ERROR_ATT_NB,
+    rxAttArr,
+};
+
+// Model error msg expected when a protocol version mismatch is detected
+static uint8_t data_badver_errloc = 0x01; // LCSF_EP_ERROR_LOC_VALIDATION_ERROR
+static uint8_t data_badver_errcode = 0x06; // LCSF_EP_ERROR_CODE_BAD_PROT_VER
+static lcsf_raw_att_t badVerErrAttArr[] = {
+    {
+        0x00,
+        false,
+        sizeof(uint8_t),
+        {
+            .pData = &data_badver_errloc,
+        }
+    },
+    {
+        0x01,
+        false,
+        sizeof(uint8_t),
+        {
+            .pData = &data_badver_errcode,
+        }
+    },
+};
+static const lcsf_raw_msg_t badVerErrMsg = {
+    0xFFFF, // ProtId
+    0x00, // ProtVer (LCSF error protocol version)
+    0x00,
+    2,
+    badVerErrAttArr,
 };
 
 
@@ -202,6 +243,9 @@ static bool compare_rawatt(const lcsf_raw_att_t *pAtt1, const lcsf_raw_att_t *pA
  * @return     bool: true if they are equal
  */
 static bool compare_rawmsg(const lcsf_raw_msg_t *pMsg1, const lcsf_raw_msg_t *pMsg2) {
+    if (pMsg1->ProtVer != pMsg2->ProtVer) {
+        return false;
+    }
     if (pMsg1->ProtId != pMsg2->ProtId) {
         return false;
     }
@@ -334,6 +378,11 @@ TEST(LCSF_Validator, receive) {
     CHECK_FALSE(LCSF_ValidatorReceive(NULL));
     mock().expectOneCall("interpret_callback");
     CHECK(LCSF_ValidatorReceive(&rxMsg));
+
+    // Test protocol version mismatch is rejected (a bad version error is sent back)
+    ExpectEncode(&badVerErrMsg);
+    mock().expectOneCall("senderr_callback");
+    CHECK_FALSE(LCSF_ValidatorReceive(&badVerMsg));
 
     // Test error receive
     mock().expectOneCall("recerr_callback");

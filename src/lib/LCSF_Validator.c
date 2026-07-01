@@ -33,13 +33,15 @@
 
 // Error buffer size
 #ifdef LCSF_SMALL
-#define ERR_BUFF_SIZE 9
+#define ERR_BUFF_SIZE 10
 #else
-#define ERR_BUFF_SIZE 16
+#define ERR_BUFF_SIZE 18
 #endif
 
 // Lcsf error protocol (LCSF_EP) id
 #define LCSF_ERROR_PROTOCOL_ID 0xFFFF
+// Lcsf error protocol (LCSF_EP) version
+#define LCSF_ERROR_PROTOCOL_VERSION 0x00
 
 // LCSF_EP command id enum
 enum _lcsf_ep_cmd_enum {
@@ -73,6 +75,7 @@ enum _lcsf_ep_cmd_error_att_err_code_val_enum {
     LCSF_EP_ERROR_CODE_TOO_MANY_ATT = 0x03,
     LCSF_EP_ERROR_CODE_MISS_NONOPT_ATT = 0x04,
     LCSF_EP_ERROR_CODE_WRONG_ATT_DATA_TYPE = 0x05,
+    LCSF_EP_ERROR_CODE_BAD_PROT_VER = 0x06,
     LCSF_EP_ERROR_CODE_UNKNOWN_ERROR = 0xFF,
 };
 
@@ -109,8 +112,7 @@ typedef struct _lcsf_validator_info {
 // Utility functions
 static bool LCSF_AllocateReceiverAttArray(uint_fast16_t attNb, lcsf_valid_att_t **pAttArray);
 static bool LCSF_AllocateSenderAttArray(uint_fast16_t attNb, lcsf_raw_att_t **pAttArray);
-static LCSFInterpretCallback_t *LCSF_GetCallback(uint_fast16_t protId);
-static const lcsf_protocol_desc_t *LCSF_GetDescriptor(uint_fast16_t protId);
+static const lcsf_validator_protocol_desc_t *LCSF_GetProtEntry(uint_fast16_t protId);
 // Table look up functions
 static bool LCSF_ValidateCmdId(
     uint_fast16_t cmdId, uint_fast16_t cmdNb, uint16_t *pCmdIdx, const lcsf_command_desc_t *pCmdDescArray);
@@ -167,38 +169,22 @@ static bool LCSF_AllocateSenderAttArray(uint_fast16_t attNb, lcsf_raw_att_t **pA
 }
 
 /**
- * \fn static LCSFInterpretCallback_t *LCSF_GetCallback(uint_fast16_t protId)
- * \brief Return the corresponding protocol interpretor function
+ * \fn static const lcsf_validator_protocol_desc_t *LCSF_GetProtEntry(uint_fast16_t protId)
+ * \brief Return the protocol validator entry matching an identifier
+ *
+ * The entry bundles the interpretor callback, protocol descriptor and version, so a single
+ * look-up replaces separate scans for each field.
  *
  * \param protId protocol identifier
- * \return LCSFInterpretCallback_t *: Pointer to the interpretor callback (NULL if unknown protocol)
+ * \return lcsf_validator_protocol_desc_t *: Pointer to the entry (NULL if unknown protocol)
  */
-static LCSFInterpretCallback_t *LCSF_GetCallback(uint_fast16_t protId) {
+static const lcsf_validator_protocol_desc_t *LCSF_GetProtEntry(uint_fast16_t protId) {
     // Parse protocol array
     for (uint8_t idx = 0; idx < LcsfValidatorInfo.ProtNb; idx++) {
         const lcsf_validator_protocol_desc_t *pProtocol = LcsfValidatorInfo.pProtArray[idx];
 
         if ((pProtocol != NULL) && (pProtocol->ProtId == protId)) {
-            return pProtocol->pFnInterpretMsg;
-        }
-    }
-    return NULL;
-}
-
-/**
- * \fn static const lcsf_protocol_desc_t *LCSF_GetDescriptor(uint_fast16_t protId)
- * \brief Return the corresponding protocol descriptor
- *
- * \param protId protocol identifier
- * \return lcsf_protocol_desc_t *: Pointer to the descriptor (NULL if unknown protocol)
- */
-static const lcsf_protocol_desc_t *LCSF_GetDescriptor(uint_fast16_t protId) {
-    // Parse protocol array
-    for (uint8_t idx = 0; idx < LcsfValidatorInfo.ProtNb; idx++) {
-        const lcsf_validator_protocol_desc_t *pProtocol = LcsfValidatorInfo.pProtArray[idx];
-
-        if ((pProtocol != NULL) && (pProtocol->ProtId == protId)) {
-            return pProtocol->pProtDesc;
+            return pProtocol;
         }
     }
     return NULL;
@@ -655,6 +641,7 @@ static bool LCSF_ValidatorSendError(uint_fast8_t errorLoc, uint_fast8_t errorTyp
     uint8_t errorLocVal = errorLoc;
     uint8_t errorTypeVal = errorType;
     // Fill message information
+    errorMsg.ProtVer = LCSF_ERROR_PROTOCOL_VERSION;
     errorMsg.ProtId = LCSF_ERROR_PROTOCOL_ID;
     errorMsg.CmdId = LCSF_EP_CMD_ERROR_ID;
     errorMsg.AttNb = LCSF_EP_CMD_ERROR_ATT_NB;
@@ -768,14 +755,20 @@ bool LCSF_ValidatorReceive(const lcsf_raw_msg_t *pMessage) {
     if (pMessage->ProtId == LCSF_ERROR_PROTOCOL_ID) {
         return LCSF_ProcessReceivedError(pMessage);
     }
-    // Retrieve protocol descriptor and callback
-    LCSFInterpretCallback_t *pFnInterpreter = LCSF_GetCallback(pMessage->ProtId);
-    const lcsf_protocol_desc_t *pProtDesc = LCSF_GetDescriptor(pMessage->ProtId);
+    // Retrieve protocol entry (bundles callback, descriptor and version)
+    const lcsf_validator_protocol_desc_t *pProt = LCSF_GetProtEntry(pMessage->ProtId);
     // Check if protocol id is valid
-    if ((pProtDesc == NULL) || (pFnInterpreter == NULL)) {
+    if ((pProt == NULL) || (pProt->pProtDesc == NULL) || (pProt->pFnInterpretMsg == NULL)) {
         LCSF_ValidatorSendError(LCSF_EP_ERROR_LOC_VALIDATION_ERROR, LCSF_EP_ERROR_CODE_UNKNOWN_PROT_ID);
         return false;
     }
+    // Check if protocol version matches
+    if (pMessage->ProtVer != pProt->ProtVer) {
+        LCSF_ValidatorSendError(LCSF_EP_ERROR_LOC_VALIDATION_ERROR, LCSF_EP_ERROR_CODE_BAD_PROT_VER);
+        return false;
+    }
+    const lcsf_protocol_desc_t *pProtDesc = pProt->pProtDesc;
+    LCSFInterpretCallback_t *pFnInterpreter = pProt->pFnInterpretMsg;
     // Variables initialization
     uint16_t descCmdIdx = 0;
     lcsf_valid_cmd_t validMsg;
@@ -802,19 +795,21 @@ int LCSF_ValidatorEncode(uint_fast16_t protId, const lcsf_valid_cmd_t *pCommand,
     if (pCommand == NULL) {
         return -1;
     }
-    // Retrieve protocol description
-    const lcsf_protocol_desc_t *pProtDesc = LCSF_GetDescriptor(protId);
-    if (pProtDesc == NULL) {
+    // Retrieve protocol entry (bundles descriptor and version)
+    const lcsf_validator_protocol_desc_t *pProt = LCSF_GetProtEntry(protId);
+    if ((pProt == NULL) || (pProt->pProtDesc == NULL)) {
         // Unknown protocol
         return -1;
     }
+    const lcsf_protocol_desc_t *pProtDesc = pProt->pProtDesc;
     // Variables initialization
     uint16_t cmdIdx = 0;
     lcsf_raw_msg_t sendMsg;
     memset(&sendMsg, 0, sizeof(lcsf_raw_msg_t));
     LifoFreeAll(&LcsfValidatorInfo.SenderLifo);
-    // Note the protocol id
+    // Note the protocol id and version
     sendMsg.ProtId = protId;
+    sendMsg.ProtVer = pProt->ProtVer;
     // Validate command id
     if (!LCSF_ValidateCmdId(pCommand->CmdId, pProtDesc->CmdNb, &cmdIdx, pProtDesc->pCmdDescArray)) {
         // Unknown command

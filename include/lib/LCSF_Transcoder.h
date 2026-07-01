@@ -49,10 +49,11 @@ struct _lcsf_raw_att {
 /** Lcsf raw message structure */
 typedef struct _lcsf_raw_msg {
     uint16_t ProtId; /**< Protocol id */
+    uint16_t ProtVer; /**< Protocol version */
     uint16_t CmdId; /**< Command id */
     uint16_t AttNb; /**< Number of attributes */
     lcsf_raw_att_t *pAttArray; /**< Pointer to the lcsf attribute header list */
-} lcsf_raw_msg_t; // total: 12 bytes, 2 padding
+} lcsf_raw_msg_t; // total: 12 bytes, 0 padding
 
 // --- Public Constants ---
 // --- Public Variables ---
