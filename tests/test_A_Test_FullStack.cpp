@@ -36,6 +36,8 @@ extern "C" {
 // *** Private macros ***
 #define ARRAY_SIZE 5
 #define TX_BUFF_SIZE 255
+#define RX_OK(x) CHECK((x) == LCSF_RECEIVE_OK)
+#define RX_FAIL(x) CHECK((x) != LCSF_RECEIVE_OK)
 
 // *** Private types ***
 enum test_id_e {
@@ -470,20 +472,20 @@ TEST(A_Test_Fullstack, valid) {
     LCSF_DBG_PRINT("[tests]: Regular LCSF representation is in use.\n");
 #endif
     // Test function error cases
-    CHECK_FALSE(LCSF_TranscoderReceive(sc1_msg, sizeof(sc1_msg)));
-    CHECK_FALSE(LCSF_TranscoderReceive(cc1_msg, sizeof(cc1_msg)));
+    RX_FAIL(LCSF_TranscoderReceive(sc1_msg, sizeof(sc1_msg)));
+    RX_FAIL(LCSF_TranscoderReceive(cc1_msg, sizeof(cc1_msg)));
     // Test valid cases
-    CHECK(LCSF_TranscoderReceive(sc2_msg, sizeof(sc2_msg)));
+    RX_OK(LCSF_TranscoderReceive(sc2_msg, sizeof(sc2_msg)));
     test_buffer(TEST_ID_SC1, txbuffer);
-    CHECK(LCSF_TranscoderReceive(sc3_msg, sizeof(sc3_msg)));
+    RX_OK(LCSF_TranscoderReceive(sc3_msg, sizeof(sc3_msg)));
     test_buffer(TEST_ID_SC3, txbuffer);
-    CHECK(LCSF_TranscoderReceive(cc2_msg, sizeof(cc2_msg)));
+    RX_OK(LCSF_TranscoderReceive(cc2_msg, sizeof(cc2_msg)));
     test_buffer(TEST_ID_CC1, txbuffer);
-    CHECK(LCSF_TranscoderReceive(cc3_msg_rx, sizeof(cc3_msg_rx)));
+    RX_OK(LCSF_TranscoderReceive(cc3_msg_rx, sizeof(cc3_msg_rx)));
     test_buffer(TEST_ID_CC3, txbuffer);
-    CHECK(LCSF_TranscoderReceive(cc5_msg, sizeof(cc5_msg)));
+    RX_OK(LCSF_TranscoderReceive(cc5_msg, sizeof(cc5_msg)));
     test_buffer(TEST_ID_CC4, txbuffer);
-    CHECK(LCSF_TranscoderReceive(cc6_msg_rx, sizeof(cc6_msg_rx)));
+    RX_OK(LCSF_TranscoderReceive(cc6_msg_rx, sizeof(cc6_msg_rx)));
     test_buffer(TEST_ID_CC6, txbuffer);
 }
 
@@ -496,17 +498,17 @@ TEST(A_Test_Fullstack, valid) {
 TEST(A_Test_Fullstack, errors) {
     // Test bad message cases
     expect_senderr_cb(err_unknown_prot_msg, sizeof(err_unknown_prot_msg));
-    CHECK_FALSE(LCSF_TranscoderReceive(bad_prot_id_msg, sizeof(bad_prot_id_msg)));
+    CHECK(LCSF_TranscoderReceive(bad_prot_id_msg, sizeof(bad_prot_id_msg)) == LCSF_RECEIVE_UNKNOWN_PROT_ID);
     expect_senderr_cb(err_unknown_cmd_msg, sizeof(err_unknown_cmd_msg));
-    CHECK_FALSE(LCSF_TranscoderReceive(bad_cmd_id_msg, sizeof(bad_cmd_id_msg)));
+    CHECK(LCSF_TranscoderReceive(bad_cmd_id_msg, sizeof(bad_cmd_id_msg)) == LCSF_RECEIVE_UNKNOWN_CMD_ID);
     expect_senderr_cb(err_unknown_att_msg, sizeof(err_unknown_att_msg));
-    CHECK_FALSE(LCSF_TranscoderReceive(bad_att_id_msg, sizeof(bad_att_id_msg)));
+    CHECK(LCSF_TranscoderReceive(bad_att_id_msg, sizeof(bad_att_id_msg)) == LCSF_RECEIVE_UNKNOWN_ATT_ID);
     expect_senderr_cb(err_too_many_att_msg, sizeof(err_too_many_att_msg));
-    CHECK_FALSE(LCSF_TranscoderReceive(extra_att_msg, sizeof(extra_att_msg)));
+    CHECK(LCSF_TranscoderReceive(extra_att_msg, sizeof(extra_att_msg)) == LCSF_RECEIVE_TOO_MANY_ATT);
     expect_senderr_cb(err_missing_att_msg, sizeof(err_missing_att_msg));
-    CHECK_FALSE(LCSF_TranscoderReceive(missing_att_msg, sizeof(missing_att_msg)));
+    CHECK(LCSF_TranscoderReceive(missing_att_msg, sizeof(missing_att_msg)) == LCSF_RECEIVE_MISS_NONOPT_ATT);
     expect_senderr_cb(err_wrong_data_type_msg, sizeof(err_wrong_data_type_msg));
-    CHECK_FALSE(LCSF_TranscoderReceive(bad_data_type_msg, sizeof(bad_data_type_msg)));
+    CHECK(LCSF_TranscoderReceive(bad_data_type_msg, sizeof(bad_data_type_msg)) == LCSF_RECEIVE_WRONG_ATT_DATA_TYPE);
     expect_senderr_cb(err_bad_prot_ver_msg, sizeof(err_bad_prot_ver_msg));
-    CHECK_FALSE(LCSF_TranscoderReceive(bad_version_msg, sizeof(bad_version_msg)));
+    CHECK(LCSF_TranscoderReceive(bad_version_msg, sizeof(bad_version_msg)) == LCSF_RECEIVE_BAD_PROT_VER);
 }

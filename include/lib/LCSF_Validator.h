@@ -141,9 +141,9 @@ bool LCSF_ValidatorAddProtocol(uint_fast16_t protIdx, const lcsf_validator_proto
  * \brief Validate a raw lcsf message and send to interpreter
  *
  * \param pMessage Pointer to message to validate
- * \return bool: true if operation was a success
+ * \return lcsf_receive_status_t: LCSF_RECEIVE_OK if processed, otherwise the matching LCSF_RECEIVE_* error status
  */
-bool LCSF_ValidatorReceive(const lcsf_raw_msg_t *pMessage);
+lcsf_receive_status_t LCSF_ValidatorReceive(const lcsf_raw_msg_t *pMessage);
 
 /**
  * \fn int LCSF_ValidatorEncode(uint_fast16_t protId, lcsf_valid_cmd_t *pCommand)

@@ -21,6 +21,7 @@
 
 // *** Libraries include ***
 // Standard lib
+#include <assert.h>
 #include <string.h>
 // Custom lib
 #include <LCSF_Config.h>
@@ -313,6 +314,8 @@ static bool LCSF_FillMsgHeader(uint16_t *pBuffIdx, uint8_t *pBuffer, size_t buff
     if ((size_t)(*pBuffIdx + 3) >= buffSize) {
         return false;
     }
+    // Smaller representation contract: header fields are 8-bit
+    assert((pMsg->ProtId <= 0xFF) && (pMsg->ProtVer <= 0xFF) && (pMsg->CmdId <= 0xFF) && (pMsg->AttNb <= 0xFF));
     // Byte 1: Protocol id
     pBuffer[(*pBuffIdx)++] = (uint8_t)pMsg->ProtId;
     // Byte 2: Protocol version
@@ -362,6 +365,8 @@ static bool LCSF_FillAttHeader(uint16_t *pBuffIdx, uint8_t *pBuffer, size_t buff
     if ((size_t)(*pBuffIdx + 1) >= buffSize) {
         return false;
     }
+    // Smaller representation contract: 7-bit attribute id (MSb is the complexity flag), 8-bit payload size
+    assert((pAtt->AttId <= 0x7F) && (pAtt->PayloadSize <= 0xFF));
     // Check if attribute has sub attributes
     if (pAtt->HasSubAtt) {
         // Byte 1: Attribute id + MSb at 1
@@ -485,17 +490,17 @@ bool LCSF_TranscoderInit(void) {
     return LifoInit(&LcsfTranscoderInfo.DecoderLifo, DecoderLifoData, LCSF_TRANSCODER_RX_LIFO_SIZE, sizeof(lcsf_raw_att_t));
 }
 
-bool LCSF_TranscoderReceive(const uint8_t *pBuffer, size_t buffSize) {
+lcsf_receive_status_t LCSF_TranscoderReceive(const uint8_t *pBuffer, size_t buffSize) {
     // Invalid parameters guards
     if (pBuffer == NULL) {
-        return false;
+        return LCSF_RECEIVE_ERROR;
     }
     lcsf_raw_msg_t *pMsg = &LcsfTranscoderInfo.DecoderMsg;
     // Decode buffer into lcsf object
     if (!LCSF_DecodeBuffer(pBuffer, buffSize, pMsg)) {
         // Encode error buffer
         LCSF_ValidatorSendTranscoderError(LcsfTranscoderInfo.LastErrCode);
-        return false;
+        return LCSF_RECEIVE_ERROR;
     }
     // Send lcsf object to receiver
     return LCSF_ValidatorReceive(pMsg);

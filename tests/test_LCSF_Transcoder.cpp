@@ -247,9 +247,9 @@ bool LCSF_ValidatorSendTranscoderError(uint_fast8_t errorType) {
  *
  * @return     bool: true if successful
  */
-bool LCSF_ValidatorReceive(const lcsf_raw_msg_t *pMessage) {
+lcsf_receive_status_t LCSF_ValidatorReceive(const lcsf_raw_msg_t *pMessage) {
     mock().actualCall("LCSF_ValidatorReceive");
-    return compare_rawmsg(pMessage, &txMsg);
+    return compare_rawmsg(pMessage, &txMsg) ? LCSF_RECEIVE_OK : LCSF_RECEIVE_ERROR;
 }
 
 // *** Tests ***
@@ -301,12 +301,12 @@ TEST(LCSF_Transcoder, encode) {
  */
 TEST(LCSF_Transcoder, receive) {
     // Test error cases
-    CHECK_FALSE(LCSF_TranscoderReceive(NULL, 0));
+    CHECK(LCSF_TranscoderReceive(NULL, 0) != LCSF_RECEIVE_OK);
     ExpectSendError(0x01, true);
-    CHECK_FALSE(LCSF_TranscoderReceive(ovrflwMsg, sizeof(ovrflwMsg)));
+    CHECK(LCSF_TranscoderReceive(ovrflwMsg, sizeof(ovrflwMsg)) != LCSF_RECEIVE_OK);
     ExpectSendError(0x00, true);
-    CHECK_FALSE(LCSF_TranscoderReceive(badformatMsg, sizeof(badformatMsg)));
+    CHECK(LCSF_TranscoderReceive(badformatMsg, sizeof(badformatMsg)) != LCSF_RECEIVE_OK);
     // Test valid packet
     ExpectReceive();
-    CHECK(LCSF_TranscoderReceive(rxMsg, sizeof(rxMsg)));
+    CHECK(LCSF_TranscoderReceive(rxMsg, sizeof(rxMsg)) == LCSF_RECEIVE_OK);
 }

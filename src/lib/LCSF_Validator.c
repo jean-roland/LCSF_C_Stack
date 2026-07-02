@@ -38,8 +38,12 @@
 #define ERR_BUFF_SIZE 18
 #endif
 
-// Lcsf error protocol (LCSF_EP) id
+// Lcsf error protocol (LCSF_EP) id (0xFF in the smaller representation to fit the 8-bit id field)
+#ifdef LCSF_SMALL
+#define LCSF_ERROR_PROTOCOL_ID 0x00FF
+#else
 #define LCSF_ERROR_PROTOCOL_ID 0xFFFF
+#endif
 // Lcsf error protocol (LCSF_EP) version
 #define LCSF_ERROR_PROTOCOL_VERSION 0x00
 
@@ -113,6 +117,7 @@ typedef struct _lcsf_validator_info {
 static bool LCSF_AllocateReceiverAttArray(uint_fast16_t attNb, lcsf_valid_att_t **pAttArray);
 static bool LCSF_AllocateSenderAttArray(uint_fast16_t attNb, lcsf_raw_att_t **pAttArray);
 static const lcsf_validator_protocol_desc_t *LCSF_GetProtEntry(uint_fast16_t protId);
+static lcsf_receive_status_t LCSF_MapValidationError(uint_fast8_t errType);
 // Table look up functions
 static bool LCSF_ValidateCmdId(
     uint_fast16_t cmdId, uint_fast16_t cmdNb, uint16_t *pCmdIdx, const lcsf_command_desc_t *pCmdDescArray);
@@ -188,6 +193,34 @@ static const lcsf_validator_protocol_desc_t *LCSF_GetProtEntry(uint_fast16_t pro
         }
     }
     return NULL;
+}
+
+/**
+ * \fn static lcsf_receive_status_t LCSF_MapValidationError(uint_fast8_t errType)
+ * \brief Map an LCSF_EP validation error code to a receive status
+ *
+ * \param errType LCSF_EP error code (see _lcsf_ep_cmd_error_att_err_code_val_enum)
+ * \return lcsf_receive_status_t: matching receive status
+ */
+static lcsf_receive_status_t LCSF_MapValidationError(uint_fast8_t errType) {
+    switch (errType) {
+        case LCSF_EP_ERROR_CODE_UNKNOWN_PROT_ID:
+            return LCSF_RECEIVE_UNKNOWN_PROT_ID;
+        case LCSF_EP_ERROR_CODE_UNKNOWN_CMD_ID:
+            return LCSF_RECEIVE_UNKNOWN_CMD_ID;
+        case LCSF_EP_ERROR_CODE_UNKNOWN_ATT_ID:
+            return LCSF_RECEIVE_UNKNOWN_ATT_ID;
+        case LCSF_EP_ERROR_CODE_TOO_MANY_ATT:
+            return LCSF_RECEIVE_TOO_MANY_ATT;
+        case LCSF_EP_ERROR_CODE_MISS_NONOPT_ATT:
+            return LCSF_RECEIVE_MISS_NONOPT_ATT;
+        case LCSF_EP_ERROR_CODE_WRONG_ATT_DATA_TYPE:
+            return LCSF_RECEIVE_WRONG_ATT_DATA_TYPE;
+        case LCSF_EP_ERROR_CODE_BAD_PROT_VER:
+            return LCSF_RECEIVE_BAD_PROT_VER;
+        default:
+            return LCSF_RECEIVE_ERROR;
+    }
 }
 
 /**
@@ -684,6 +717,10 @@ static bool LCSF_ProcessReceivedError(const lcsf_raw_msg_t *pErrorMsg) {
         LCSF_DBG_PRINT("[LCSF_Validator]: Received error but missing callback\n");
         return false;
     }
+    // Validate the command id
+    if (pErrorMsg->CmdId != LCSF_EP_CMD_ERROR_ID) {
+        return false;
+    }
     // Validate message attribute number
     if (pErrorMsg->AttNb != LCSF_EP_CMD_ERROR_ATT_NB) {
         return false;
@@ -746,26 +783,26 @@ bool LCSF_ValidatorAddProtocol(uint_fast16_t protIdx, const lcsf_validator_proto
     return true;
 }
 
-bool LCSF_ValidatorReceive(const lcsf_raw_msg_t *pMessage) {
+lcsf_receive_status_t LCSF_ValidatorReceive(const lcsf_raw_msg_t *pMessage) {
     // Bad parameters guard
     if (pMessage == NULL) {
-        return false;
+        return LCSF_RECEIVE_ERROR;
     }
     // Process lcsf error messages
     if (pMessage->ProtId == LCSF_ERROR_PROTOCOL_ID) {
-        return LCSF_ProcessReceivedError(pMessage);
+        return LCSF_ProcessReceivedError(pMessage) ? LCSF_RECEIVE_OK : LCSF_RECEIVE_ERROR;
     }
     // Retrieve protocol entry (bundles callback, descriptor and version)
     const lcsf_validator_protocol_desc_t *pProt = LCSF_GetProtEntry(pMessage->ProtId);
     // Check if protocol id is valid
     if ((pProt == NULL) || (pProt->pProtDesc == NULL) || (pProt->pFnInterpretMsg == NULL)) {
         LCSF_ValidatorSendError(LCSF_EP_ERROR_LOC_VALIDATION_ERROR, LCSF_EP_ERROR_CODE_UNKNOWN_PROT_ID);
-        return false;
+        return LCSF_MapValidationError(LCSF_EP_ERROR_CODE_UNKNOWN_PROT_ID);
     }
     // Check if protocol version matches
     if (pMessage->ProtVer != pProt->ProtVer) {
         LCSF_ValidatorSendError(LCSF_EP_ERROR_LOC_VALIDATION_ERROR, LCSF_EP_ERROR_CODE_BAD_PROT_VER);
-        return false;
+        return LCSF_MapValidationError(LCSF_EP_ERROR_CODE_BAD_PROT_VER);
     }
     const lcsf_protocol_desc_t *pProtDesc = pProt->pProtDesc;
     LCSFInterpretCallback_t *pFnInterpreter = pProt->pFnInterpretMsg;
@@ -777,17 +814,17 @@ bool LCSF_ValidatorReceive(const lcsf_raw_msg_t *pMessage) {
     // Check if command id is valid
     if (!LCSF_ValidateCmdId(pMessage->CmdId, pProtDesc->CmdNb, &descCmdIdx, pProtDesc->pCmdDescArray)) {
         LCSF_ValidatorSendError(LCSF_EP_ERROR_LOC_VALIDATION_ERROR, LCSF_EP_ERROR_CODE_UNKNOWN_CMD_ID);
-        return false;
+        return LCSF_MapValidationError(LCSF_EP_ERROR_CODE_UNKNOWN_CMD_ID);
     }
     // Validate the command id
     validMsg.CmdId = pMessage->CmdId;
     // Check if command attributes are valid
     if (!LCSF_ValidateAttribute(pMessage, &(pProtDesc->pCmdDescArray[descCmdIdx]), &(validMsg.pAttArray))) {
         LCSF_ValidatorSendError(LCSF_EP_ERROR_LOC_VALIDATION_ERROR, LcsfValidatorInfo.LastErrorType);
-        return false;
+        return LCSF_MapValidationError(LcsfValidatorInfo.LastErrorType);
     }
     // Send validated message to interpreter function
-    return pFnInterpreter(&validMsg);
+    return pFnInterpreter(&validMsg) ? LCSF_RECEIVE_OK : LCSF_RECEIVE_ERROR;
 }
 
 int LCSF_ValidatorEncode(uint_fast16_t protId, const lcsf_valid_cmd_t *pCommand, uint8_t *pBuffer, size_t buffSize) {

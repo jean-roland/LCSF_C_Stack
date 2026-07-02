@@ -33,7 +33,7 @@
 static const uint8_t dummyTxBuff[20] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
 static bool dummyReceiveProcess(void) {
-    return LCSF_TranscoderReceive(dummyTxBuff, 6);
+    return LCSF_TranscoderReceive(dummyTxBuff, 6) == LCSF_RECEIVE_OK;
 }
 
 static bool dummyErrSend(const uint8_t *pBuffer, size_t buffSize) {

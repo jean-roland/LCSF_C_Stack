@@ -55,6 +55,19 @@ typedef struct _lcsf_raw_msg {
     lcsf_raw_att_t *pAttArray; /**< Pointer to the lcsf attribute header list */
 } lcsf_raw_msg_t; // total: 12 bytes, 0 padding
 
+/** Lcsf receive status enum (error values mirror the LCSF error protocol codes) */
+typedef enum _lcsf_receive_status {
+    LCSF_RECEIVE_OK = 0, /**< Message received and processed */
+    LCSF_RECEIVE_ERROR, /**< Bad parameters, malformed buffer or receiver refused the command */
+    LCSF_RECEIVE_UNKNOWN_PROT_ID, /**< Unknown protocol id */
+    LCSF_RECEIVE_UNKNOWN_CMD_ID, /**< Unknown command id */
+    LCSF_RECEIVE_UNKNOWN_ATT_ID, /**< Unknown attribute id */
+    LCSF_RECEIVE_TOO_MANY_ATT, /**< Too many attributes */
+    LCSF_RECEIVE_MISS_NONOPT_ATT, /**< Missing non-optional attribute */
+    LCSF_RECEIVE_WRONG_ATT_DATA_TYPE, /**< Wrong attribute data type */
+    LCSF_RECEIVE_BAD_PROT_VER, /**< Protocol version mismatch */
+} lcsf_receive_status_t;
+
 // --- Public Constants ---
 // --- Public Variables ---
 // --- Public Function Prototypes ---
@@ -73,9 +86,9 @@ bool LCSF_TranscoderInit(void);
  *
  * \param pBuffer pointer to the data to decode
  * \param buffSize buffer size
- * \return bool: true if operation was a success
+ * \return lcsf_receive_status_t: LCSF_RECEIVE_OK if processed, otherwise the matching LCSF_RECEIVE_* error status
  */
-bool LCSF_TranscoderReceive(const uint8_t *pBuffer, size_t buffSize);
+lcsf_receive_status_t LCSF_TranscoderReceive(const uint8_t *pBuffer, size_t buffSize);
 
 /**
  * \fn int LCSF_TranscoderEncode(const lcsf_raw_msg_t *pMessage, uint8_t* pBuffer, size_t buffSize)

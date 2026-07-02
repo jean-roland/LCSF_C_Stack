@@ -36,6 +36,12 @@ extern "C" {
 // *** Private macros ***
 #define ERROR_CODE 0xff
 #define TX_BUFF_SIZE 8
+// Error protocol id, matching the transcoder's per-representation id
+#ifdef LCSF_SMALL
+#define ERR_PROT_ID 0x00FF
+#else
+#define ERR_PROT_ID 0xFFFF
+#endif
 
 // *** Private functions prototypes ***
 static bool compare_validatt(const lcsf_valid_att_t *pAtt1, const lcsf_valid_att_t *pAtt2);
@@ -83,9 +89,18 @@ static lcsf_raw_att_t errAttArr[] = {
 };
 
 static const lcsf_raw_msg_t errMsg = {
-    0xFFFF, // ProtId
+    ERR_PROT_ID, // ProtId
     0x00, // ProtVer (LCSF error protocol version)
     0x00,
+    2,
+    errAttArr,
+};
+
+// Model error msg carrying an unexpected command id (must be ignored, not processed)
+static const lcsf_raw_msg_t badCmdErrMsg = {
+    ERR_PROT_ID, // ProtId
+    0x00, // ProtVer (LCSF error protocol version)
+    0x01, // CmdId (not LCSF_EP_CMD_ERROR_ID)
     2,
     errAttArr,
 };
@@ -141,7 +156,7 @@ static lcsf_raw_att_t badVerErrAttArr[] = {
     },
 };
 static const lcsf_raw_msg_t badVerErrMsg = {
-    0xFFFF, // ProtId
+    ERR_PROT_ID, // ProtId
     0x00, // ProtVer (LCSF error protocol version)
     0x00,
     2,
@@ -375,16 +390,19 @@ TEST(LCSF_Validator, encode)  {
  */
 TEST(LCSF_Validator, receive) {
     // Test message receive
-    CHECK_FALSE(LCSF_ValidatorReceive(NULL));
+    CHECK(LCSF_ValidatorReceive(NULL) != LCSF_RECEIVE_OK);
     mock().expectOneCall("interpret_callback");
-    CHECK(LCSF_ValidatorReceive(&rxMsg));
+    CHECK(LCSF_ValidatorReceive(&rxMsg) == LCSF_RECEIVE_OK);
 
-    // Test protocol version mismatch is rejected (a bad version error is sent back)
+    // Test protocol version mismatch returns the dedicated status (and sends a bad version error back)
     ExpectEncode(&badVerErrMsg);
     mock().expectOneCall("senderr_callback");
-    CHECK_FALSE(LCSF_ValidatorReceive(&badVerMsg));
+    CHECK(LCSF_ValidatorReceive(&badVerMsg) == LCSF_RECEIVE_BAD_PROT_VER);
 
     // Test error receive
     mock().expectOneCall("recerr_callback");
-    CHECK(LCSF_ValidatorReceive(&errMsg));
+    CHECK(LCSF_ValidatorReceive(&errMsg) == LCSF_RECEIVE_OK);
+
+    // Test error frame with an unexpected command id is ignored (no callback, no error sent)
+    CHECK(LCSF_ValidatorReceive(&badCmdErrMsg) != LCSF_RECEIVE_OK);
 }
