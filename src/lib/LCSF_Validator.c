@@ -383,10 +383,6 @@ static bool LCSF_ValidateAttribute_Rec(uint_fast16_t attNb, const lcsf_raw_att_t
             return false;
         }
     }
-    if (attNb > descAttNb) {
-        LcsfValidatorInfo.LastErrorType = LCSF_EP_ERROR_CODE_TOO_MANY_ATT;
-        return false;
-    }
     // Allocate the valid attribute array
     if (!LCSF_AllocateReceiverAttArray(descAttNb, pValidAttArray)) {
         LcsfValidatorInfo.LastErrorType = LCSF_EP_ERROR_CODE_UNKNOWN_ERROR;
@@ -440,11 +436,7 @@ static bool LCSF_ValidateAttribute_Rec(uint_fast16_t attNb, const lcsf_raw_att_t
             pCurrValidAtt->Payload.pData = NULL;
         }
     }
-    // Check everything is processed
-    if (rxAttNb > 0) {
-        LcsfValidatorInfo.LastErrorType = LCSF_EP_ERROR_CODE_UNKNOWN_ATT_ID;
-        return false;
-    }
+    // Unprocessed attributes are unknown ones, ignored for forward compatibility
     return true;
 }
 
@@ -459,11 +451,7 @@ static bool LCSF_ValidateAttribute_Rec(uint_fast16_t attNb, const lcsf_raw_att_t
  */
 static bool LCSF_ValidateAttribute(
     const lcsf_raw_msg_t *pMessage, const lcsf_command_desc_t *pCmdDesc, lcsf_valid_att_t **pValidAttArray) {
-    if ((pCmdDesc->AttNb == 0) && (pMessage->AttNb > 0)) {
-        // Attributes received while the descriptor expected none
-        LcsfValidatorInfo.LastErrorType = LCSF_EP_ERROR_CODE_TOO_MANY_ATT;
-        return false;
-    } else if ((pCmdDesc->AttNb != 0) && (pMessage->AttNb == 0)) {
+    if ((pCmdDesc->AttNb != 0) && (pMessage->AttNb == 0)) {
         // No attributes received, check if missing attributes
         if (LCSF_HasNonOptionalAttribute(pCmdDesc->AttNb, pCmdDesc->pAttDescArray)) {
             LcsfValidatorInfo.LastErrorType = LCSF_EP_ERROR_CODE_MISS_NONOPT_ATT;
