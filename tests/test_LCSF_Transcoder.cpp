@@ -146,6 +146,28 @@ static const lcsf_raw_msg_t txMsg = {
     txAttArr
 };
 
+// Payload size over the 8-bit field of the smaller representation
+static uint8_t txBigAttData[0x100];
+
+static lcsf_raw_att_t txBigAttArr[] = {
+    {
+        0x55,
+        false,
+        sizeof(txBigAttData),
+        {
+            .pData = txBigAttData,
+        }
+    }
+};
+
+static const lcsf_raw_msg_t txBigMsg = {
+    0xab, // ProtId
+    0x01, // ProtVer
+    0x12, // CmdId
+    sizeof(txBigAttArr)/sizeof(lcsf_raw_att_t),
+    txBigAttArr
+};
+
 // *** Private Functions ***
 
 /**
@@ -291,6 +313,23 @@ TEST(LCSF_Transcoder, encode) {
     CHECK_EQUAL(LCSF_TranscoderEncode(&txMsg, txBuffer, TX_BUFF_SIZE), 56);
 #endif
     MEMCMP_EQUAL(txBuffer, rxMsg, sizeof(rxMsg));
+}
+
+/**
+ * testgroup: LCSF_Transcoder
+ * testname: encode_oversize
+ *
+ * Test the encode feature refuses a payload its size field can't hold
+ */
+TEST(LCSF_Transcoder, encode_oversize) {
+    static uint8_t bigTxBuffer[2 * sizeof(txBigAttData)];
+
+#ifdef LCSF_SMALL
+    CHECK_EQUAL(LCSF_TranscoderEncode(&txBigMsg, bigTxBuffer, sizeof(bigTxBuffer)), -1);
+#else
+    // Message header, attribute header, data
+    CHECK_EQUAL(LCSF_TranscoderEncode(&txBigMsg, bigTxBuffer, sizeof(bigTxBuffer)), (int)(8 + 4 + sizeof(txBigAttData)));
+#endif
 }
 
 /**

@@ -365,8 +365,12 @@ static bool LCSF_FillAttHeader(uint16_t *pBuffIdx, uint8_t *pBuffer, size_t buff
     if ((size_t)(*pBuffIdx + 1) >= buffSize) {
         return false;
     }
-    // Smaller representation contract: 7-bit attribute id (MSb is the complexity flag), 8-bit payload size
-    assert((pAtt->AttId <= 0x7F) && (pAtt->PayloadSize <= 0xFF));
+    // Smaller representation contract: 7-bit attribute id (MSb is the complexity flag)
+    assert(pAtt->AttId <= 0x7F);
+    // Payload size is runtime data, refuse what doesn't fit its 8 bits
+    if (pAtt->PayloadSize > 0xFF) {
+        return false;
+    }
     // Check if attribute has sub attributes
     if (pAtt->HasSubAtt) {
         // Byte 1: Attribute id + MSb at 1
