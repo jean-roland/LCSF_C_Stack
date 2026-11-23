@@ -518,6 +518,10 @@ int LCSF_TranscoderEncode(const lcsf_raw_msg_t *pMessage, uint8_t *pBuffer, size
     if (pBuffer == NULL) {
         return -1;
     }
+    // The encode index is 16-bit, a bigger buffer would let it wrap
+    if (buffSize > UINT16_MAX) {
+        buffSize = UINT16_MAX;
+    }
     uint16_t msgSize = 0;
     // Encode lcsf object into send buffer
     if (!LCSF_EncodeBuffer(&msgSize, pBuffer, buffSize, pMessage)) {

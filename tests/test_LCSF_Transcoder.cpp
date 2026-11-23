@@ -168,6 +168,28 @@ static const lcsf_raw_msg_t txBigMsg = {
     txBigAttArr
 };
 
+// Message over the 16-bit encode index, headers included
+static uint8_t txHugeAttData[UINT16_MAX];
+
+static lcsf_raw_att_t txHugeAttArr[] = {
+    {
+        0x55,
+        false,
+        sizeof(txHugeAttData),
+        {
+            .pData = txHugeAttData,
+        }
+    }
+};
+
+static const lcsf_raw_msg_t txHugeMsg = {
+    0xab, // ProtId
+    0x01, // ProtVer
+    0x12, // CmdId
+    sizeof(txHugeAttArr)/sizeof(lcsf_raw_att_t),
+    txHugeAttArr
+};
+
 // *** Private Functions ***
 
 /**
@@ -330,6 +352,18 @@ TEST(LCSF_Transcoder, encode_oversize) {
     // Message header, attribute header, data
     CHECK_EQUAL(LCSF_TranscoderEncode(&txBigMsg, bigTxBuffer, sizeof(bigTxBuffer)), (int)(8 + 4 + sizeof(txBigAttData)));
 #endif
+}
+
+/**
+ * testgroup: LCSF_Transcoder
+ * testname: encode_over_index
+ *
+ * Test the encode feature refuses a message over its 16-bit index, whatever the buffer size
+ */
+TEST(LCSF_Transcoder, encode_over_index) {
+    static uint8_t hugeTxBuffer[2 * sizeof(txHugeAttData)];
+
+    CHECK_EQUAL(LCSF_TranscoderEncode(&txHugeMsg, hugeTxBuffer, sizeof(hugeTxBuffer)), -1);
 }
 
 /**
