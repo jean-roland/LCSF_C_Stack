@@ -69,6 +69,13 @@ typedef enum _lcsf_receive_status {
 } lcsf_receive_status_t;
 
 // --- Public Constants ---
+// Attribute payload size field: 1 byte in the smaller representation, 2 otherwise
+#ifdef LCSF_SMALL
+#define LCSF_ATT_PAYLOAD_MAX_SIZE UINT8_MAX
+#else
+#define LCSF_ATT_PAYLOAD_MAX_SIZE UINT16_MAX
+#endif
+
 // --- Public Variables ---
 // --- Public Function Prototypes ---
 

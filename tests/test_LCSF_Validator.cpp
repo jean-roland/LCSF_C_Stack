@@ -177,6 +177,63 @@ static const lcsf_valid_cmd_t txMsg = {
     txAttArr,
 };
 
+// Byte array and string protocol, payloads one byte over the size field
+#define BIG_PROT_ID 0x01
+#define BIG_CMD_ID_ARRAY 0x00
+#define BIG_CMD_ID_STRING 0x01
+
+static const lcsf_attribute_desc_t bigArrayAttDescArray[] = {
+    {false, LCSF_BYTE_ARRAY, 0x00, 0, NULL},
+};
+
+static const lcsf_attribute_desc_t bigStringAttDescArray[] = {
+    {false, LCSF_STRING, 0x00, 0, NULL},
+};
+
+static const lcsf_command_desc_t bigCmdDescArray[] = {
+    {BIG_CMD_ID_ARRAY, 1, bigArrayAttDescArray},
+    {BIG_CMD_ID_STRING, 1, bigStringAttDescArray},
+};
+
+static const lcsf_protocol_desc_t bigProtDesc = {
+    sizeof(bigCmdDescArray)/sizeof(lcsf_command_desc_t),
+    bigCmdDescArray,
+};
+
+static const lcsf_validator_protocol_desc_t big_prot_desc = {
+    BIG_PROT_ID,
+    0x00,
+    &bigProtDesc,
+    interpret_callback,
+};
+
+static uint8_t bigArrayData[LCSF_ATT_PAYLOAD_MAX_SIZE + 1];
+static char bigStringData[LCSF_ATT_PAYLOAD_MAX_SIZE + 1]; // Filled up to its last nul in the test
+
+static lcsf_valid_att_t bigArrayAttArr[] = {
+    sizeof(bigArrayData),
+    {
+        .pData = bigArrayData,
+    }
+};
+
+static lcsf_valid_att_t bigStringAttArr[] = {
+    sizeof(bigStringData),
+    {
+        .pData = bigStringData,
+    }
+};
+
+static const lcsf_valid_cmd_t bigArrayMsg = {
+    BIG_CMD_ID_ARRAY,
+    bigArrayAttArr,
+};
+
+static const lcsf_valid_cmd_t bigStringMsg = {
+    BIG_CMD_ID_STRING,
+    bigStringAttArr,
+};
+
 // *** Private Functions ***
 
 /**
@@ -380,6 +437,19 @@ TEST(LCSF_Validator, encode)  {
     CHECK_EQUAL(LCSF_ValidatorEncode(LCSF_EXAMPLE_PROTOCOL_ID, NULL, txBuffer, TX_BUFF_SIZE), -1);
     ExpectEncode(&rxMsg);
     CHECK_EQUAL(LCSF_ValidatorEncode(LCSF_EXAMPLE_PROTOCOL_ID, &txMsg, txBuffer, TX_BUFF_SIZE), 0);
+}
+
+/**
+ * testgroup: LCSF_Validator
+ * testname: encode_oversize
+ *
+ * Test the encode feature refuses a payload its size field can't hold, before calling the transcoder
+ */
+TEST(LCSF_Validator, encode_oversize) {
+    CHECK(LCSF_ValidatorAddProtocol(1, &big_prot_desc));
+    memset(bigStringData, 'a', sizeof(bigStringData) - 1);
+    CHECK_EQUAL(LCSF_ValidatorEncode(BIG_PROT_ID, &bigArrayMsg, txBuffer, TX_BUFF_SIZE), -1);
+    CHECK_EQUAL(LCSF_ValidatorEncode(BIG_PROT_ID, &bigStringMsg, txBuffer, TX_BUFF_SIZE), -1);
 }
 
 /**

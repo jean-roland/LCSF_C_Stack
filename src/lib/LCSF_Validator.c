@@ -477,7 +477,7 @@ static bool LCSF_ValidateAttribute(
  */
 static bool LCSF_FillAttributeInfo(
     lcsf_raw_att_t *pRawAtt, uint_fast8_t descDataType, uint_fast16_t subAttNb, const lcsf_valid_att_t *pValidAtt) {
-    uint16_t stringSize = 0;
+    size_t stringSize = 0;
 
     // Check data type
     switch (descDataType) {
@@ -530,7 +530,7 @@ static bool LCSF_FillAttributeInfo(
             return true;
 
         case LCSF_BYTE_ARRAY:
-            if (pValidAtt->PayloadSize <= 0) {
+            if ((pValidAtt->PayloadSize == 0) || (pValidAtt->PayloadSize > LCSF_ATT_PAYLOAD_MAX_SIZE)) {
                 return false;
             }
             pRawAtt->PayloadSize = (uint16_t)pValidAtt->PayloadSize;
@@ -538,11 +538,12 @@ static bool LCSF_FillAttributeInfo(
             return true;
 
         case LCSF_STRING:
-            stringSize = (uint16_t)strlen((char *)pValidAtt->Payload.pData);
-            if (stringSize <= 0) {
+            stringSize = strlen((char *)pValidAtt->Payload.pData);
+            // Payload includes the terminating nul
+            if ((stringSize == 0) || (stringSize >= LCSF_ATT_PAYLOAD_MAX_SIZE)) {
                 return false;
             }
-            pRawAtt->PayloadSize = stringSize + 1;
+            pRawAtt->PayloadSize = (uint16_t)(stringSize + 1);
             pRawAtt->HasSubAtt = false;
             return true;
 
