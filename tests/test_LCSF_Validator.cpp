@@ -163,6 +163,63 @@ static const lcsf_raw_msg_t badVerErrMsg = {
     badVerErrAttArr,
 };
 
+// Model raw msg with a data attribute sent with sub-attributes, its payload size is then their count
+static lcsf_raw_att_t subAttOnDataSubAttArr[] = {
+    {
+        0x00,
+        false,
+        sizeof(att1Data),
+        {
+            .pData = att1Data,
+        }
+    },
+};
+static lcsf_raw_att_t subAttOnDataAttArr[] = {
+    {
+        LCSF_EXAMPLE_ATT_ERROR_CODE,
+        true,
+        sizeof(subAttOnDataSubAttArr) / sizeof(lcsf_raw_att_t),
+        {
+            .pSubAttArray = subAttOnDataSubAttArr,
+        }
+    },
+};
+static const lcsf_raw_msg_t subAttOnDataMsg = {
+    LCSF_EXAMPLE_PROTOCOL_ID,
+    LCSF_EXAMPLE_PROTOCOL_VERSION,
+    LCSF_EXAMPLE_CMD_ID_ERROR,
+    LCSF_EXAMPLE_CMD_ERROR_ATT_NB,
+    subAttOnDataAttArr,
+};
+
+// Model error msg expected when an attribute has the wrong data type
+static uint8_t data_wrongtype_errcode = 0x05; // LCSF_EP_ERROR_CODE_WRONG_ATT_DATA_TYPE
+static lcsf_raw_att_t wrongTypeErrAttArr[] = {
+    {
+        0x00,
+        false,
+        sizeof(uint8_t),
+        {
+            .pData = &data_badver_errloc,
+        }
+    },
+    {
+        0x01,
+        false,
+        sizeof(uint8_t),
+        {
+            .pData = &data_wrongtype_errcode,
+        }
+    },
+};
+static const lcsf_raw_msg_t wrongTypeErrMsg = {
+    ERR_PROT_ID, // ProtId
+    0x00, // ProtVer (LCSF error protocol version)
+    0x00,
+    2,
+    wrongTypeErrAttArr,
+};
+
 
 // Model valid msg
 static lcsf_valid_att_t txAttArr[] = {
@@ -468,6 +525,11 @@ TEST(LCSF_Validator, receive) {
     ExpectEncode(&badVerErrMsg);
     mock().expectOneCall("senderr_callback");
     CHECK(LCSF_ValidatorReceive(&badVerMsg) == LCSF_RECEIVE_BAD_PROT_VER);
+
+    // Test a data attribute sent with sub-attributes is rejected (and sends a wrong data type error back)
+    ExpectEncode(&wrongTypeErrMsg);
+    mock().expectOneCall("senderr_callback");
+    CHECK(LCSF_ValidatorReceive(&subAttOnDataMsg) != LCSF_RECEIVE_OK);
 
     // Test error receive
     mock().expectOneCall("recerr_callback");

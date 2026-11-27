@@ -418,8 +418,8 @@ static bool LCSF_ValidateAttribute_Rec(uint_fast16_t attNb, const lcsf_raw_att_t
                     return false;
                 }
             } else {
-                // Check if data type is valid
-                if (!LCSF_ValidateDataType(pCurrRxAtt->PayloadSize, pCurrDescAtt->DataType)) {
+                // Check if data type is valid, a data attribute carries no sub-attributes
+                if (pCurrRxAtt->HasSubAtt || !LCSF_ValidateDataType(pCurrRxAtt->PayloadSize, pCurrDescAtt->DataType)) {
                     LcsfValidatorInfo.LastErrorType = LCSF_EP_ERROR_CODE_WRONG_ATT_DATA_TYPE;
                     return false;
                 }
